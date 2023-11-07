@@ -1,0 +1,28 @@
+{
+  "title": "叮叮丹-xiaolidan00.top",
+  "language": "zh-hans",
+  "plugins": [
+    "code",
+    "-search",
+    "-share",
+    "anchor-navigation-ex",
+    "tbfed-pagefooter",
+    "-highlight",
+    "prism",
+    "prism-themes"
+  ],
+  "pluginsConfig": {
+    "prism": {
+      "css": ["prismjs/themes/prism-solarizedlight.css"]
+    },
+    "code": {
+      "copyButtons": true
+    },
+    "tbfed-pagefooter": {
+      "copyright": "Copyright © xiaolidan00@qq.com 粤ICP备17139828号"
+    }
+  },
+  "structure": {
+    "readme": "README.md"
+  }
+}
