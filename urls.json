@@ -13,5 +13,6 @@
   { "name": "学习笔记" },
   { "name": "react18 学习笔记", "url": "note/react-guide.md" },
   { "name": "canvas 学习笔记", "url": "note/canvas.md" },
-  { "name": "typescript 学习笔记", "url": "note/ts.md" }
+  { "name": "typescript 学习笔记", "url": "note/ts.md" },
+  { "name": "软考架构师", "url": "note/note.md" }
 ]

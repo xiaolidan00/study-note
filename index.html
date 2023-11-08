@@ -22,7 +22,7 @@
     <button class="left-nav-btn" id="leftbtn">nav</button>
     <button class="right-menu-btn" id="rightbtn">menu</button>
     <script>
-      const version = 'urllist-11-7';
+      const version = 'urllist-11-8';
       const converter = new showdown.Converter({ tables: true });
       // console.log(showdown, showdown.getDefaultOptions());
       var menulist = document.getElementById('menulist');
@@ -42,16 +42,22 @@
               let cs = markdown.children;
               let h1count = 1;
               let h2count = 1;
+              let h3count = 1;
               for (let i = 0; i < cs.length; i++) {
                 let c = cs[i];
                 let tagName = c.tagName.toLowerCase();
 
-                if (['h1', 'h2'].includes(tagName)) {
+                if (['h1', 'h2', 'h3'].includes(tagName)) {
                   let dom = document.createElement('a');
-                  if (tagName == 'h2') {
+                  if (tagName == 'h3') {
+                    dom.setAttribute('level', 3);
+                    c.innerText = h1count + '.' + h2count + '.' + h3count + '.' + c.innerText;
+                    h3count++;
+                  } else if (tagName == 'h2') {
                     dom.setAttribute('level', 2);
                     c.innerText = h1count + '.' + h2count + '.' + c.innerText;
                     h2count++;
+                    h3count = 1;
                   } else {
                     c.innerText = h1count + '.' + c.innerText;
                     dom.setAttribute('level', 1);

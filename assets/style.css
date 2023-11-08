@@ -113,6 +113,10 @@ body {
 .right-menu a.active {
   color: #1a67ff;
 }
+.left-nav a[level="3"],
+.right-menu a[level="3"] {
+  padding-left: 64px;
+}
 .left-nav a[level="2"],
 .right-menu a[level="2"] {
   padding-left: 32px;
