@@ -5,6 +5,8 @@
     "install": "gitbook install"
   },
   "dependencies": {
-    "gitbook-cli": "^2.3.2"
+    "gitbook-cli": "^2.3.2",
+    "normalize.css": "^8.0.1",
+    "showdown": "^2.1.0"
   }
 }

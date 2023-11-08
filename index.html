@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>叮叮丹-xiaolidan00.top</title>
+    <link rel="stylesheet" href="./assets/highlight-github.min.css" />
+    <link rel="stylesheet" href="./assets/normalize.css" />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script src="./assets/showdown.min.js"></script>
+    <script src="./assets/highlight.min.js"></script>
+  </head>
+  <body onload="init()">
+    <div class="left-nav" id="navlist"></div>
+    <div class="content">
+      <div class="markdown-content">
+        <div class="markdown-body" id="markdown"></div>
+        <div class="footer">2023年 Copyright © xiaolidan00@qq.com 粤ICP备17139828号</div>
+      </div>
+    </div>
+    <div class="right-menu" id="menulist"></div>
+    <button class="left-nav-btn" id="leftbtn">nav</button>
+    <button class="right-menu-btn" id="rightbtn">menu</button>
+    <script>
+      const version = 'urllist-11-7';
+      const converter = new showdown.Converter({ tables: true });
+      // console.log(showdown, showdown.getDefaultOptions());
+      var menulist = document.getElementById('menulist');
+      var navlist = document.getElementById('navlist');
+      function getData(url, cb) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, false);
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            const markdown = document.getElementById('markdown');
+
+            let html = converter.makeHtml(xhr.responseText);
+            markdown.innerHTML = html;
+            //生成本章目录
+            const result = [];
+            setTimeout(() => {
+              let cs = markdown.children;
+              let h1count = 1;
+              let h2count = 1;
+              for (let i = 0; i < cs.length; i++) {
+                let c = cs[i];
+                let tagName = c.tagName.toLowerCase();
+
+                if (['h1', 'h2'].includes(tagName)) {
+                  let dom = document.createElement('a');
+                  if (tagName == 'h2') {
+                    dom.setAttribute('level', 2);
+                    c.innerText = h1count + '.' + h2count + '.' + c.innerText;
+                    h2count++;
+                  } else {
+                    c.innerText = h1count + '.' + c.innerText;
+                    dom.setAttribute('level', 1);
+                    h2count = 1;
+                    h1count++;
+                  }
+
+                  dom.innerText = c.innerText;
+                  dom.href = '#' + c.id;
+
+                  menulist.appendChild(dom);
+                }
+              }
+              menulist.onclick = (ev) => {
+                let a = menulist.querySelector('.active');
+                if (a) {
+                  a.className = '';
+                }
+
+                ev.target.classList.add('active');
+              };
+              let codes = markdown.querySelectorAll('pre code');
+              for (let i = 0; i < codes.length; i++) {
+                let code = codes[i];
+                hljs.highlightElement(code);
+              }
+            }, 50);
+          }
+        };
+        xhr.send();
+      }
+      function getList() {
+        return new Promise((resolve) => {
+          let list = window.localStorage.getItem(version);
+          if (list) {
+            resolve(JSON.parse(list));
+          } else {
+            fetch('urls.json')
+              .then((res) => res.json())
+              .then((res) => {
+                window.localStorage.setItem(version, JSON.stringify(res));
+                resolve(res);
+              });
+          }
+        });
+      }
+      function init() {
+        getList().then((res) => {
+          let url = '';
+          if (window.location.search) {
+            url = window.location.search.split('=')[1];
+          }
+
+          res.forEach((a) => {
+            const dom = document.createElement('a');
+            if (a.url == url) {
+              dom.classList.add('active');
+            }
+            if (a.url) {
+              dom.href = '?url=' + a.url;
+            } else {
+              dom.classList.add('disabled');
+            }
+
+            dom.innerText = a.name;
+            navlist.appendChild(dom);
+          });
+          if (url) {
+            getData(url);
+          } else {
+            getData(res[1].url);
+          }
+          const leftbtn = document.getElementById('leftbtn');
+          const leftaction = () => {
+            if (navlist.classList.contains('show')) {
+              navlist.classList.remove('show');
+            } else {
+              navlist.classList.add('show');
+            }
+          };
+          leftbtn.onclick = leftaction;
+
+          const rightbtn = document.getElementById('rightbtn');
+          const rightaction = () => {
+            if (menulist.classList.contains('show')) {
+              menulist.classList.remove('show');
+            } else {
+              menulist.classList.add('show');
+              if (navlist.classList.contains('show')) {
+                navlist.classList.remove('show');
+              }
+            }
+          };
+          rightbtn.onclick = rightaction;
+        });
+      }
+    </script>
+  </body>
+</html>

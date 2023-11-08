@@ -4,6 +4,12 @@ dependencies:
   gitbook-cli:
     specifier: ^2.3.2
     version: 2.3.2
+  normalize.css:
+    specifier: ^8.0.1
+    version: 8.0.1
+  showdown:
+    specifier: ^2.1.0
+    version: 2.1.0
 
 packages:
 
@@ -13,6 +19,11 @@ packages:
 
   /commander@2.11.0:
     resolution: {integrity: sha512-b0553uYA5YAEGgyYIGYROzKQ7X5RAqedkfjiZxwi0kL1g3bOaBNNZfYkzt/CL0umgD5wc9Jec2FbB98CjkMRvQ==}
+    dev: false
+
+  /commander@9.5.0:
+    resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
+    engines: {node: ^12.20.0 || >=14}
     dev: false
 
   /fs-extra@3.0.1:
@@ -56,6 +67,10 @@ packages:
 
   /minimist@0.0.10:
     resolution: {integrity: sha512-iotkTvxc+TwOm5Ieim8VnSNvCDjCK9S8G3scJ50ZthspSxa7jx50jkhYduuAtAjvfDUwSgOwf8+If99AlOEhyw==}
+    dev: false
+
+  /normalize.css@8.0.1:
+    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
     dev: false
 
   /npm@2.15.12:
@@ -274,6 +289,13 @@ packages:
   /semver@5.3.0:
     resolution: {integrity: sha512-mfmm3/H9+67MCVix1h+IXTpDwL6710LyHuk7+cWC9T1mE0qz4iHhh6r4hU2wrIT9iTsAAC2XQRvfblL028cpLw==}
     hasBin: true
+    dev: false
+
+  /showdown@2.1.0:
+    resolution: {integrity: sha512-/6NVYu4U819R2pUIk79n67SYgJHWCce0a5xTP979WbNp0FL9MN1I1QK662IDU1b6JzKTvmhgI7T7JYIxBi3kMQ==}
+    hasBin: true
+    dependencies:
+      commander: 9.5.0
     dev: false
 
   /tmp@0.0.31:

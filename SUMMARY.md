@@ -15,8 +15,9 @@
 
 ### 学习笔记
 
-- [typescript 学习笔记](note/ts.md)
+<!-- - [typescript 学习笔记](note/ts.md) -->
+
 - [react18 学习笔记](note/react-guide.md)
 - [canvas 学习笔记](note/canvas.md)
 
-<link rel="stylesheet" href="./styles/website.css">
+<link rel="stylesheet" href="styles/website.css">
