@@ -161,8 +161,12 @@ body {
   li {
     line-height: 2;
   }
+  li::marker {
+    color: $primary;
+  }
 
-  a {
+  a,
+  strong {
     color: $primary;
   }
   h1,

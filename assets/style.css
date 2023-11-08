@@ -165,7 +165,11 @@ body {
 .markdown-body li {
   line-height: 2;
 }
-.markdown-body a {
+.markdown-body li::marker {
+  color: #1a67ff;
+}
+.markdown-body a,
+.markdown-body strong {
   color: #1a67ff;
 }
 .markdown-body h1,
