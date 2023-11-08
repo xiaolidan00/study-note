@@ -93,7 +93,7 @@ body {
 .left-nav a,
 .right-menu a {
   color: #666;
-  line-height: 2;
+  line-height: 1.5;
   display: block;
   width: 100%;
   padding: 8px;
@@ -148,7 +148,6 @@ body {
   flex: 1;
   overflow: auto;
   height: 100%;
-  padding: 10px;
 }
 .content .markdown-content {
   margin: 0 auto;
@@ -160,6 +159,7 @@ body {
   min-height: calc(100% - 34px);
   white-space: pre-wrap;
   font-size: 14px;
+  padding: 10px;
 }
 .markdown-body p,
 .markdown-body li {
