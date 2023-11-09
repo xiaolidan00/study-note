@@ -52,13 +52,10 @@ https://vue3js.cn/interview/React/summary.html
 
 - componentWillUnmount
 
-  1.React16 新的生命周期弃用了 componentWillMount、componentWillReceivePorps，componentWillUpdate
-
-  2.新增了 getDerivedStateFromProps、getSnapshotBeforeUpdate 来代替弃用的三个钩子函数（componentWillMount、componentWillReceivePorps，componentWillUpdate）
-
-  3.React16 并没有删除这三个钩子函数，但是不能和新增的两个钩子函数（getDerivedStateFromProps、getSnapshotBeforeUpdate）混用。注意：React17 将会删除 componentWillMount、componentWillReceivePorps，componentWillUpdate
-
-  4.新增了对错误处理的钩子函数（componentDidCatch）
+1. React16 新的生命周期弃用了 componentWillMount、componentWillReceivePorps，componentWillUpdate
+2. 新增了 getDerivedStateFromProps、getSnapshotBeforeUpdate 来代替弃用的三个钩子函数（componentWillMount、componentWillReceivePorps，componentWillUpdate）
+3. React16 并没有删除这三个钩子函数，但是不能和新增的两个钩子函数（getDerivedStateFromProps、getSnapshotBeforeUpdate）混用。注意：React17 将会删除 componentWillMount、componentWillReceivePorps，componentWillUpdate
+4. 新增了对错误处理的钩子函数（componentDidCatch）
 
 # state 和 props 有什么区别？
 

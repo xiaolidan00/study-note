@@ -15,19 +15,20 @@ vue2 使用的是 Object.defineProperty 的 get 和 set， 收集依赖， 通�
 
 vue3 基于 Proxy,有 13 中动作捕获器，监听动作更细致丰富，
 对应 Reflect 的 13 种操作方法
-Reflect.apply(target, thisArg, args)
-Reflect.construct(target, args)
-Reflect.get(target, name, receiver)
-Reflect.set(target, name, value, receiver)
-Reflect.defineProperty(target, name, desc)
-Reflect.deleteProperty(target, name)
-Reflect.has(target, name)
-Reflect.ownKeys(target)
-Reflect.isExtensible(target)
-Reflect.preventExtensions(target)
-Reflect.getOwnPropertyDescriptor(target, name)
-Reflect.getPrototypeOf(target)
-Reflect.setPrototypeOf(target, prototype)
+
+> Reflect.apply(target, thisArg, args)
+> Reflect.construct(target, args)
+> Reflect.get(target, name, receiver)
+> Reflect.set(target, name, value, receiver)
+> Reflect.defineProperty(target, name, desc)
+> Reflect.deleteProperty(target, name)
+> Reflect.has(target, name)
+> Reflect.ownKeys(target)
+> Reflect.isExtensible(target)
+> Reflect.preventExtensions(target)
+> Reflect.getOwnPropertyDescriptor(target, name)
+> Reflect.getPrototypeOf(target)
+> Reflect.setPrototypeOf(target, prototype)
 
 # vue 与 react 对比
 

@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>叮叮丹-xiaolidan00.top</title>
     <link rel="stylesheet" href="./assets/highlight-github.min.css" />
-    <link rel="stylesheet" href="./assets/normalize.css" />
+    <!-- <link rel="stylesheet" href="./assets/normalize.css" /> -->
     <link rel="stylesheet" href="./assets/style.css" />
     <script src="./assets/showdown.min.js"></script>
     <script src="./assets/highlight.min.js"></script>
   </head>
   <body onload="init()">
     <div class="left-nav" id="navlist"></div>
-    <div class="content">
+    <div class="content" onclick="onHideList()">
       <div class="markdown-content">
         <div class="markdown-body" id="markdown"></div>
         <div class="footer">2023年 Copyright © xiaolidan00@qq.com 粤ICP备17139828号</div>
@@ -22,7 +22,7 @@
     <button class="left-nav-btn" id="leftbtn">nav</button>
     <button class="right-menu-btn" id="rightbtn">menu</button>
     <script>
-      const version = 'urllist-11-8';
+      const version = 'urllist-11-9';
       const converter = new showdown.Converter({ tables: true });
       // console.log(showdown, showdown.getDefaultOptions());
       var menulist = document.getElementById('menulist');
@@ -64,10 +64,10 @@
                     h2count = 1;
                     h1count++;
                   }
-
+                  dom.title = c.innerText;
                   dom.innerText = c.innerText;
                   dom.href = '#' + c.id;
-
+                  dom.target = '_self';
                   menulist.appendChild(dom);
                 }
               }
@@ -121,14 +121,14 @@
             } else {
               dom.classList.add('disabled');
             }
-
+            dom.target = '_self';
             dom.innerText = a.name;
             navlist.appendChild(dom);
           });
           if (url) {
             getData(url);
           } else {
-            getData(res[1].url);
+            getData(res[0].url);
           }
           const leftbtn = document.getElementById('leftbtn');
           const leftaction = () => {
@@ -136,6 +136,9 @@
               navlist.classList.remove('show');
             } else {
               navlist.classList.add('show');
+              if (menulist.classList.contains('show')) {
+                menulist.classList.remove('show');
+              }
             }
           };
           leftbtn.onclick = leftaction;
@@ -153,6 +156,14 @@
           };
           rightbtn.onclick = rightaction;
         });
+      }
+      function onHideList() {
+        if (navlist.classList.contains('show')) {
+          navlist.classList.remove('show');
+        }
+        if (menulist.classList.contains('show')) {
+          menulist.classList.remove('show');
+        }
       }
     </script>
   </body>

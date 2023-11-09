@@ -1,4 +1,5 @@
 [
+  { "name": "主页", "url": "README.md" },
   { "name": "面试题" },
   { "name": "代码阅读", "url": "interview/readcode.md" },
   { "name": "js/es6", "url": "interview/js.md" },
@@ -14,5 +15,9 @@
   { "name": "react18 学习笔记", "url": "note/react-guide.md" },
   { "name": "canvas 学习笔记", "url": "note/canvas.md" },
   { "name": "typescript 学习笔记", "url": "note/ts.md" },
-  { "name": "软考架构师", "url": "note/note.md" }
+  { "name": "软考架构师", "url": "note/note.md" },
+  { "name": "算法题" },
+  { "name": "数组", "url": "code/array.md" },
+  { "name": "字符串", "url": "code/str.md" },
+  { "name": "树", "url": "code/str.md" }
 ]
