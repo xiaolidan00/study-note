@@ -1,6 +1,6 @@
 # 阮一峰《Typescript 教程》读书笔记
 
-内容来源于(阮一峰《Typescript 教程》)[https://www.bookstack.cn/read/wangdoc-typescript-tutorial/docs-tsconfig.json.md]
+内容来源于(阮一峰《Typescript 教程》)[https://wangdoc.com/typescript/intro]
 
 # 安装与常用命令
 

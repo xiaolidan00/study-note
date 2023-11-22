@@ -94,6 +94,21 @@ Fully Typed APIs —— 类型齐全的 API
 - 执行热更新：moduleGraph+handleHMRUpdate 模块。接收到文件改动执行的回调，这里主要两个操作：moduleGraph.onFileChange 修改文件的缓存和 handleHMRUpdate 执行热更新。moduleGraph 是 Vite 定义的用来记录整个应用的模块依赖图的类，除此之外还有 moduleNode。moduleGraph 是由一系列 map 组成，而这些 map 分别是 url、id、file 等与 ModuleNode 的映射，而 ModuleNode 是 Vite 中定义的最小模块单位。
 - handleHMRUpdate: 主要是监听文件的更改，进行处理和判断通过 WebSocket 给客户端发送消息通知客户端去请求新的模块代码。
 
+# rollup
+
+rollup 是一款 ES Modules 打包器，相比于 Webpack，Rollup 要小巧的多，打包生成的文件更小。
+1、优势
+
+打包的产物比较干净，体积小，没有 webpack 那么多工具函数。
+插件机制设计得相对更干净简洁，单个模块的 resolve / load / transform 跟打包环节完全解耦。
+rollup 原生支持 tree-shaking
+
+2、劣势
+
+对 js 以外的模块的支持上不如 webpack，加载其他类型的资源文件或者支持导入 CommonJS 模块等，需要使用插件去完成。
+rollup 不支持 HMR（热更新），使开发效率降低。
+rollup 并不适合开发应用使用，因为需要使用第三方模块，而目前第三方模块大多数使用 CommonJs 方式导出成员。
+
 # SPA 首屏加载慢
 
 - 减小入口文件积，按需加载

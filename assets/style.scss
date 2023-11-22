@@ -49,9 +49,10 @@ body {
     color: #666;
     border: none;
     outline: none;
-    box-shadow: 0 0 8px #ccc;
     background-color: white;
     z-index: 3;
+    border-radius: 3px;
+    border: solid 1px rgba(0, 0, 0, 0.1);
     font-size: 12px;
     &:hover,
     &:active {
@@ -87,6 +88,12 @@ body {
   text-align: center;
   padding: 10px;
 }
+.left-nav {
+  border-right: solid 1px rgba(0, 0, 0, 0.1);
+}
+.right-menu {
+  border-left: solid 1px rgba(0, 0, 0, 0.1);
+}
 .left-nav,
 .right-menu {
   height: 100%;
@@ -94,7 +101,6 @@ body {
   width: 300px;
   background-color: white;
 
-  box-shadow: 0 0 8px #ccc;
   a {
     color: #666;
     line-height: 1.5;
@@ -346,11 +352,11 @@ body {
   }
   pre {
     background-color: $bg;
-
+    width: 100%;
+    overflow: auto;
     border-radius: 4px;
     font-size: 14px;
     line-height: 2;
-    white-space: pre-wrap;
   }
 }
 .hljs-comment {

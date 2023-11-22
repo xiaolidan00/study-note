@@ -22,7 +22,7 @@
     <button class="left-nav-btn" id="leftbtn">nav</button>
     <button class="right-menu-btn" id="rightbtn">menu</button>
     <script>
-      const version = 'urllist-11-9';
+      const version = 'urllist-11-21';
       const converter = new showdown.Converter({ tables: true });
       // console.log(showdown, showdown.getDefaultOptions());
       var menulist = document.getElementById('menulist');
@@ -51,21 +51,26 @@
                   let dom = document.createElement('a');
                   if (tagName == 'h3') {
                     dom.setAttribute('level', 3);
-                    c.innerText = h1count + '.' + h2count + '.' + h3count + '.' + c.innerText;
+                    c.innerText =
+                      h1count - 1 + '.' + (h2count - 1) + '.' + h3count + '.' + c.innerText;
                     h3count++;
                   } else if (tagName == 'h2') {
                     dom.setAttribute('level', 2);
-                    c.innerText = h1count + '.' + h2count + '.' + c.innerText;
+                    c.innerText = h1count - 1 + '.' + h2count + '.' + c.innerText;
                     h2count++;
                     h3count = 1;
                   } else {
                     c.innerText = h1count + '.' + c.innerText;
                     dom.setAttribute('level', 1);
                     h2count = 1;
+                    h3count = 1;
                     h1count++;
                   }
                   dom.title = c.innerText;
                   dom.innerText = c.innerText;
+                  if (!c.id) {
+                    c.id = 'a' + Math.round(Math.random() * 99999);
+                  }
                   dom.href = '#' + c.id;
                   dom.target = '_self';
                   menulist.appendChild(dom);
@@ -84,6 +89,11 @@
                 let code = codes[i];
                 hljs.highlightElement(code);
               }
+              markdown.onclick = (e) => {
+                if (e.target.tagName.toLowerCase() == 'img') {
+                  window.open(e.target.src);
+                }
+              };
             }, 50);
           }
         };
