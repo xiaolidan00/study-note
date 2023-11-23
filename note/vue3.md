@@ -112,7 +112,7 @@ vue3 采用并行编译：每个包的编译都是一个异步过程，他们之
 
 3. watcher 依赖管理=》触发对应 DOM 重新渲染=》执行组件渲染函数=》虚拟 DOM 树
 
-![reactive](../images/vue3/reactive.png)
+![reactive](images/vue3/reactive.png)
 
 - Vue2 通过 Object.defineProperty 去劫持数据的 getter 和 setter。
 
@@ -924,7 +924,7 @@ const render: RootRenderFunction = (vnode, container, isSVG) => {
 
 ## Vue App 渲染流程
 
-![渲染流程](../images/vue3/vueApp.png)
+![渲染流程](images/vue3/vueApp.png)
 
 # 组件更新
 
@@ -1192,7 +1192,7 @@ newIndexToOldIndexMap 的数组，存储新子序列节点的索引和旧子序�
 
 ## 组件更新流程
 
-![组件更新的流程](../images/vue3/comp-update.png)
+![组件更新的流程](images/vue3/comp-update.png)
 
 # 组件实例
 
@@ -1270,7 +1270,7 @@ function applyOptions() {}
 
 ## 组件初始化流程
 
-![image](../images/vue3/init-comp.png)
+![image](images/vue3/init-comp.png)
 
 # 组件的 props
 
@@ -1375,7 +1375,7 @@ export function handleError(
 
 ## 组件生命周期
 
-![image](../images/vue3/life-cycle.png)
+![image](images/vue3/life-cycle.png)
 
 # 异步组件
 
@@ -1765,7 +1765,7 @@ ComputedRefImpl 的内部，还对实例的 value 属性创建了 getter 和 set
 
 computed 内部两个重要变量`_dirty`计算属性值是否是脏的，判断是否需要重新计算
 `_value`计算属性每次计算后的结果。
-![image](../images/vue3/computed.png)
+![image](images/vue3/computed.png)
 
 核心：延迟计算和缓存
 优势：只要它依赖的响应式数据不变化，就可以使用缓存的`_value`，而不用每次渲染数组时执行函数进行计算。（空间换时间的优化）

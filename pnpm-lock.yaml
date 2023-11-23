@@ -10,6 +10,9 @@ dependencies:
   showdown:
     specifier: ^2.1.0
     version: 2.1.0
+  xcolor-helper:
+    specifier: ^1.0.0
+    version: 1.0.0
 
 packages:
 
@@ -320,4 +323,8 @@ packages:
   /wordwrap@0.0.3:
     resolution: {integrity: sha512-1tMA907+V4QmxV7dbRvb4/8MaRALK6q9Abid3ndMYnbyo8piisCmeONVqVSXqQA3KaP4SLt5b7ud6E2sqP8TFw==}
     engines: {node: '>=0.4.0'}
+    dev: false
+
+  /xcolor-helper@1.0.0:
+    resolution: {integrity: sha512-NyO3SDm8HtX14r6RDXAI1gaU2mgrOC0a50D3eXKeblQVQC0lbuNgLA5j/v9WiT3wiTk7J4Ee+KyzEM5w2BxAMA==}
     dev: false

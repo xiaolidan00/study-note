@@ -543,7 +543,7 @@ fiber.stateNode 会在 completeWork 中创建
 
 为了解决这个问题，在 mount 时只有 rootFiber 会赋值 Placement effectTag，在 commit 阶段只会执行一次插入操作。
 
-![beginWork](../images/react/beginWork.png)
+![beginWork](images/react/beginWork.png)
 
 ## completeWork
 
@@ -684,7 +684,7 @@ rootFiber.firstEffect -----------> fiber -----------> fiber
 
 render 阶段全部工作完成。在 performSyncWorkOnRoot 函数中 fiberRootNode 被传递给 commitRoot 方法，开启 commit 阶段工作流程。
 
-![completeWork](../images/react/completeWork.png)
+![completeWork](images/react/completeWork.png)
 
 # commit 阶段
 
@@ -1171,7 +1171,7 @@ function reconcileChildFibers(
 
 ## 单节点
 
-![image](../images/react/diff.png)
+![image](images/react/diff.png)
 
 ```js
 function reconcileSingleElement(
