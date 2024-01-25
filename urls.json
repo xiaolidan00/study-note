@@ -17,5 +17,6 @@
   { "name": "《React技术揭秘》学习笔记", "url": "note/React.md" },
   { "name": "canvas 学习笔记", "url": "note/canvas.md" },
   { "name": "typescript 学习笔记", "url": "note/ts.md" },
-  { "name": "软考架构师", "url": "note/note.md" }
+  { "name": "软考架构师", "url": "note/note.md" },
+  { "name": "Leetcode学习笔记", "url": "note/code-study.md" }
 ]
