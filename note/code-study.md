@@ -1,201 +1,6 @@
-# 动态规划
-
-参考：https://leetcode.cn/circle/discuss/krb5lH/
-https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61963bcdc1553b002e57bf13
-
-## 动态规划特点
-
-「分治」是算法中的一种基本思想，其通过将原问题分解为子问题，不断递归地将子问题分解为更小的子问题，并通过组合子问题的解来得到原问题的解。
-
-类似于分治算法，「动态规划」也通过组合子问题的解得到原问题的解。不同的是，适合用动态规划解决的问题具有「重叠子问题」和「最优子结构」两大特性。
-
-### 重叠子问题
-
-动态规划的子问题是有重叠的，即各个子问题中包含重复的更小子问题。若使用暴力法穷举，求解这些相同子问题会产生大量的重复计算，效率低下。
-
-动态规划在第一次求解某子问题时，会将子问题的解保存至矩阵中；后续遇到重叠子问题时，则直接通过查表获取解，保证每个独立子问题只被计算一次，从而降低算法的时间复杂度。
-
-### 最优子结构
-
-如果一个问题的最优解可以由其子问题的最优解组合构成，那么称此问题具有最优子结构。
-
-动态规划从基础问题的解开始，不断迭代组合、选择子问题的最优解，最终得到原问题最优解。
-
-### 动态规划和其他算法的区别
-
-动态规划和分治的区别：动态规划和分治都有最优子结构 ，但是分治的子问题不重叠
-动态规划和贪心的区别：动态规划中每一个状态一定是由上一个状态推导出来的，这一点就区分于贪心，贪心没有状态推导，而是从局部直接选最优解，所以它永远是局部最优，但是全局的解不一定是最优的。
-动态规划和递归的区别：递归和回溯可能存在非常多的重复计算，动态规划可以用递归加记忆化的方式减少不必要的重复计算
-
-### 解动态规划题目的步骤
-
-1. 根据重叠子问题定义状态
-2. 寻找最优子结构推导状态转移方程
-3. 确定 dp 初始状态
-4. 确定输出值
-
-**动态规划解题框架**
-若确定给定问题具有重叠子问题和最优子结构，那么就可以使用动态规划求解。总体上看，求解可分为四步：
-
-1. 状态定义： 构建问题最优解模型，包括问题最优解的定义、有哪些计算解的自变量；
-2. 初始状态： 确定基础子问题的解（即已知解），原问题和子问题的解都是以基础子问题的解为起始点，在迭代计算中得到的；
-3. 转移方程： 确定原问题的解与子问题的解之间的关系是什么，以及使用何种选择规则从子问题最优解组合中选出原问题最优解；
-4. 返回值： 确定应返回的问题的解是什么，即动态规划在何处停止迭代；
-
-**动态规划的解题方法**
-
-- 递归+记忆化(自顶向下)
-- 动态规划（自底向上）
-
-## 重叠子问题示例：斐波那契数列
-
-https://leetcode.cn/problems/fibonacci-number/submissions/494780155/?envType=study-plan-v2&envId=dynamic-programming
-
-f(n)=f(n-1)+f(n-2)
-f(0)=0,f(1)=1
-**暴力递归法**
-
-```js
-// 求第 n 个斐波那契数
-function fibonacci(n) {
-  if (n == 0) return 0; // 返回 f(0)
-  if (n == 1) return 1; // 返回 f(1)
-  return fibonacci(n - 1) + fibonacci(n - 2); // 分解为两个子问题求解
-}
-```
-
-**记忆化递归**
-重叠子问题产生了大量的递归树节点，其不应被重复计算.可以在递归中第一次求解子问题时，就将它们保存；后续递归中再次遇到相同子问题时，直接访问内存赋值即可
-
-```js
-function fibonacci(n, dp) {
-  if (n == 0) return 0; // 返回 f(0)
-  if (n == 1) return 1; // 返回 f(1)
-  if (dp[n] != 0) return dp[n]; // 若 f(n) 以前已经计算过，则直接返回记录的解
-  dp[n] = fibonacci(n - 1, dp) + fibonacci(n - 2, dp); // 将 f(n) 则记录至 dp
-  return dp[n];
-}
-
-// 求第 n 个斐波那契数
-function fibonacciMemorized(n) {
-  var dp = []; // 用于保存 f(0) 至 f(n) 问题的解
-  return fibonacci(n, dp);
-}
-```
-
-**动态规划**
-
-```js
-// 求第 n 个斐波那契数
-function fibonacci(n) {
-  if (n == 0) return 0; // 若求 f(0) 则直接返回 0
-  var dp = []; // 初始化 dp 列表
-  dp[1] = 1; // 初始化 f(0), f(1)
-  for (let i = 2; i <= n; i++) {
-    // 状态转移求取 f(2), f(3), ..., f(n)
-    dp[i] = dp[i - 1] + dp[i - 2];
-  }
-  return dp[n]; // 返回 f(n)
-}
-
-// 求第 n 个斐波那契数
-function fibonacci(n) {
-  if (n == 0) return 0; // 若求 f(0) 则直接返回 0
-  let a = 0,
-    b = 1; // 初始化 f(0), f(1)
-  for (let i = 2; i <= n; i++) {
-    // 状态转移求取 f(2), f(3), ..., f(n)
-    let tmp = a;
-    a = b;
-    b = tmp + b;
-  }
-  return b; // 返回 f(n)
-}
-
-// 时间复杂度O(n)，空间复杂度O(1)
-var fib = function (N) {
-  if (N <= 1) {
-    return N;
-  }
-  let prev2 = 0;
-  let prev1 = 1;
-  let result = 0;
-  for (let i = 2; i <= N; i++) {
-    result = prev1 + prev2;
-    prev2 = prev1;
-    prev1 = result;
-  }
-  return result;
-};
-```
-
-## 最优子结构示例：蛋糕最高售价
-
-f(0)=0,f(1)=p(1)
-f(n)=max(f(i)+p(n-i))
-
-**暴力递归**
-
-```js
-// 输入蛋糕价格列表 priceList ，求重量为 n 蛋糕的最高售价
-function maxCakePrice(n, priceList) {
-  if (n <= 1) return priceList[n]; // 蛋糕重量 <= 1 时直接返回
-  var f_n = 0;
-  for (
-    let i = 0;
-    i < n;
-    i++ // 从 n 种组合种选择最高售价的组合作为 f(n)
-  )
-    f_n = Math.max(f_n, maxCakePrice(i, priceList) + priceList[n - i]);
-  return f_n; // 返回 f(n)
-}
-```
-
-**记忆递归**
-
-```js
-// 输入蛋糕价格列表 priceList ，求重量为 n 蛋糕的最高售价
-function maxCakePrice(n, priceList, dp) {
-  if (n <= 1) return priceList[n]; // 蛋糕重量 <= 1 时直接返回
-  var f_n = 0;
-  for (var i = 0; i < n; i++) {
-    // 从 n 种组合种选择最高售价的组合作为 f(n)
-    var f_i = dp[i] != 0 ? dp[i] : maxCakePrice(i, priceList, dp);
-    f_n = Math.max(f_n, f_i + priceList[n - i]);
-  }
-  dp[n] = f_n; // 记录 f(n) 至 dp 数组
-  return f_n; // 返回 f(n)
-}
-
-function maxCakePriceMemorized(n, priceList) {
-  var dp = [];
-  return maxCakePrice(n, priceList, dp);
-}
-```
-
-**动态规划**
-
-```js
-// 输入蛋糕价格列表 priceList ，求重量为 n 蛋糕的最高售价
-function maxCakePrice(n, priceList) {
-  if (n <= 1) return priceList[n]; // 蛋糕重量 <= 1 时直接返回
-  let dp = []; // 初始化 dp 列表
-  for (let j = 1; j <= n; j++) {
-    // 按顺序计算 f(1), f(2), ..., f(n)
-    for (
-      let i = 0;
-      i < j;
-      i++ // 从 j 种组合种选择最高售价的组合作为 f(j)
-    )
-      dp[j] = Math.max(dp[j], dp[i] + priceList[j - i]);
-  }
-  return dp[n];
-}
-```
-
 # 数组
 
-## 二分查找法++
+## >二分查找法
 
 ```js
 function binarySearch(arr, target) {
@@ -221,7 +26,7 @@ function binarySearch(arr, target) {
 }
 ```
 
-## 283. 移动零++
+## >283. 移动零
 
 https://leetcode.cn/problems/move-zeroes/description/
 
@@ -311,10 +116,7 @@ int len = removeElement(nums, val);
 // 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。
 for (int i = 0; i < len; i++) {
     print(nums[i]);
-}
-
-
-示例 1：
+}示例 1：
 
 输入：nums = [3,2,2,3], val = 3
 输出：2, nums = [2,2]
@@ -402,10 +204,7 @@ int len = removeDuplicates(nums);
 // 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。
 for (int i = 0; i < len; i++) {
     print(nums[i]);
-}
-
-
-示例 1：
+}示例 1：
 
 输入：nums = [1,1,1,2,2,3]
 输出：5, nums = [1,1,2,2,3]
@@ -444,7 +243,7 @@ var removeDuplicates = function (nums) {
 };
 ```
 
-## 75. 颜色分类++
+## >75. 颜色分类
 
 https://leetcode.cn/problems/sort-colors/description/
 
@@ -454,9 +253,6 @@ https://leetcode.cn/problems/sort-colors/description/
 我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
 
 必须在不使用库内置的 sort 函数的情况下解决这个问题。
-
-
-
 示例 1：
 
 输入：nums = [2,0,2,1,1,0]
@@ -523,9 +319,6 @@ https://leetcode.cn/problems/merge-sorted-array/description/
 请你 合并 nums2 到 nums1 中，使合并后的数组同样按 非递减顺序 排列。
 
 注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
-
-
-
 示例 1：
 
 输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
@@ -721,7 +514,7 @@ void quick_sort(int s[], int l, int r)
 }
 ```
 
-## 167. 两数之和 II - 输入有序数组++
+## >167. 两数之和 II - 输入有序数组
 
 https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/description/
 
@@ -821,9 +614,6 @@ https://leetcode.cn/problems/valid-palindrome/description/
 字母和数字都属于字母数字字符。
 
 给你一个字符串 s，如果它是 回文串 ，返回 true ；否则，返回 false 。
-
-
-
 示例 1：
 
 输入: s = "A man, a plan, a canal: Panama"
@@ -883,9 +673,6 @@ https://leetcode.cn/problems/reverse-string/description/
 编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 s 的形式给出。
 
 不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。
-
-
-
 示例 1：
 
 输入：s = ["h","e","l","l","o"]
@@ -928,9 +715,6 @@ https://leetcode.cn/problems/reverse-vowels-of-a-string/description/
 给你一个字符串 s ，仅反转字符串中的所有元音字母，并返回结果字符串。
 
 元音字母包括 'a'、'e'、'i'、'o'、'u'，且可能以大小写两种形式出现不止一次。
-
-
-
 示例 1：
 
 输入：s = "hello"
@@ -1038,7 +822,9 @@ var maxArea = function (height) {
 };
 ```
 
-## 209. 长度最小的子数组，滑动窗口，子数组++
+## >209. 长度最小的子数组
+
+滑动窗口，子数组
 
 https://leetcode.cn/problems/minimum-size-subarray-sum/description/
 
@@ -1046,9 +832,6 @@ https://leetcode.cn/problems/minimum-size-subarray-sum/description/
 给定一个含有 n 个正整数的数组和一个正整数 target 。
 
 找出该数组中满足其总和大于等于 target 的长度最小的 连续子数组 [numsl, numsl+1, ..., numsr-1, numsr] ，并返回其长度。如果不存在符合条件的子数组，返回 0 。
-
-
-
 示例 1：
 
 输入：target = 7, nums = [2,3,1,2,4,3]
@@ -1108,7 +891,7 @@ var minSubArrayLen = function (target, nums) {
 };
 ```
 
-## 3. 无重复字符的最长子串++
+## >3. 无重复字符的最长子串
 
 https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/
 
@@ -1413,15 +1196,12 @@ var minWindow = function (s, t) {
 二分搜索树：O(logn) set ，map
 哈希表:hash O(1),失去数据的顺序性
 
-## 349. 两个数组的交集++
+## >349. 两个数组的交集
 
 https://leetcode.cn/problems/intersection-of-two-arrays/description/
 
 ```txt
 给定两个数组 nums1 和 nums2 ，返回 它们的交集 。输出结果中的每个元素一定是 唯一 的。我们可以 不考虑输出结果的顺序 。
-
-
-
 示例 1：
 
 输入：nums1 = [1,2,2,1], nums2 = [2,2]
@@ -1439,15 +1219,12 @@ https://leetcode.cn/problems/intersection-of-two-arrays/description/
 0 <= nums1[i], nums2[i] <= 1000
 ```
 
-## 350. 两个数组的交集 II++
+## >350. 两个数组的交集 II
 
 https://leetcode.cn/problems/intersection-of-two-arrays-ii/description/
 
 ```txt
 给你两个整数数组 nums1 和 nums2 ，请你以数组形式返回两数组的交集。返回结果中每个元素出现的次数，应与元素在两个数组中都出现的次数一致（如果出现次数不一致，则考虑取较小值）。可以不考虑输出结果的顺序。
-
-
-
 示例 1：
 
 输入：nums1 = [1,2,2,1], nums2 = [2,2]
@@ -1531,7 +1308,7 @@ var intersect = function (nums1, nums2) {
 
 ## 451
 
-## 1. 两数之和++
+## >1. 两数之和
 
 https://leetcode.cn/problems/two-sum/description/
 
@@ -1541,9 +1318,6 @@ https://leetcode.cn/problems/two-sum/description/
 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
 
 你可以按任意顺序返回答案。
-
-
-
 示例 1：
 
 输入：nums = [2,7,11,15], target = 9
@@ -1593,7 +1367,7 @@ var twoSum = function (nums, target) {
 
 ## 16
 
-## 454. 四数相加 II++
+## >454. 四数相加 II
 
 https://leetcode.cn/problems/4sum-ii/
 
@@ -1652,7 +1426,7 @@ var fourSumCount = function (nums1, nums2, nums3, nums4) {
 
 ## 49
 
-## 447. 回旋镖的数量++
+## >447. 回旋镖的数量
 
 https://leetcode.cn/problems/number-of-boomerangs/description/
 
@@ -1711,15 +1485,12 @@ var numberOfBoomerangs = function (points) {
 };
 ```
 
-## 149. 直线上最多的点数(困难)++
+## >149. 直线上最多的点数(困难)
 
 https://leetcode.cn/problems/max-points-on-a-line/description/
 
 ```txt
 给你一个数组 points ，其中 points[i] = [xi, yi] 表示 X-Y 平面上的一个点。求最多有多少个点在同一条直线上。
-
-
-
 示例 1：
 
 
@@ -1785,15 +1556,12 @@ const gcd = (a, b) => {
 };
 ```
 
-## 219. 存在重复元素 II++
+## >219. 存在重复元素 II
 
 https://leetcode.cn/problems/contains-duplicate-ii/description/
 
 ```txt
 给你一个整数数组 nums 和一个整数 k ，判断数组中是否存在两个 不同的索引 i 和 j ，满足 nums[i] == nums[j] 且 abs(i - j) <= k 。如果存在，返回 true ；否则，返回 false 。
-
-
-
 示例 1：
 
 输入：nums = [1,2,3,1], k = 3
@@ -1833,7 +1601,7 @@ var containsNearbyDuplicate = function (nums, k) {
 };
 ```
 
-## 217. 存在重复元素++
+## 217. 存在重复元素
 
 https://leetcode.cn/problems/contains-duplicate/description/
 
@@ -1879,7 +1647,7 @@ var containsDuplicate = function (nums) {
 };
 ```
 
-## 220. 存在重复元素 III++
+## 220. 存在重复元素 III
 
 https://leetcode.cn/problems/contains-duplicate-iii/description/
 
@@ -1892,9 +1660,6 @@ i != j,
 abs(i - j) <= indexDiff
 abs(nums[i] - nums[j]) <= valueDiff
 如果存在，返回 true ；否则，返回 false 。
-
-
-
 示例 1：
 
 输入：nums = [1,2,3,1], indexDiff = 3, valueDiff = 0
@@ -1979,7 +1744,7 @@ function printLink(head) {
 }
 ```
 
-## 206. 反转链表++
+## >206. 反转链表
 
 https://leetcode.cn/problems/reverse-linked-list/description/
 
@@ -2042,7 +1807,7 @@ var reverseList = function (head) {
 
 ## 445
 
-## 203. 移除链表元素++
+## >203. 移除链表元素
 
 https://leetcode.cn/problems/remove-linked-list-elements/description/
 
@@ -2099,15 +1864,12 @@ var removeElements = function (head, val) {
 
 ## 21
 
-## 24. 两两交换链表中的节点++
+## >24. 两两交换链表中的节点
 
 https://leetcode.cn/problems/swap-nodes-in-pairs/description/
 
 ```txt
 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
-
-
-
 示例 1：
 
 
@@ -2156,7 +1918,7 @@ var swapPairs = function (head) {
 
 ## 148
 
-## 237. 删除链表中的节点++
+## >237. 删除链表中的节点
 
 https://leetcode.cn/problems/delete-node-in-a-linked-list/description/
 
@@ -2222,15 +1984,12 @@ var deleteNode = function (node) {
 };
 ```
 
-## 19. 删除链表的倒数第 N 个结点++
+## >19. 删除链表的倒数第 N 个结点
 
 https://leetcode.cn/problems/remove-nth-node-from-end-of-list/description/
 
 ```txt
 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
-
-
-
 示例 1：
 
 
@@ -2289,15 +2048,12 @@ var removeNthFromEnd = function (head, n) {
 
 中间元素获取：temp1 走两步，temp 走一步，然后当 temp1 的元素 next 为空时,temp 在中间的位置
 
-## 234. 回文链表++
+## >234. 回文链表
 
 https://leetcode.cn/problems/palindrome-linked-list/description/
 
 ```txt
 给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。
-
-
-
 示例 1：
 
 
@@ -2367,7 +2123,7 @@ var isPalindrome = function (head) {
 
 # 栈与队列
 
-## 20. 有效的括号++
+## >20. 有效的括号
 
 https://leetcode.cn/problems/valid-parentheses/description/
 
@@ -2433,15 +2189,12 @@ var isValid = function (s) {
 
 ## 71
 
-## 144. 二叉树的前序遍历++
+## >144. 二叉树的前序遍历
 
 https://leetcode.cn/problems/binary-tree-preorder-traversal/description/
 
 ```txt
 给你二叉树的根节点 root ，返回它节点值的 前序 遍历。
-
-
-
 示例 1：
 
 
@@ -2522,15 +2275,12 @@ var preorderTraversal = function (root) {
 };
 ```
 
-## 94. 二叉树的中序遍历++
+## >94. 二叉树的中序遍历
 
 https://leetcode.cn/problems/binary-tree-inorder-traversal/description/
 
 ```txt
 给定一个二叉树的根节点 root ，返回 它的 中序 遍历 。
-
-
-
 示例 1：
 
 
@@ -2596,15 +2346,12 @@ var inorderTraversal = function (root) {
 };
 ```
 
-## 145. 二叉树的后序遍历++
+## >145. 二叉树的后序遍历
 
 https://leetcode.cn/problems/binary-tree-postorder-traversal/description/
 
 ```txt
 给你一棵二叉树的根节点 root ，返回其节点值的 后序遍历 。
-
-
-
 示例 1：
 
 
@@ -2674,15 +2421,12 @@ var postorderTraversal = function (root) {
 
 ## 341
 
-## 102. 二叉树的层序遍历++
+## >102. 二叉树的层序遍历
 
 https://leetcode.cn/problems/binary-tree-level-order-traversal/description/
 
 ```txt
 给你二叉树的根节点 root ，返回其节点值的 层序遍历 。 （即逐层地，从左到右访问所有节点）。
-
-
-
 示例 1：
 
 
@@ -2737,7 +2481,7 @@ var levelOrder = function (root) {
 
 ## 199
 
-## 279. 完全平方数++
+## >279. 完全平方数
 
 https://leetcode.cn/problems/perfect-squares/description/
 
@@ -2745,9 +2489,6 @@ https://leetcode.cn/problems/perfect-squares/description/
 给你一个整数 n ，返回 和为 n 的完全平方数的最少数量 。
 
 完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。
-
-
-
 示例 1：
 
 输入：n = 12
@@ -2824,7 +2565,7 @@ var numSquares = function (n) {
 
 ## 126
 
-## 347. 前 K 个高频元素++
+## >347. 前 K 个高频元素
 
 https://leetcode.cn/problems/top-k-frequent-elements/description/
 
@@ -2890,7 +2631,7 @@ var topKFrequent = function (nums, k) {
 
 # 二叉树与递归
 
-## 104. 二叉树的最大深度++
+## >104. 二叉树的最大深度
 
 https://leetcode.cn/problems/maximum-depth-of-binary-tree/description/
 
@@ -2926,7 +2667,7 @@ var maxDepth = function (root) {
 
 ## 111
 
-## 226. 翻转二叉树++
+## >226. 翻转二叉树
 
 https://leetcode.cn/problems/invert-binary-tree/description/
 
@@ -2981,7 +2722,7 @@ var invertTree = function (root) {
 
 ## 101
 
-## 112. 路径总和++
+## >112. 路径总和
 
 https://leetcode.cn/problems/path-sum/description/
 
@@ -2989,9 +2730,6 @@ https://leetcode.cn/problems/path-sum/description/
 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。如果存在，返回 true ；否则，返回 false 。
 
 叶子节点 是指没有子节点的节点。
-
-
-
 示例 1：
 
 
@@ -3042,7 +2780,7 @@ var hasPathSum = function (root, targetSum) {
 
 ## 404
 
-## 257. 二叉树的所有路径++
+## >257. 二叉树的所有路径
 
 https://leetcode.cn/problems/binary-tree-paths/description/
 
@@ -3098,7 +2836,7 @@ var binaryTreePaths = function (root) {
 
 ## 129
 
-## 437. 路径总和 III++
+## >437. 路径总和 III
 
 https://leetcode.cn/problems/path-sum-iii/description/
 
@@ -3106,13 +2844,7 @@ https://leetcode.cn/problems/path-sum-iii/description/
 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
 
 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
-
-
-
 示例 1：
-
-
-
 输入：root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
 输出：3
 解释：和等于 8 的路径有 3 条，如图所示。
@@ -3158,7 +2890,7 @@ var pathSum = function (root, targetSum) {
 };
 ```
 
-## 235. 二叉搜索树的最近公共祖先++
+## >235. 二叉搜索树的最近公共祖先
 
 https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/description/
 
@@ -3216,7 +2948,7 @@ var lowestCommonAncestor = function (root, p, q) {
 
 # 递归和回溯
 
-## 17. 电话号码的字母组合++
+## >17. 电话号码的字母组合
 
 https://leetcode.cn/problems/letter-combinations-of-a-phone-number/description/
 
@@ -3290,7 +3022,7 @@ var letterCombinations = function (digits) {
 
 ## 131
 
-## 46. 全排列
+## >46. 全排列
 
 https://leetcode.cn/problems/permutations/description/
 
@@ -3317,3 +3049,1178 @@ https://leetcode.cn/problems/permutations/description/
 -10 <= nums[i] <= 10
 nums 中的所有整数 互不相同
 ```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function (nums) {
+  let res = [];
+  function getArr(arr, used) {
+    if (arr.length == nums.length) {
+      res.push([...arr]);
+      return;
+    }
+    for (let i = 0; i < nums.length; i++) {
+      if (!used[i]) {
+        arr.push(nums[i]);
+        used[i] = true; //设置已使用
+        getArr(arr, used);
+        arr.pop(); //回溯重置
+        used[i] = false;
+      }
+    }
+  }
+  if (nums.length) {
+    getArr([], []);
+  }
+  return res;
+};
+```
+
+## 47
+
+## >77. 组合
+
+https://leetcode.cn/problems/combinations/description/
+
+```txt
+给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合。
+
+你可以按 任何顺序 返回答案。
+
+示例 1：
+
+输入：n = 4, k = 2
+输出：
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+示例 2：
+
+输入：n = 1, k = 1
+输出：[[1]]
+
+
+提示：
+
+1 <= n <= 20
+1 <= k <= n
+```
+
+```js
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function (n, k) {
+  let res = [];
+
+  function getArr(arr, start) {
+    if (arr.length == k) {
+      res.push([...arr]);
+      return;
+    }
+    //还有k-arr.length个空位，[i……n]中至少要k-arr.length个元素，i最多为n - (k - arr.length) + 1
+    let len = n - (k - arr.length) + 1;
+    for (let i = start; i <= len; i++) {
+      arr.push(i);
+      getArr(arr, i + 1);
+      arr.pop();
+    }
+  }
+  if (n && k) {
+    getArr([], 1);
+  }
+  return res;
+};
+```
+
+## 39
+
+## 40
+
+## 216
+
+## 78
+
+## 90
+
+## 401
+
+## >79. 单词搜索
+
+```txt
+给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+示例 1：
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+输出：true
+
+示例 2：
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+输出：true
+
+示例 3：
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+输出：false
+
+
+提示：
+
+m == board.length
+n = board[i].length
+1 <= m, n <= 6
+1 <= word.length <= 15
+board 和 word 仅由大小写英文字母组成
+
+
+进阶：你可以使用搜索剪枝的技术来优化解决方案，使其在 board 更大的情况下可以更快解决问题？
+```
+
+二维平面上的回溯
+
+```js
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+const d = [
+  [-1, 0],
+  [0, 1],
+  [1, 0],
+  [0, -1]
+];
+
+function searchWord(board, word, index, startx, starty, visited) {
+  if (index == word.length - 1) {
+    return board[startx][starty] === word[index];
+  }
+
+  if (board[startx][starty] === word[index]) {
+    visited[startx][starty] = true;
+    //从startx,starty触发，向四个方向寻找
+    for (let i = 0; i < 4; i++) {
+      let newx = startx + d[i][0];
+      let newy = starty + d[i][1];
+
+      if (
+        //是否在范围内
+        newx >= 0 &&
+        newy >= 0 &&
+        newx < board.length &&
+        newy < board[0].length &&
+        //是否访问过
+        !visited[newx][newy] &&
+        //是否找到
+        searchWord(board, word, index + 1, newx, newy, visited)
+      ) {
+        return true;
+      }
+    }
+
+    visited[startx][starty] = false;
+  }
+  return false;
+}
+
+var exist = function (board, word) {
+  const visited = new Array(board.length)
+    .fill([])
+    .map((a) => new Array(board[0].length).fill(false));
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      if (searchWord(board, word, 0, i, j, visited)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+```
+
+## >200. 岛屿数量
+
+https://leetcode.cn/problems/number-of-islands/description/
+
+```txt
+给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+
+岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+
+此外，你可以假设该网格的四条边均被水包围。
+
+
+
+示例 1：
+
+输入：grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+输出：1
+示例 2：
+
+输入：grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+输出：3
+
+
+提示：
+
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 300
+grid[i][j] 的值为 '0' 或 '1'
+```
+
+floodfill 算法
+
+```js
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+const d = [
+  [-1, 0],
+  [0, 1],
+  [1, 0],
+  [0, -1]
+];
+
+function dfs(grid, x, y, visited) {
+  visited[x][y] = true;
+  for (let i = 0; i < 4; i++) {
+    let newx = x + d[i][0];
+    let newy = y + d[i][1];
+    if (
+      newx >= 0 &&
+      newy >= 0 &&
+      newx < grid.length &&
+      newy < grid[0].length &&
+      !visited[newx][newy] &&
+      grid[newx][newy] == '1'
+    ) {
+      dfs(grid, newx, newy, visited);
+    }
+  }
+}
+var numIslands = function (grid) {
+  const visited = new Array(grid.length).fill([]).map((a) => new Array(grid[0].length).fill(false));
+  let res = 0;
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (grid[i][j] == '1' && !visited[i][j]) {
+        res++;
+        dfs(grid, i, j, visited);
+      }
+    }
+  }
+  return res;
+};
+```
+
+```js
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function (grid) {
+  let count = 0;
+  function think(i, j) {
+    grid[i][j] = 0;
+    if (i + 1 < grid.length && grid[i + 1][j] == 1) think(i + 1, j);
+    if (i - 1 >= 0 && grid[i - 1][j] == 1) think(i - 1, j);
+    if (j + 1 < grid[i].length && grid[i][j + 1] == 1) think(i, j + 1);
+    if (j - 1 >= 0 && grid[i][j - 1] == 1) think(i, j - 1);
+  }
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      if (grid[i][j] == 1) {
+        think(i, j);
+        count++;
+      }
+    }
+  }
+  return count;
+};
+```
+
+## 130
+
+## 417
+
+## >51. N 皇后
+
+https://leetcode.cn/problems/n-queens/description/
+
+```txt
+按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或同一斜线上的棋子。
+
+n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。
+
+每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+
+示例 1：
+
+输入：n = 4
+输出：[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+解释：如上图所示，4 皇后问题存在两个不同的解法。
+示例 2：
+
+输入：n = 1
+输出：[["Q"]]
+
+
+提示：
+
+1 <= n <= 9
+```
+
+从右上到左下，在同一对角线上 i+j 的值相同
+从左上到右下，在同一对角线上 i-j+n-1 的值相同
+
+```js
+function generateBoard(n, row) {
+  let board = new Array(n).fill([]);
+  for (let i = 0; i < n; i++) {
+    board[i] = new Array(n).fill('.');
+  }
+
+  for (let i = 0; i < n; i++) {
+    board[i][row[i]] = 'Q';
+  }
+  return board.map((a) => a.join(''));
+}
+/**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function (n) {
+  let row = [];
+  let res = [];
+  //列，两个对角线上是否摆上了皇后
+  let col = new Array(n).fill(false);
+  let duijiao1 = new Array(2 * n - 1).fill(false); //正对角线
+  let duijiao2 = new Array(2 * n - 1).fill(false); //反对角线
+  function putQueen(n, index, row) {
+    if (index == n) {
+      res.push(generateBoard(n, row));
+      return;
+    }
+    for (let i = 0; i < n; i++) {
+      //尝试在第index行摆上皇后在第i列,对角线位置
+      if (!col[i] && !duijiao1[index + i] && !duijiao2[index - i + n - 1]) {
+        row.push(i);
+        col[i] = true;
+        duijiao1[index + i] = true;
+        duijiao2[index - i + n - 1] = true;
+        putQueen(n, index + 1, row);
+        col[i] = false;
+        duijiao1[index + i] = false;
+        duijiao2[index - i + n - 1] = false;
+        row.pop();
+      }
+    }
+  }
+
+  putQueen(n, 0, row);
+  return res;
+};
+```
+
+## 52
+
+## 37
+
+# 动态规划
+
+通过解决小问题得到大问题的解
+
+## 斐波那契数列数列
+
+```js
+function fib(n) {
+  if (n <= 1) return n;
+  return fib(n - 1) + fib(n - 2);
+}
+//记忆化
+function fib(n) {
+  if (n <= 1) return n;
+  let memo = [0, 1];
+  for (let i = 2; i <= n; i++) {
+    memo[i] = memo[i - 1] + memo[i - 2];
+  }
+  return memo[n];
+}
+
+function fib(n) {
+  if (n <= 1) return n;
+
+  let n1 = 1, //n-1
+    n2 = 0; //n-2
+  let sum = 0;
+  for (let i = 2; i <= n; i++) {
+    sum = n2 + n1;
+    n2 = n1;
+    n1 = sum;
+  }
+  return sum;
+}
+```
+
+## >70. 爬楼梯
+
+https://leetcode.cn/problems/climbing-stairs/description/
+
+```txt
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+示例 1：
+
+输入：n = 2
+输出：2
+解释：有两种方法可以爬到楼顶。
+1. 1 阶 + 1 阶
+2. 2 阶
+
+示例 2：
+
+输入：n = 3
+输出：3
+解释：有三种方法可以爬到楼顶。
+1. 1 阶 + 1 阶 + 1 阶
+2. 1 阶 + 2 阶
+3. 2 阶 + 1 阶
+
+
+提示：
+
+1 <= n <= 45
+```
+
+n-1 阶+1=n
+n-2 阶+2=n
+
+重叠子结构
+
+```js
+function fib(n) {
+  if (n <= 2) return n;
+
+  let n1 = 2, //n-1
+    n2 = 1; //n-2
+  let sum = 0;
+  for (let i = 3; i <= n; i++) {
+    sum = n2 + n1;
+    n2 = n1;
+    n1 = sum;
+  }
+  return sum;
+}
+```
+
+## 120
+
+## 64
+
+## >343. 整数拆分
+
+https://leetcode.cn/problems/integer-break/description/
+
+```txt
+给定一个正整数 n ，将其拆分为 k 个 正整数 的和（ k >= 2 ），并使这些整数的乘积最大化。
+
+返回 你可以获得的最大乘积 。
+
+示例 1:
+
+输入: n = 2
+输出: 1
+解释: 2 = 1 + 1, 1 × 1 = 1。
+
+示例 2:
+
+输入: n = 10
+输出: 36
+解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
+
+
+提示:
+
+2 <= n <= 58
+```
+
+3=1+2,1\*2=3
+
+4=1+3,1*3=3
+4=2+2,2*2=4
+
+5=1+4
+5=2+3
+
+问题从顶向下拆分成小问题，将重复计算的部分记忆化->重叠子问题
+
+求子问题的最优解->最优子结构
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+//递归
+var integerBreak = function (n) {
+  let memo = [];
+  function breaker(n) {
+    if (n == 1) return 1;
+    if (memo[n]) {
+      return memo[n];
+    }
+    let res = -1;
+    for (let i = 1; i <= n - 1; i++) {
+      res = Math.max(res, i * (n - i), i * breaker(n - i));
+    }
+    memo[n] = res;
+    return res;
+  }
+  return breaker(n);
+};
+
+//动态规划
+var integerBreak = function (n) {
+  let memo = new Array(n + 1).fill(0);
+  memo[1] = 1;
+  for (let i = 2; i <= n; i++) {
+    for (let j = 1; j <= i - 1; j++) {
+      memo[i] = Math.max(memo[i], j * (i - j), j * memo[i - j]);
+    }
+  }
+  return memo[n];
+};
+```
+
+## 279
+
+## 91
+
+## 63
+
+## >198. 打家劫舍
+
+https://leetcode.cn/problems/house-robber/description/
+
+```txt
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+
+示例 1：
+
+输入：[1,2,3,1]
+输出：4
+解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+示例 2：
+
+输入：[2,7,9,3,1]
+输出：12
+解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+
+
+提示：
+
+1 <= nums.length <= 100
+0 <= nums[i] <= 400
+```
+
+递归函数的函数定义->状态转移方程
+f(0)=v(0)+max(f(2),f(3)……)
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+//记忆化递归
+var rob = function (nums) {
+  let memo = new Array(nums.length).fill(0);
+  function robb(index) {
+    if (index >= nums.length) {
+      return 0;
+    }
+    if (memo[index]) {
+      return memo[index];
+    }
+    let res = 0;
+    for (let i = index; i < nums.length; i++) {
+      res = Math.max(res, nums[i] + robb(i + 2));
+    }
+    return res;
+  }
+  return robb(0);
+};
+
+var rob = function (nums) {
+  let n = nums.length;
+  if (n == 0) return 0;
+  let memo = new Array(n).fill(0);
+  memo[n - 1] = nums[n - 1];
+  for (let i = n - 2; i >= 0; i--) {
+    for (let j = i; j < n; j++) {
+      memo[i] = Math.max(memo[i], nums[j] + (j + 2 < n ? memo[j + 2] : 0));
+    }
+  }
+  return memo[0];
+};
+
+var rob = function (nums) {
+  let n = nums.length;
+  if (n == 1) return nums[0];
+  if (n == 2) return Math.max(nums[0], nums[1]);
+
+  let dp = []; // 初始化 dp 列表
+  dp[0] = nums[0];
+  dp[1] = Math.max(nums[0], nums[1]);
+  for (let i = 2; i < n; i++) {
+    // 按顺序计算 f(1), f(2), ..., f(n)
+    dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+  }
+  return dp[n - 1];
+};
+```
+
+## 213
+
+## 337
+
+## 309
+
+## >0-1 背包问题
+
+```txt
+有一个背包，它的容量是 C。现在有 n 中不同物品，编号为 0……n-1,其中每件物品重量为 w(i)，价值为 v(i)，请问向背包中盛放那些物品，使得在不超过背包容量的基础上，物品总价值最大？
+求 n 个物品的组合
+暴力解法：O((2^n)*n)
+贪心算法：价值/重量=价值比，将价值比高的放进去（不能解决）
+F(i,c)=F(i-1,c)
+=v(i)+F(i-1,c-w(i))
+=max(F(i-1,c),v(i)+F(i-1,c-w(i)))
+```
+
+```js
+/**
+ *
+ * @param {number[]} w
+ * @param {number[]} v
+ * @param {number} c
+ * @returns number
+ */
+//记忆化搜索
+function beibao01(w, v, c) {
+  const n = w.length;
+  let memo = new Array(n).fill([]);
+  for (let i = 0; i < n; i++) {
+    memo[i] = new Array(c + 1).fill(0);
+  }
+
+  function bestVal(index, c) {
+    if (index < 0 || c <= 0) {
+      return 0;
+    }
+    if (memo[index][c]) {
+      return memo[index][c];
+    }
+    let res = bestVal(index - 1, c);
+    if (c >= w[index]) {
+      res = Math.max(res, v[index] + bestVal(index - 1, c - w[index]));
+    }
+    memo[index][c] = res;
+    return res;
+  }
+  return bestVal(n - 1, c);
+}
+//动态规划
+function beibao01(w, v, c) {
+  const n = w.length;
+  if (n == 0) return 0;
+
+  let memo = new Array(n).fill([]);
+  for (let i = 0; i < n; i++) {
+    memo[i] = new Array(c + 1).fill(0);
+  }
+  for (let j = 0; j <= c; j++) {
+    memo[0][j] = j >= w[0] ? v[0] : 0;
+  }
+  for (let i = 1; i < n; i++) {
+    for (let j = 0; j <= c; j++) {
+      memo[i][j] = memo[i - 1][j];
+      if (j >= w[i]) {
+        memo[i][j] = Math.max(memo[i][j], v[i] + memo[i - 1][j - w[i]]);
+      }
+    }
+  }
+  return memo[n - 1][c];
+}
+//优化空间复杂度,只用2c，奇偶数参考
+function beibao01(w, v, c) {
+  const n = w.length;
+  if (n == 0) return 0;
+
+  let memo = new Array(2).fill([]);
+  for (let i = 0; i < 2; i++) {
+    memo[i] = new Array(c + 1).fill(0);
+  }
+  for (let j = 0; j <= c; j++) {
+    memo[0][j] = j >= w[0] ? v[0] : 0;
+  }
+  for (let i = 1; i < n; i++) {
+    for (let j = 0; j <= c; j++) {
+      memo[i % 2][j] = memo[(i - 1) % 2][j];
+      if (j >= w[i]) {
+        memo[i % 2][j] = Math.max(memo[i % 2][j], v[i] + memo[(i - 1) % 2][j - w[i]]);
+      }
+    }
+  }
+  return memo[(n - 1) % 2][c];
+}
+
+//优化空间复杂度,只用c，从右到左参考
+function beibao01(w, v, c) {
+  const n = w.length;
+  if (n == 0) return 0;
+
+  let memo = new Array(c + 1).fill(0);
+
+  for (let j = 0; j <= c; j++) {
+    memo[j] = j >= w[0] ? v[0] : 0;
+  }
+  for (let i = 1; i < n; i++) {
+    for (let j = c; j >= w[i]; j--) {
+      memo[j] = Math.max(memo[j], v[i] + memo[j - w[i]]);
+    }
+  }
+  return memo[c];
+}
+console.log(beibao01([1, 2, 3], [6, 10, 12], 5));
+```
+
+完全背包问题：每个物品可以无限使用。背包容量有限，每种物品最多可放置的数量
+
+多重背包问题，每个物品不止一个，有 num(i)个
+多维费用背包问题：考虑物品体积和重量两个维度
+物品约束：可排斥，可依赖
+
+## >416. 分割等和子集
+
+https://leetcode.cn/problems/partition-equal-subset-sum/description/
+
+```txt
+给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+
+示例 1：
+
+输入：nums = [1,5,11,5]
+输出：true
+解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+示例 2：
+
+输入：nums = [1,2,3,5]
+输出：false
+解释：数组不能分割成两个元素和相等的子集。
+
+
+提示：
+
+1 <= nums.length <= 200
+1 <= nums[i] <= 100
+```
+
+n 个物品选出来，使得填满 sum/2 的背包
+F(i,c)=F(i-1,c)||F(i-1,c-w(i))
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+//记忆化搜索
+var canPartition = function (nums) {
+  let sum = 0;
+  nums.forEach((a) => {
+    sum += a;
+  });
+  if (sum % 2 !== 0) {
+    return false;
+  }
+  const n = nums.length;
+  let memo = new Array(n).fill([]);
+  for (let i = 0; i < n; i++) {
+    memo[i] = new Array(sum / 2 + 1).fill(0);
+  }
+  function part(index, sum) {
+    if (sum == 0) {
+      return true;
+    }
+    if (sum < 0 || index < 0) {
+      return false;
+    }
+    if (memo[index][sum] !== 0) return memo[index][sum];
+    memo[index][sum] = part(index - 1, sum) || part(index - 1, sum - nums[index]);
+
+    return memo[index][sum];
+  }
+  return part(n - 1, sum / 2);
+};
+
+//动态规划
+var canPartition = function (nums) {
+  let sum = 0;
+  nums.forEach((a) => {
+    sum += a;
+  });
+  if (sum % 2 !== 0) {
+    return false;
+  }
+  const n = nums.length;
+  let c = sum / 2;
+  let memo = new Array(c + 1).fill(false);
+  for (let i = 0; i <= c; i++) {
+    memo[i] = nums[0] == i;
+  }
+  for (let i = 1; i < n; i++) {
+    for (let j = c; j >= nums[i]; j--) {
+      memo[j] = memo[j] || memo[j - nums[i]];
+    }
+  }
+  return memo[c];
+};
+```
+
+## 322
+
+## 377
+
+## 474
+
+## 139
+
+## 494
+
+## >300. 最长递增子序列
+
+https://leetcode.cn/problems/longest-increasing-subsequence/description/
+
+```txt
+给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
+
+子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+
+
+示例 1：
+
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+示例 2：
+
+输入：nums = [0,1,0,3,2,3]
+输出：4
+示例 3：
+
+输入：nums = [7,7,7,7,7,7,7]
+输出：1
+
+
+提示：
+
+1 <= nums.length <= 2500
+-104 <= nums[i] <= 104
+
+
+进阶：
+
+你能将算法的时间复杂度降低到 O(n log(n)) 吗?
+LIS(i)=max(1+LIS(j)if(num[i]>nums[j]))
+```
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function (nums) {
+  let memo = new Array(nums.length).fill(1);
+
+  for (let i = 1; i < nums.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[j] < nums[i]) {
+        memo[i] = Math.max(memo[j] + 1, memo[i]);
+      }
+    }
+  }
+  let res = 1;
+  memo.forEach((a) => {
+    res = Math.max(a, res);
+  });
+  return res;
+};
+```
+
+## 376
+
+## >1143. 最长公共子序列
+
+https://leetcode.cn/problems/longest-common-subsequence/description/
+
+```txt
+给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
+
+一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+
+例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
+两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。
+
+示例 1：
+
+输入：text1 = "abcde", text2 = "ace"
+输出：3
+解释：最长公共子序列是 "ace" ，它的长度为 3 。
+示例 2：
+
+输入：text1 = "abc", text2 = "abc"
+输出：3
+解释：最长公共子序列是 "abc" ，它的长度为 3 。
+示例 3：
+
+输入：text1 = "abc", text2 = "def"
+输出：0
+解释：两个字符串没有公共子序列，返回 0 。
+
+
+提示：
+
+1 <= text1.length, text2.length <= 1000
+text1 和 text2 仅由小写英文字符组成。
+
+
+S1[m]==S2[n]:LCS(m,n)=1+LCS(m-1,n-1);
+
+S1[m]!=S2[n]:LCS(m,n)=max( LCS(m-1,n),LCS(m,n-1));
+```
+
+```js
+var longestCommonSubsequence = function (text1, text2) {
+  const m = text1.length,
+    n = text2.length;
+  const dp = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    const c1 = text1[i - 1];
+    for (let j = 1; j <= n; j++) {
+      const c2 = text2[j - 1];
+      if (c1 === c2) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+  return dp[m][n];
+};
+```
+
+## 迪杰斯特拉最短路径
+
+# 贪心算法
+
+数学归纳法，反证法验证贪心算法正确性
+
+## >455. 分发饼干
+
+https://leetcode.cn/problems/assign-cookies/description/
+
+```txt
+假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。
+
+对每个孩子 i，都有一个胃口值 g[i]，这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 j，都有一个尺寸 s[j] 。如果 s[j] >= g[i]，我们可以将这个饼干 j 分配给孩子 i ，这个孩子会得到满足。你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。
+
+
+示例 1:
+
+输入: g = [1,2,3], s = [1,1]
+输出: 1
+解释:
+你有三个孩子和两块小饼干，3个孩子的胃口值分别是：1,2,3。
+虽然你有两块小饼干，由于他们的尺寸都是1，你只能让胃口值是1的孩子满足。
+所以你应该输出1。
+示例 2:
+
+输入: g = [1,2], s = [1,2,3]
+输出: 2
+解释:
+你有两个孩子和三块小饼干，2个孩子的胃口值分别是1,2。
+你拥有的饼干数量和尺寸都足以让所有孩子满足。
+所以你应该输出2.
+
+
+提示：
+
+1 <= g.length <= 3 * 104
+0 <= s.length <= 3 * 104
+1 <= g[i], s[j] <= 231 - 1
+```
+
+最大的饼干给最贪心的小朋友
+
+```js
+/**
+ * @param {number[]} g
+ * @param {number[]} s
+ * @return {number}
+ */
+var findContentChildren = function (g, s) {
+  g = g.sort((a, b) => b - a);
+  s = s.sort((a, b) => b - a);
+  let i = 0,
+    j = 0;
+  let res = 0;
+  while (i < g.length && j < s.length) {
+    if (s[j] >= g[i]) {
+      i++;
+      j++;
+      res++;
+    } else {
+      i++;
+    }
+  }
+  return res;
+};
+```
+
+## 392
+
+## >435. 无重叠区间
+
+https://leetcode.cn/problems/non-overlapping-intervals/description/
+
+```txt
+给定一个区间的集合 intervals ，其中 intervals[i] = [starti, endi] 。返回 需要移除区间的最小数量，使剩余区间互不重叠 。
+
+
+
+示例 1:
+
+输入: intervals = [[1,2],[2,3],[3,4],[1,3]]
+输出: 1
+解释: 移除 [1,3] 后，剩下的区间没有重叠。
+示例 2:
+
+输入: intervals = [ [1,2], [1,2], [1,2] ]
+输出: 2
+解释: 你需要移除两个 [1,2] 来使剩下的区间没有重叠。
+示例 3:
+
+输入: intervals = [ [1,2], [2,3] ]
+输出: 0
+解释: 你不需要移除任何区间，因为它们已经是无重叠的了。
+
+
+提示:
+
+1 <= intervals.length <= 105
+intervals[i].length == 2
+-5 * 104 <= starti < endi <= 5 * 104
+```
+
+最多保留多少区间
+
+```js
+/**
+ * @param {number[][]} intervals
+ * @return {number}
+ */
+//动态规划
+var eraseOverlapIntervals = function (intervals) {
+  intervals.sort((a, b) => {
+    if (a[0] != b[0]) {
+      return a[0] - b[0];
+    } else {
+      return a[1] - b[1];
+    }
+  });
+  let memo = new Array(intervals.length).fill(1);
+  for (let i = 1; i < intervals.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (intervals[i][0] >= intervals[j][1]) {
+        memo[i] = Math.max(memo[i], memo[j] + 1);
+      }
+    }
+  }
+  let res = 0;
+  memo.forEach((a) => {
+    res = Math.max(res, a);
+  });
+  return intervals.length - res;
+};
+//贪心算法，按照区间最大值排序，每次选择结尾最早的，且前一个区间不重叠的区间
+
+var eraseOverlapIntervals = function (intervals) {
+  intervals.sort((a, b) => {
+    if (a[1] != b[1]) {
+      return a[1] - b[1];
+    } else {
+      return a[0] - b[0];
+    }
+  });
+  let res = 1;
+  let pre = 0;
+  for (let i = 1; i < intervals.length; i++) {
+    if (intervals[i][0] >= intervals[pre][1]) {
+      res++;
+      pre = i;
+    }
+  }
+  return intervals.length - res;
+};
+
+var eraseOverlapIntervals = function (intervals) {
+  intervals.sort(function (a, b) {
+    return a[1] - b[1];
+  });
+  var count = 1;
+  var end = intervals[0][1];
+  for (var i = 1; i < intervals.length; i++) {
+    var each = intervals[i];
+    if (each[0] >= end) {
+      end = each[1];
+      count++;
+    }
+  }
+  return intervals.length - count;
+};
+```
+
+## 最小生成树
+
+## 最短路径

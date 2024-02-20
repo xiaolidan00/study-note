@@ -52,11 +52,11 @@
                   if (tagName == 'h3') {
                     dom.setAttribute('level', 3);
                     c.innerText =
-                      h1count - 1 + '.' + (h2count - 1) + '.' + h3count + '.' + c.innerText;
+                      h1count - 1 + '.' + (h2count - 1) + '.' + h3count + '  ' + c.innerText;
                     h3count++;
                   } else if (tagName == 'h2') {
                     dom.setAttribute('level', 2);
-                    c.innerText = h1count - 1 + '.' + h2count + '.' + c.innerText;
+                    c.innerText = h1count - 1 + '.' + h2count + '  ' + c.innerText;
                     h2count++;
                     h3count = 1;
                   } else {

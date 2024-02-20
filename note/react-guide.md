@@ -1,24 +1,29 @@
 # 入门
 
+https://zh-hans.react.dev/reference/react/hooks
+
+## vite创建
+
+```bash
+npm create vite@latest react-project
+```
+
+
+
+
+
+## 状态管理
+
 ```jsx
-function(props) function({label,value})//获取属性
-function({children})//slot子组件
-//条件
-if(tag){return <button></button>}else{return null}
-//列表
-return <ul>{list.map((a,idx)=><li key={idx}>{a.name}</li>)}</ul>
-//事件
-function handleClick(even){}
-return <button onClick={handleClick}>click</button>
-	e.stopPropagation() 停止触发附加到上述标签的事件处理程序。
-	e.preventDefault() 阻止了少数事件的默认浏览器行为。
-//状态管理
 import { useState } from 'react';
 const [index, setIndex] = useState(0);
 //状态同步
-setNumber(n+ 5);
-setNumber(n => n + 1);
-//状态突变
+setIndex(index+5);
+setIndex(n => n + 1);
+```
+
+## 只更新局部状态
+```jsx
 const [position, setPosition] = useState({ x: 0, y: 0 });
 onPointerMove={e => {
   setPosition({
@@ -38,7 +43,98 @@ updatePerson(position => {
      position.x = e.target.value;
     });
 ```
+## 条件渲染
+```jsx
+let content;
+if (isLoggedIn) {
+  content = <AdminPanel />;
+} else {
+  content = <LoginForm />;
+}
+return (
+  <div>
+    {content}
+  </div>
+);
 
+<div>
+  {isLoggedIn ? (
+    <AdminPanel />
+  ) : (
+    <LoginForm />
+  )}
+</div>
+
+<div>
+  {isLoggedIn && <AdminPanel />}
+</div>
+
+if(tag){return <button></button>}else{return null}
+```
+## 渲染列表 
+```jsx
+const products = [
+  { title: 'Cabbage', id: 1 },
+  { title: 'Garlic', id: 2 },
+  { title: 'Apple', id: 3 },
+];
+const listItems = products.map(product =>
+  <li key={product.id}>
+    {product.title}
+  </li>
+);
+
+return (
+  <ul>{listItems}</ul>
+);
+
+  <ul>{list.map((a,idx)=><li key={idx}>{a.name}</li>)}</ul>
+  
+  
+function Cup({ guest }) {
+  return <h2>Tea cup for guest #{guest}</h2>;
+}
+
+export default function TeaGathering() {
+  let cups = [];
+  for (let i = 1; i <= 12; i++) {
+    cups.push(<Cup key={i} guest={i} />);
+  }
+  return cups;
+}
+```
+## 响应事件
+```jsx
+function MyButton() {
+  function handleClick(ev) {
+    alert('You clicked me!',ev);
+  }
+
+  return (
+    <button onClick={handleClick}>
+      Click me
+    </button>
+  );
+}
+
+```
+## 获取属性
+```jsx
+function(props) {
+return <div>{props.label}:{props.value}</div>
+}
+
+function({label,value}){
+retutn <div>{label}:{value}</div>
+}
+```
+## 子组件=slot插槽
+```jsx 
+function({children}){
+return <div className="page-container">{children}<div>
+}
+```
+## 数组操作
 ```jsx
 //数组
 const [artists, setArtists] = useState([]);
@@ -51,15 +147,9 @@ setArtists(//删除
                   a.id !== artist.id
                 )
               );
-
-//输入状态
-<button disabled={
-          status === 'empty' ||
-          status === 'submitting'
-        }>
-          Submit
-        </button>
-//避免状态矛盾
+```
+## 避免状态矛盾
+```jsx 
   async function handleSubmit(e) {
     e.preventDefault();
     setIsSending(true);
@@ -71,8 +161,9 @@ function sendMessage(text) {
     setTimeout(resolve, 2000);
   });
 }
-
-
+```
+## 组件状态改变
+```jsx
 const [hover, setHover] = useState(false);
 
   let className = 'counter';
@@ -87,9 +178,9 @@ const [hover, setHover] = useState(false);
     >123</div>
 
 ```
-
+## Reducer
 ```jsx
-//Reducer
+ 
 import { useReducer } from 'react';
 const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 dispatch({
@@ -125,10 +216,10 @@ function tasksReducer(draft, action) {
       break;
     }
 }
+```
+## Context
+```jsx
 
-
-
-//Context
 import { createContext } from 'react';
 export const LevelContext = createContext(1);
 
@@ -139,8 +230,9 @@ import { LevelContext } from './LevelContext.js';
 <LevelContext.Provider value={level}>
         {level+1}
       </LevelContext.Provider>
-
-//context reducer
+```
+## context reducer
+```jsx
 import { createContext, useContext, useReducer } from 'react';
 
 const TasksContext = createContext(null);
@@ -174,9 +266,9 @@ const tasks = useTasks();
 const dispatch = useTasksDispatch();
 
 ```
-
+## ref
 ```jsx
-//ref
+ 
 import { useRef } from 'react';
 const ref = useRef(0); //{current:0}
 ref.current = ref.current + 1; //改变不更新，还是要用state
@@ -191,9 +283,9 @@ const MyInput = forwardRef((props, ref) => {
   return <input {...props} ref={ref} />;
 });
 ```
-
+## useEffect
 ```jsx
-//useEffect
+ 
 import { useEffect } from 'react';
 
 //每次渲染后执行
@@ -220,9 +312,9 @@ useEffect(() => {
   };
 }, []);
 ```
-
+## useMemo
 ```jsx
-//useMemo
+ 
 import { useMemo, useState } from 'react';
 const [newTodo, setNewTodo] = useState('');
 const visibleTodos = useMemo(() => {
@@ -230,8 +322,9 @@ const visibleTodos = useMemo(() => {
   // Does not re-run unless todos or filter change
   return getFilteredTodos(todos, filter);
 }, [todos, filter]);
-
-//useEffectEvent
+```
+## useEffectEvent
+```jsx
 import { useEffect, useEffectEvent } from 'react';
 const onVisit = useEffectEvent((visitedUrl) => {
   logVisit(visitedUrl, numberOfItems);
@@ -283,9 +376,8 @@ useEffect(() => {
   return () => connection.disconnect();
 }, [options]);
 ```
-
+## hook
 ```jsx
-//hook
 
 function useOnlineStatus() {
   //钩子函数hook
@@ -307,7 +399,9 @@ function useOnlineStatus() {
   return isOnline;
 }
 const isOnline = useOnlineStatus();
-
+```
+## formInput
+```jsx
 export function useFormInput(initialValue) {
   const [value, setValue] = useState(initialValue);
 
@@ -324,7 +418,9 @@ export function useFormInput(initialValue) {
 }
 const firstNameProps = useFormInput('Mary');
 <input {...firstNameProps} />;
-
+```
+## useEffect监听
+```jsx
 useChatRoom({
   roomId: roomId,
   serverUrl: serverUrl,
@@ -350,7 +446,7 @@ export function useChatRoom({ serverUrl, roomId, onReceiveMessage }) {
   }, [roomId, serverUrl]); // ✅ All dependencies declared
 }
 ```
-
+## 动画
 ```jsx
 //动画1
 export function useFadeIn(ref, duration) {
@@ -472,6 +568,7 @@ export class FadeInAnimation {
   }
 }
 ```
+
 
 # 钩子
 
@@ -840,15 +937,23 @@ function arePropsEqual(oldProps, newProps) {
 
 ```jsx
 //startTransition 允许你在不阻塞 UI 的情况下更新状态。
-function TabContainer() {
-  const [tab, setTab] = useState('about');
-
-  function selectTab(nextTab) {
-    startTransition(() => {
-      setTab(nextTab);
-    });
+export default function TabButton({ children, isActive, onClick }) {
+  const [isPending, startTransition] = useTransition();
+  if (isActive) {
+    return <b>{children}</b>
   }
-  // ...
+  if (isPending) {
+    return <b className="pending">{children}</b>;
+  }
+  return (
+    <button onClick={() => {
+      startTransition(() => {
+        onClick();
+      });
+    }}>
+      {children}
+    </button>
+  );
 }
 ```
 
@@ -870,3 +975,10 @@ flushSync(() => {
   setIsPrinting(true);
 });
 ```
+
+# mobx
+
+# Redux
+
+# React-router
+
