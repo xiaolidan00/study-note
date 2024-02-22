@@ -1,5 +1,5 @@
 [
-  { "name": "主页", "url": "README.md" },
+  { "name": "主页", "url": "index.md" },
   { "name": "面试题" },
   { "name": "代码阅读", "url": "interview/readcode.md" },
   { "name": "js/es6", "url": "interview/js.md" },
@@ -11,12 +11,24 @@
   { "name": "Three.js", "url": "interview/three.md" },
   { "name": "node.js", "url": "interview/node.md" },
   { "name": "网络", "url": "interview/network.md" },
+  { "name": "Rollup", "url": "interview/interview-rollup.md" },
+  { "name": "webpack", "url": "interview/webpack.md" },
+  { "name": "前端整理" },
+  { "name": "基础", "url": "interview/interview-base.md" },
+  { "name": "网络", "url": "interview/interview-netword.md" },
+  { "name": "vue", "url": "interview/interview-vue.md" },
+  { "name": "react", "url": "interview/interview-react.md" },
+  { "name": "工程化", "url": "interview/interview-project.md" },
+  { "name": "手写代码", "url": "interview/interview-code.md" },
   { "name": "学习笔记" },
   { "name": "《Vue.js 技术内幕》学习笔记", "url": "note/vue3.md" },
   { "name": "react18 学习笔记", "url": "note/react-guide.md" },
+  { "name": "拉钩 React 面试题", "url": "note/lagou-react.md" },
   { "name": "《React技术揭秘》学习笔记", "url": "note/React.md" },
   { "name": "canvas 学习笔记", "url": "note/canvas.md" },
   { "name": "typescript 学习笔记", "url": "note/ts.md" },
-  { "name": "软考架构师", "url": "note/note.md" },
-  { "name": "Leetcode学习笔记", "url": "note/code-study.md" }
+  { "name": "2022 年 11 月软考架构师", "url": "note/note.md" },
+  { "name": "Leetcode学习笔记", "url": "note/code-study.md" },
+  { "name": "练习算法题", "url": "note/code.md" },
+  { "name": "动态规划算法题学习笔记", "url": "note/dongtai.md" }
 ]

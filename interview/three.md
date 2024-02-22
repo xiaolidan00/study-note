@@ -1,4 +1,8 @@
+https://juejin.cn/post/7222475192933072952
+
 # WebGL 渲染流程
+
+![image](images/webgl.png)
 
 1. 基本处理（顶点缓冲对象）
 2. 顶点着色器

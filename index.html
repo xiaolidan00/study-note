@@ -102,16 +102,16 @@
       function getList() {
         return new Promise((resolve) => {
           let list = window.localStorage.getItem(version);
-          if (list) {
-            resolve(JSON.parse(list));
-          } else {
-            fetch('urls.json')
-              .then((res) => res.json())
-              .then((res) => {
-                window.localStorage.setItem(version, JSON.stringify(res));
-                resolve(res);
-              });
-          }
+          // if (list) {
+          //   resolve(JSON.parse(list));
+          // } else {
+          fetch('urls.json')
+            .then((res) => res.json())
+            .then((res) => {
+              window.localStorage.setItem(version, JSON.stringify(res));
+              resolve(res);
+            });
+          // }
         });
       }
       function init() {

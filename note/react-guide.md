@@ -2,15 +2,11 @@
 
 https://zh-hans.react.dev/reference/react/hooks
 
-## vite创建
+## vite 创建
 
 ```bash
 npm create vite@latest react-project
 ```
-
-
-
-
 
 ## 状态管理
 
@@ -18,11 +14,12 @@ npm create vite@latest react-project
 import { useState } from 'react';
 const [index, setIndex] = useState(0);
 //状态同步
-setIndex(index+5);
-setIndex(n => n + 1);
+setIndex(index + 5);
+setIndex((n) => n + 1);
 ```
 
 ## 只更新局部状态
+
 ```jsx
 const [position, setPosition] = useState({ x: 0, y: 0 });
 onPointerMove={e => {
@@ -43,7 +40,9 @@ updatePerson(position => {
      position.x = e.target.value;
     });
 ```
+
 ## 条件渲染
+
 ```jsx
 let content;
 if (isLoggedIn) {
@@ -71,26 +70,25 @@ return (
 
 if(tag){return <button></button>}else{return null}
 ```
-## 渲染列表 
+
+## 渲染列表
+
 ```jsx
 const products = [
   { title: 'Cabbage', id: 1 },
   { title: 'Garlic', id: 2 },
-  { title: 'Apple', id: 3 },
+  { title: 'Apple', id: 3 }
 ];
-const listItems = products.map(product =>
-  <li key={product.id}>
-    {product.title}
-  </li>
-);
+const listItems = products.map((product) => <li key={product.id}>{product.title}</li>);
 
-return (
-  <ul>{listItems}</ul>
-);
+return <ul>{listItems}</ul>;
 
-  <ul>{list.map((a,idx)=><li key={idx}>{a.name}</li>)}</ul>
-  
-  
+<ul>
+  {list.map((a, idx) => (
+    <li key={idx}>{a.name}</li>
+  ))}
+</ul>;
+
 function Cup({ guest }) {
   return <h2>Tea cup for guest #{guest}</h2>;
 }
@@ -103,22 +101,21 @@ export default function TeaGathering() {
   return cups;
 }
 ```
+
 ## 响应事件
+
 ```jsx
 function MyButton() {
   function handleClick(ev) {
-    alert('You clicked me!',ev);
+    alert('You clicked me!', ev);
   }
 
-  return (
-    <button onClick={handleClick}>
-      Click me
-    </button>
-  );
+  return <button onClick={handleClick}>Click me</button>;
 }
-
 ```
+
 ## 获取属性
+
 ```jsx
 function(props) {
 return <div>{props.label}:{props.value}</div>
@@ -128,41 +125,49 @@ function({label,value}){
 retutn <div>{label}:{value}</div>
 }
 ```
-## 子组件=slot插槽
-```jsx 
+
+## 子组件=slot 插槽
+
+```jsx
 function({children}){
 return <div className="page-container">{children}<div>
 }
 ```
+
 ## 数组操作
+
 ```jsx
 //数组
 const [artists, setArtists] = useState([]);
-setArtists([//新增
-          ...artists,
-          { id: nextId++, name: name }
-        ]);
-setArtists(//删除
-                artists.filter(a =>
-                  a.id !== artist.id
-                )
-              );
+setArtists([
+  //新增
+  ...artists,
+  { id: nextId++, name: name }
+]);
+setArtists(
+  //删除
+  artists.filter((a) => a.id !== artist.id)
+);
 ```
+
 ## 避免状态矛盾
-```jsx 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setIsSending(true);
-    await sendMessage(text);
-    setIsSending(false);
-  }
+
+```jsx
+async function handleSubmit(e) {
+  e.preventDefault();
+  setIsSending(true);
+  await sendMessage(text);
+  setIsSending(false);
+}
 function sendMessage(text) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, 2000);
   });
 }
 ```
+
 ## 组件状态改变
+
 ```jsx
 const [hover, setHover] = useState(false);
 
@@ -178,9 +183,11 @@ const [hover, setHover] = useState(false);
     >123</div>
 
 ```
+
 ## Reducer
+
 ```jsx
- 
+
 import { useReducer } from 'react';
 const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 dispatch({
@@ -217,21 +224,22 @@ function tasksReducer(draft, action) {
     }
 }
 ```
-## Context
-```jsx
 
+## Context
+
+```jsx
 import { createContext } from 'react';
 export const LevelContext = createContext(1);
 
 import { useContext } from 'react';
 import { LevelContext } from './LevelContext.js';
- const level = useContext(LevelContext);
+const level = useContext(LevelContext);
 
-<LevelContext.Provider value={level}>
-        {level+1}
-      </LevelContext.Provider>
+<LevelContext.Provider value={level}>{level + 1}</LevelContext.Provider>;
 ```
+
 ## context reducer
+
 ```jsx
 import { createContext, useContext, useReducer } from 'react';
 
@@ -240,16 +248,11 @@ const TasksContext = createContext(null);
 const TasksDispatchContext = createContext(null);
 
 export function TasksProvider({ children }) {
-  const [tasks, dispatch] = useReducer(
-    tasksReducer,
-    initialTasks
-  );
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 
   return (
     <TasksContext.Provider value={tasks}>
-      <TasksDispatchContext.Provider value={dispatch}>
-        {children}
-      </TasksDispatchContext.Provider>
+      <TasksDispatchContext.Provider value={dispatch}>{children}</TasksDispatchContext.Provider>
     </TasksContext.Provider>
   );
 }
@@ -264,11 +267,11 @@ export function useTasksDispatch() {
 
 const tasks = useTasks();
 const dispatch = useTasksDispatch();
-
 ```
+
 ## ref
+
 ```jsx
- 
 import { useRef } from 'react';
 const ref = useRef(0); //{current:0}
 ref.current = ref.current + 1; //改变不更新，还是要用state
@@ -283,9 +286,10 @@ const MyInput = forwardRef((props, ref) => {
   return <input {...props} ref={ref} />;
 });
 ```
+
 ## useEffect
+
 ```jsx
- 
 import { useEffect } from 'react';
 
 //每次渲染后执行
@@ -312,9 +316,10 @@ useEffect(() => {
   };
 }, []);
 ```
+
 ## useMemo
+
 ```jsx
- 
 import { useMemo, useState } from 'react';
 const [newTodo, setNewTodo] = useState('');
 const visibleTodos = useMemo(() => {
@@ -323,7 +328,9 @@ const visibleTodos = useMemo(() => {
   return getFilteredTodos(todos, filter);
 }, [todos, filter]);
 ```
+
 ## useEffectEvent
+
 ```jsx
 import { useEffect, useEffectEvent } from 'react';
 const onVisit = useEffectEvent((visitedUrl) => {
@@ -376,9 +383,10 @@ useEffect(() => {
   return () => connection.disconnect();
 }, [options]);
 ```
-## hook
-```jsx
 
+## hook
+
+```jsx
 function useOnlineStatus() {
   //钩子函数hook
   const [isOnline, setIsOnline] = useState(true);
@@ -400,7 +408,9 @@ function useOnlineStatus() {
 }
 const isOnline = useOnlineStatus();
 ```
+
 ## formInput
+
 ```jsx
 export function useFormInput(initialValue) {
   const [value, setValue] = useState(initialValue);
@@ -419,7 +429,9 @@ export function useFormInput(initialValue) {
 const firstNameProps = useFormInput('Mary');
 <input {...firstNameProps} />;
 ```
-## useEffect监听
+
+## useEffect 监听
+
 ```jsx
 useChatRoom({
   roomId: roomId,
@@ -446,7 +458,9 @@ export function useChatRoom({ serverUrl, roomId, onReceiveMessage }) {
   }, [roomId, serverUrl]); // ✅ All dependencies declared
 }
 ```
+
 ## 动画
+
 ```jsx
 //动画1
 export function useFadeIn(ref, duration) {
@@ -568,7 +582,6 @@ export class FadeInAnimation {
   }
 }
 ```
-
 
 # 钩子
 
@@ -940,17 +953,19 @@ function arePropsEqual(oldProps, newProps) {
 export default function TabButton({ children, isActive, onClick }) {
   const [isPending, startTransition] = useTransition();
   if (isActive) {
-    return <b>{children}</b>
+    return <b>{children}</b>;
   }
   if (isPending) {
     return <b className="pending">{children}</b>;
   }
   return (
-    <button onClick={() => {
-      startTransition(() => {
-        onClick();
-      });
-    }}>
+    <button
+      onClick={() => {
+        startTransition(() => {
+          onClick();
+        });
+      }}
+    >
       {children}
     </button>
   );
@@ -981,4 +996,3 @@ flushSync(() => {
 # Redux
 
 # React-router
-

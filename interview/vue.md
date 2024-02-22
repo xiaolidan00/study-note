@@ -16,6 +16,48 @@ vue2 使用的是 Object.defineProperty 的 get 和 set， 收集依赖， 通�
 vue3 基于 Proxy,有 13 中动作捕获器，监听动作更细致丰富，
 对应 Reflect 的 13 种操作方法
 
+**Proxy**
+handler.getPrototypeOf()
+Object.getPrototypeOf 方法的捕捉器。
+
+handler.setPrototypeOf()
+Object.setPrototypeOf 方法的捕捉器。
+
+handler.isExtensible()
+Object.isExtensible 方法的捕捉器。
+
+handler.preventExtensions()
+Object.preventExtensions 方法的捕捉器。
+
+handler.getOwnPropertyDescriptor()
+Object.getOwnPropertyDescriptor 方法的捕捉器。
+
+handler.defineProperty()
+Object.defineProperty 方法的捕捉器。
+
+handler.has()
+in 操作符的捕捉器。
+
+handler.get()
+属性读取操作的捕捉器。
+
+handler.set()
+属性设置操作的捕捉器。
+
+handler.deleteProperty()
+delete 操作符的捕捉器。
+
+handler.ownKeys()
+Object.getOwnPropertyNames 方法和 Object.getOwnPropertySymbols 方法的捕捉器。
+
+handler.apply()
+函数调用操作的捕捉器。
+
+handler.construct()
+new 操作符的捕捉器。
+
+**Reflect**
+
 > Reflect.apply(target, thisArg, args)
 > Reflect.construct(target, args)
 > Reflect.get(target, name, receiver)
@@ -29,6 +71,13 @@ vue3 基于 Proxy,有 13 中动作捕获器，监听动作更细致丰富，
 > Reflect.getOwnPropertyDescriptor(target, name)
 > Reflect.getPrototypeOf(target)
 > Reflect.setPrototypeOf(target, prototype)
+
+# watch 与 watchEffect 区别
+
+- 两个都可监听 data 属性变化
+- watch 需明确监听哪个属性
+- watchEffect 会根据其中的属性，自动监听其变化
+- watch immediate,watchEffect 初始化一定会执行
 
 # vue 与 react 对比
 
@@ -288,6 +337,6 @@ vue 和 react 都是采用 diff 算法来对比新旧虚拟节点，从而更新
 - $refs（vue3 中要 expose 暴露属性）
 - $parent
 - `$attrs/$listeners`
-- Vuex
+- Vuex,pinia
 - EventBus
 - provide / inject

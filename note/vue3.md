@@ -335,23 +335,32 @@ vue 官方提供的在线模板导出工具[vue template explorer](https://templ
 
 ```jsx
 <div>
-  <p  class="aaa" style="color:blue">Hello World
+  <a>Hello word</a>
+  <p  class="aaa" style="color:blue" @click="onClickBtn">{{text}}
   </p>
-  <my-btn type="primary">Click me</button>
+  <MyButton type="primary" >Click me</MyButton>
   </div>
 
-  //编译后render函数
-  import { createElementVNode as _createElementVNode, createTextVNode as _createTextVNode, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from "vue"
+//编译后render函数
+
+import { createElementVNode as _createElementVNode, toDisplayString as _toDisplayString, createTextVNode as _createTextVNode, resolveComponent as _resolveComponent, withCtx as _withCtx, createVNode as _createVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from "vue"
+
+const _hoisted_1 = /*#__PURE__*/_createElementVNode("a", null, "Hello word", -1 /* HOISTED */)//静态提升，只渲染一次，重复使用
 
 export function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_my_btn = _resolveComponent("my-btn")
+  const _component_MyButton = _resolveComponent("MyButton")
 
   return (_openBlock(), _createElementBlock("div", null, [
+    _hoisted_1,
     _createElementVNode("p", {
       class: "aaa",
-      style: {"color":"blue"}
-    }, "Hello World "),
-    _createVNode(_component_my_btn, { type: "primary" }, {
+      style: {"color":"blue"},
+      onClick: _cache[0] || (_cache[0] = (...args) => (_ctx.onClickBtn && _ctx.onClickBtn(...args)))//事件缓存
+    },
+     _toDisplayString(_ctx.text),//收集依赖
+     1 /* TEXT *///标记类型
+    ),
+    _createVNode(_component_MyButton, { type: "primary" }, {
       default: _withCtx(() => [
         _createTextVNode("Click me")
       ], undefined, true),
