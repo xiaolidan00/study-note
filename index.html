@@ -21,15 +21,26 @@
     <div class="right-menu" id="menulist"></div>
     <button class="left-nav-btn" id="leftbtn">nav</button>
     <button class="right-menu-btn" id="rightbtn">menu</button>
+    <!-- <div id="loading">loading...</div> -->
     <script>
-      const version = 'urllist-2024-1-25';
       const converter = new showdown.Converter({ tables: true });
       const markdown = document.getElementById('markdown');
       const markdownContent = document.getElementById('markdown-content');
       // console.log(showdown, showdown.getDefaultOptions());
       var menulist = document.getElementById('menulist');
       var navlist = document.getElementById('navlist');
+
       function getData(url, cb) {
+        const d = document.getElementById(url.replace(/\.\//, '_'));
+        if (d) {
+          const ac = navlist.querySelector('.active');
+          if (ac) {
+            ac.classList.remove('active');
+          }
+
+          d.classList.add('active');
+        }
+
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, false);
         xhr.onreadystatechange = () => {
@@ -101,6 +112,7 @@
             }, 50);
           }
         };
+
         xhr.send();
       }
 
@@ -111,32 +123,22 @@
       };
       function getList() {
         return new Promise((resolve) => {
-          let list = window.localStorage.getItem(version);
-          // if (list) {
-          //   resolve(JSON.parse(list));
-          // } else {
           fetch('urls.json')
             .then((res) => res.json())
             .then((res) => {
-              window.localStorage.setItem(version, JSON.stringify(res));
               resolve(res);
             });
-          // }
         });
       }
       function init() {
         getList().then((res) => {
-          let url = '';
-          if (window.location.search) {
-            url = window.location.search.split('=')[1];
-          }
+          const url = window.location.hash.substring(1);
 
           res.forEach((a) => {
             const dom = document.createElement('a');
-            if (a.url == url) {
-              dom.classList.add('active');
-            }
+
             if (a.url) {
+              dom.id = a.url.replace(/\.\//, '_');
               dom.href = '#' + a.url;
             } else {
               dom.classList.add('disabled');
