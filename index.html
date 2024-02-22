@@ -12,7 +12,7 @@
   </head>
   <body onload="init()">
     <div class="left-nav" id="navlist"></div>
-    <div class="content" onclick="onHideList()">
+    <div class="content" onclick="onHideList()" id="markdown-content">
       <div class="markdown-content">
         <div class="markdown-body" id="markdown"></div>
         <div class="footer">2024年 Copyright © xiaolidan00@qq.com 粤ICP备17139828号</div>
@@ -24,6 +24,8 @@
     <script>
       const version = 'urllist-2024-1-25';
       const converter = new showdown.Converter({ tables: true });
+      const markdown = document.getElementById('markdown');
+      const markdownContent = document.getElementById('markdown-content');
       // console.log(showdown, showdown.getDefaultOptions());
       var menulist = document.getElementById('menulist');
       var navlist = document.getElementById('navlist');
@@ -32,8 +34,6 @@
         xhr.open('GET', url, false);
         xhr.onreadystatechange = () => {
           if (xhr.readyState == 4 && xhr.status == 200) {
-            const markdown = document.getElementById('markdown');
-
             let html = converter.makeHtml(xhr.responseText);
             markdown.innerHTML = html;
             //生成本章目录
@@ -68,10 +68,9 @@
                   }
                   dom.title = c.innerText;
                   dom.innerText = c.innerText;
-                  if (!c.id) {
-                    c.id = 'a' + Math.round(Math.random() * 99999);
-                  }
-                  dom.href = '#' + c.id;
+                  c.id = 'a' + Math.round(Math.random() * 99999);
+                  dom.id = 'M' + c.id;
+
                   dom.target = '_self';
                   menulist.appendChild(dom);
                 }
@@ -83,6 +82,11 @@
                 }
 
                 ev.target.classList.add('active');
+
+                markdownContent.scrollTo(
+                  0,
+                  document.getElementById(ev.target.id.substring(1)).offsetTop - 10
+                );
               };
               let codes = markdown.querySelectorAll('pre code');
               for (let i = 0; i < codes.length; i++) {
@@ -99,6 +103,12 @@
         };
         xhr.send();
       }
+
+      window.onhashchange = (ev) => {
+        const url = window.location.hash.substring(1);
+
+        getData(url);
+      };
       function getList() {
         return new Promise((resolve) => {
           let list = window.localStorage.getItem(version);
@@ -127,7 +137,7 @@
               dom.classList.add('active');
             }
             if (a.url) {
-              dom.href = '?url=' + a.url;
+              dom.href = '#' + a.url;
             } else {
               dom.classList.add('disabled');
             }
