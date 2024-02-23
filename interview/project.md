@@ -70,7 +70,7 @@ js 沙箱、样式隔离、元素隔离、预加载、数据通信、静态资�
 
 ## Webpack 与 Vite
 
-1. webpack 打包的时候会有两个阶段: 编译和打包，但打包之后会有一个问题，就是随着模块的增多，会造成打出的 bundle 体积过大，进而会造成热更新速度明显拖慢。
+1. webpack，编译和打包两个阶段，模块的增多，打出来的 bundle 体积大，造成热更新慢。
 
 2. vite 的诞生就是为了解决这样的问题，当模块越来越多时，热更新速度并不会变慢。 当然，这仅仅只是针对 Vue 项目开发阶段的工具，其他的场景还是需要依赖强大的 Webpack 的。vite 也并不是万能的。
 
@@ -86,15 +86,6 @@ js 沙箱、样式隔离、元素隔离、预加载、数据通信、静态资�
 - HMR 时只需让浏览器重新请求该模块，同时利用浏览器的缓存（源码模块协商缓存，依赖模块强缓存）来优化请求
 
 # Vite
-
-## vite 特性
-
-Instant Server Start —— 即时服务启动
-Lightning Fast HMR —— 闪电般快速的热更新
-Rich Features —— 丰富的功能
-Optimized Build —— 经过优化的构建
-Universal Plugin Interface —— 通用的 Plugin 接口
-Fully Typed APIs —— 类型齐全的 API
 
 ## Vite 整个热更新过程可以分成四步：
 

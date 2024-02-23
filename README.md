@@ -27,9 +27,11 @@
 - [react](interview/interview-react.md)
 - [工程化](interview/interview-project.md)
 - [手写代码](interview/interview-code.md)
+- [性能优化](interview/performance.md)
 
 # 学习笔记
 
+- [Three.js开发注意事项](note/three.md)
 - [《Vue.js 技术内幕》学习笔记](note/vue3.md)
 - [react18 学习笔记](note/react-guide.md)
 - [拉钩 React 面试题](interview/lagou-react.md)

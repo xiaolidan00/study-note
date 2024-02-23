@@ -16,7 +16,44 @@
 
 # Rollup 支持哪些输出格式？
 
-- Rollup 支持多种输出格式，包括 AMD、CJS（CommonJS）、ESM（ES6 模块）、IIFE（立即执行函数表达式）、UMD（通用模块定义）和 SystemJS。
+- amd – 异步模块加载，适用于 RequireJS 等模块加载器
+- cjs – CommonJS，适用于 Node 环境和其他打包工具（别名：commonjs）
+- es – 将 bundle 保留为 ES 模块文件，适用于其他打包工具，以及支持 `<script type=module>` 标签的浏览器。（别名：esm，module）
+- iife – 自执行函数，适用于 `<script>` 标签（如果你想为你的应用程序创建 bundle，那么你可能会使用它）。iife 表示“自执行 函数表达式”
+- umd – 通用模块定义规范，同时支持 amd，cjs 和 iife
+- system – SystemJS 模块加载器的原生格式（别名：systemjs）
+
+```html
+<script type="systemjs-importmap">
+  {
+    "imports": {
+      "react": "https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js",
+      "react-dom": "https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"
+    }
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.min.js"></script>
+
+<div id="app"></div>
+
+<script type="systemjs-module">
+  System.register(["react", "react-dom"], function (_export, _context) {
+    "use strict";
+
+    var React, ReactDOM;
+    return {
+      setters: [function (_react) {
+        React = _react.default;
+      }, function (_reactDom) {
+        ReactDOM = _reactDom.default;
+      }],
+      execute: function () {
+        ReactDOM.render('Hello React', document.getElementById('root'));
+      }
+    };
+  });
+</script>
+```
 
 # 如何配置 Rollup 的入口文件和输出文件？
 
@@ -63,3 +100,5 @@ Rollup 的构建流程主要包括以下几个步骤：
 # 使用 rollup-plugin-visualizer：
 
 安装并使用 rollup-plugin-visualizer 插件来分析打包后的文件大小分布，这有助于识别和移除不必要的依赖。
+
+Three.js 中的 `WebGLRenderer` 是一个用于在网页上渲染 3D 图形的核心组件。它基于 WebGL API，提供了一种在浏览器中创建和显示 3D 场景和模型的方法。`WebGLRenderer` 的渲染过程可以分为以下几个主要步骤：

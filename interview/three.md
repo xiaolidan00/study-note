@@ -1,5 +1,3 @@
-https://juejin.cn/post/7222475192933072952
-
 # WebGL 渲染流程
 
 ![image](images/webgl.png)
