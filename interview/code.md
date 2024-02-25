@@ -808,7 +808,38 @@ Vue.directive('my-directive', {
 });
 ```
 
+# 获取数据准确类型
+
+```js
+function getType(data) {
+  const t = Object.prototype.toString.call(data);
+  return t.substring(t.indexOf(' ') + 1, t.length - 1);
+}
+```
+
 # 数组算法
+
+## 扁平化数组
+
+```js
+[1, [2, [3]]].flat(Infinity);
+
+function flatArr(arr) {
+  const res = [];
+  const queue = [...arr];
+  while (queue.length > 0) {
+    const item = queue.shift();
+    if (Array.isArray(item)) {
+      item.forEach((a) => {
+        queue.push(a);
+      });
+    } else {
+      res.push(item);
+    }
+  }
+  return res;
+}
+```
 
 ## 判断回文
 

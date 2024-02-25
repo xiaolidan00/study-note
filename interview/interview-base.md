@@ -149,6 +149,14 @@ Object.prototype.__proto__//null
 //实例.constructor === 构造函数
 s.constructor==Student//true
 
+
+//注意
+Number.prototype + 1; // 1
+Array.prototype.map((x) => x + 1); // []
+String.prototype + "a"; // "a"
+RegExp.prototype.source; // "(?:)"
+Function.prototype(); // Function.prototype 本身就是一个无操作函数
+
 ```
 
 - 每个 class 都有显式原型 prototype
