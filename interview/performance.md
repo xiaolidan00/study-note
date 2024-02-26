@@ -85,3 +85,13 @@
 - rollup-plugin-visualizer 查看包体积分布、各插件占比情况
 - vite-plugin-imagemin 压缩图片
 - @rollup/plugin-terser 压缩代码
+
+# React 性能优化
+
+- 渲染列表时加 key
+- 自定义事件、DOM 事件及时销毁
+- 合理使用异步组件
+- 减少函数 bind this 次数
+- 合理使用 SCU 和 memo
+- 合理使用 Immutable
+- SSR

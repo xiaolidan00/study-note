@@ -562,7 +562,7 @@ presets 插件集合
 # babel 和 webpack 区别
 
 - babel:js 新语法编译工具，不关心模块化
-- weboack：打包构建工具，是多个 loader plugin 的集合
+- webpack：打包构建工具，是多个 loader plugin 的集合
 
 # 打包 library
 

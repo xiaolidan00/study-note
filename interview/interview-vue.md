@@ -28,7 +28,7 @@ vue3 中 v-if 比 v-for 的优先级更高，可采用 template 包裹，尽量�
 
 - 两个都可监听 data 属性变化
 - watch 需明确监听哪个属性
-- watchEffect 会根据其中的属性，自动监听其变化
+- watchEffect 会根据函数里面的属性，自动监听其变化
 - watch immediate,watchEffect 初始化一定会执行
 
 # Vue3 性能为什么比 vue2 好
@@ -194,8 +194,6 @@ defineComponent((props, context) => {
   const count = ref(0);
   return () => <p>{count}<MyButton msg={count}>Hello</MyButton></p>;
 });
-
-
 ```
 
 ## jsx 与 template 区别
@@ -437,7 +435,7 @@ Vue.component('heading', {
 ## hash 路由
 
 - hash 变化会触发网页跳转，即浏览器前进后退
-- hash 变化不会杀心页面，SPA 必备的特点
+- hash 变化不会刷新页面，SPA 必备的特点
 - hash 永远不会提交到 server 端（分离前后端，纯前端控制）
 - onhashchange 监听
 
@@ -474,7 +472,7 @@ window.onpopstate = (ev) => {
 - 父子组件 props 和 this.$emit
 - EventBus
 - Vuex
-- $parent,$children,$ref，dispose
+- $parent,$children,$ref，expose
 - $attrs/$listeners
 - provide/inject
 
