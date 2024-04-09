@@ -3,42 +3,37 @@
 ```js
 class EventEmitter {
   constructor() {
-    this._events = {};
+    this.eventMap = {};
   }
-  getEvenCall(event) {
-    return this._events[event] || [];
-  }
+
   on(event, callback) {
-    let callbacks = this.getEvenCall(event);
-    callbacks.push(callback);
-    this._events[event] = callbacks;
-    return this;
+    if (this.eventMap[event]?.length) {
+      const f = this.eventMap[event].findIndex((it) => it === callback);
+      if (f == -1) {
+        this.eventMap[event].push(callback);
+      }
+    } else {
+      this.eventMap[event] = [callback];
+    }
   }
   off(event, callback) {
-    if (callback) {
-      let callbacks = this.getEvenCall(event);
-      this._events[event] = callbacks.filter((fn) => fn !== callback);
-    } else {
-      this._events[event] = [];
+    if (this.eventMap[event]?.length) {
+      this.eventMap[event] = this.eventMap[event].filter((it) => it !== callback);
     }
-    return this;
   }
-  emit(...args) {
-    const event = args[0];
-    const params = args.slice(1);
-    const callbacks = this._events[event] || [];
-    callbacks.forEach((fn) => {
-      fn.apply(this, params);
-    });
-    return this;
+  emit(event, data) {
+    if (this.eventMap[event]?.length) {
+      this.eventMap[event].forEach((fn) => {
+        fn(data);
+      });
+    }
   }
   once(event, callback) {
-    let wrapFanc = (...args) => {
-      callback.apply(this, args);
-      this.off(event, wrapFanc);
+    const fun = (data) => {
+      callback(data);
+      this.off(event, fun);
     };
-    this.on(event, wrapFanc);
-    return this;
+    this.on(event, fun);
   }
 }
 ```

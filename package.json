@@ -4,6 +4,7 @@
   "description": "<p style='text-align:center;font-size:32px;color:#1a67ff'>  <img style=\"height:32px;width:32px;border-radius:50%\" src='http://www.xiaolidan00.top/bell-icon.png'/> 主页-xiaolidan00.top </p>",
   "main": "createMD.js",
   "scripts": {
+    "doc": "node createMD.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

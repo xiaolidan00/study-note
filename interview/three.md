@@ -46,6 +46,32 @@ MeshBasicMaterial ➡ MeshLambertMaterial ➡ MeshPhongMaterial ➡ MeshStandard
 
 首先，场景被渲染到一个渲染目标上，渲染目标表示的是一块在显存中的缓冲区。 接下来，在图像最终被渲染到屏幕之前，一个或多个后期处理过程将滤镜和效果应用到图像缓冲区。
 
+# 性能优化
+
+https://blog.csdn.net/u014361280/article/details/124285654
+
+1. 创建多量物体时 ，BufferGeometry （或者 InstancedBufferGeometry）创建
+
+2. 合理执行渲染方法.render(),requestAnimationFrame 换成 controls 监听 change
+
+3. 减少没必要执行的代码在周期性渲染函数中的执行
+
+4. 减少模型面数，必要可以用法线贴图增加模型细节替代
+
+5. 共享几何体和材质
+
+6. 渲染帧率的优化，其实就是合理调用 render （补充第 2 点），有实操些代码
+
+7. 网格合并
+
+8. 尽量重用 Material 和 Geometry
+
+9. 删除模型时，将材质和几何体从内存中清除
+
+10. 在循环渲染中避免使用更新 （真正需要更新才更新，补充 2，含代码 ）
+
+11. Instance、Merge 性能对比
+
 # 空间
 
 - 模型空间

@@ -200,3 +200,35 @@ Monorepo：子项目组织到一个仓库统一管理
 3. 减少重绘和回流：通过合并多个 DOM 修改、使用 transform 进行动画变换，避免频繁的 DOM 重绘和回流操作，以提高性能。
 4. 使用硬件加速：使用 CSS 属性 translate3d、scale3d 等可以启用 GPU 硬件加速，提高动画的性能。
 5. 避免使用阻塞操作：确保动画执行期间没有长时间的 JavaScript 计算或网络请求阻塞主线程。
+
+# ESM 与 CJS 区别
+
+- ES Module 输出的是值的引用，而 CommonJS 输出的是值的拷贝；
+- ES Module 是编译时执行，而 CommonJS 模块是在运行时加载；
+- ES6 Module 可以导出多个值，而 CommonJs 是单个值导出；
+- ES6 Module 静态语法只能写在顶层，而 CommonJs 是动态语法可以写在判断里；
+- ES6 Module 的 this 是 undefined，而 CommonJs 的 this 是当前模块；
+
+# Tree Shaking 实现原理
+
+- Tree Shaking 都是在 ES Module 标准只上的：静态编译，确定输入输出值；
+
+- 搜集依赖—>标记引用—>清除 DeadCode。
+
+# webpack 中 chunk,module,bundle 区别
+
+- bundle 由许多不同的模块生成，包含已经经过加载和编译过程的源文件的最终版本。
+- chunk: 在 webpack 内部用于管理捆绑过程。输出束（bundle）由块组成，其中有几种类型（例如 entry 和 child ）。通常，块 直接与 输出束 (bundle）相对应，但是，有些配置不会产生一对一的关系。
+- module 是离散功能块，相比于完整程序提供了更小的接触面。精心编写的模块提供了可靠的抽象和封装界限，使得应用程序中每个模块都具有条理清楚的设计和明确的目的。
+
+# webpack 中 loader 与 plugin 区别
+
+**官方**
+
+- loader 用于对模块的源代码进行转换。loader 可以使你在 require() 或"加载"模块时预处理文件。
+- Plugin: webpack 插件是一个具有 apply 属性的 JavaScript 对象。apply 属性会被 webpack compiler 调用，并且插件可在整个编译生命周期访问。这些包通常会以某种方式扩展编译功能。
+
+**别人概括：**
+
+- loader 是文件加载转换
+- plugin:拓展编译功能，在 webpack 运行的生命周期中会广播出许多事件，plugin 可以监听这些事件，在合适的时机通过 webpack 提供的 API 改变输出结果。

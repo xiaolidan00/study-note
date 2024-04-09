@@ -1,3 +1,8 @@
+# 技术资讯
+
+es2024 新特性：https://blog.csdn.net/weixin_50367873/article/details/136174663
+vite 新特性：https://mp.weixin.qq.com/s/mFAboFdgQp6cikq5yrDtMg
+
 # Vue 性能优化
 
 - 合理使用 v-show 和 v-if
@@ -90,8 +95,11 @@
 
 - 渲染列表时加 key
 - 自定义事件、DOM 事件及时销毁
-- 合理使用异步组件
+- 合理使用异步组件，懒加载 lazy
 - 减少函数 bind this 次数
 - 合理使用 SCU 和 memo
 - 合理使用 Immutable
 - SSR
+- useCallback 和 useMemo
+- Fragment
+- 虚拟列表： React-virtualized 或者是 React-window 等包。

@@ -104,7 +104,7 @@ Expires 同为控制缓存过期，已被 Cache-Control 代替
 **Etag 过程：**
 
 - 初次请求服务器-》返回资源和 Etag
-- 再次请求，Request Headers 带着 If-None-Math(之前的 Etag)->返回 304，或新资源和新 Etag
+- 再次请求，Request Headers 带着 If-None-Match(之前的 Etag)->返回 304，或新资源和新 Etag
 
 - 优先使用 Etag
 - Last-Modified 只能精确到秒

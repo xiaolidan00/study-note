@@ -13,6 +13,7 @@
   { "name": "网络", "url": "interview/network.md" },
   { "name": "Rollup", "url": "interview/Rollup.md" },
   { "name": "webpack", "url": "interview/webpack.md" },
+  { "name": "package.json", "url": "interview/project.md" },
   { "name": "前端整理" },
   { "name": "基础", "url": "interview/interview-base.md" },
   { "name": "网络", "url": "interview/interview-netword.md" },
@@ -32,5 +33,9 @@
   { "name": "2022 年 11 月软考架构师", "url": "note/note.md" },
   { "name": "Leetcode学习笔记", "url": "note/code-study.md" },
   { "name": "练习算法题", "url": "note/code.md" },
-  { "name": "动态规划算法题学习笔记", "url": "note/dongtai.md" }
+  { "name": "动态规划算法题学习笔记", "url": "note/dongtai.md" },
+  { "name": "系统分析师笔记", "url": "note/analysis.md" },
+  { "name": "《React Hooks 开发实战》", "url": "note/react-hook.md" },
+  { "name": "《前端开发必知必会：从工程核心到前沿实战》", "url": "note/book1.md" },
+  { "name": "2024 年 4 月读书笔记", "url": "study/2024-4.md" }
 ]

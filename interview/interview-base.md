@@ -48,6 +48,37 @@
 2. （执行微任务）尝试 DOM 渲染（执行宏任务）
 3. 触发 Event loop
 
+## MutationObserver 接口提供了监视对 DOM 树所做更改的能力
+
+```js
+// 选择需要观察变动的节点
+const targetNode = document.getElementById('some-id');
+
+// 观察器的配置（需要观察什么变动）
+const config = { attributes: true, childList: true, subtree: true };
+
+// 当观察到变动时执行的回调函数
+const callback = function (mutationsList, observer) {
+  // Use traditional 'for loops' for IE 11
+  for (let mutation of mutationsList) {
+    if (mutation.type === 'childList') {
+      console.log('A child node has been added or removed.');
+    } else if (mutation.type === 'attributes') {
+      console.log('The ' + mutation.attributeName + ' attribute was modified.');
+    }
+  }
+};
+
+// 创建一个观察器实例并传入回调函数
+const observer = new MutationObserver(callback);
+
+// 以上述配置开始观察目标节点
+observer.observe(targetNode, config);
+
+// 之后，可停止观察
+observer.disconnect();
+```
+
 # async/await
 
 - 异步回调地狱
@@ -475,6 +506,5 @@ localStorage,sessionStorage
 
 - 两个都是异步加载 JS 脚本，不阻塞 html 解析
 - defer 是先加载，等到 dom 解析完，在 DOMContentLoaded 事件之前按顺序执行脚本
-  执行时间不同
 - async 是加载完立即执行,顺序不定
 - type="module"的效果等同于 defer
