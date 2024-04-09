@@ -18,6 +18,7 @@
 - [网络](#interview/network.md)
 - [Rollup](#interview/Rollup.md)
 - [webpack](#interview/webpack.md)
+- [package.json](#interview/project.md)
 
 # 前端整理
 
@@ -42,4 +43,7 @@
 - [Leetcode学习笔记](#note/code-study.md)
 - [练习算法题](#note/code.md)
 - [动态规划算法题学习笔记](#note/dongtai.md)
+- [系统分析师笔记](#note/analysis.md)
+- [《React Hooks 开发实战》](#note/react-hook.md)
+- [《前端开发必知必会：从工程核心到前沿实战》](#note/book1.md)
 - [2024 年 4 月读书笔记](#study/2024-4.md)
