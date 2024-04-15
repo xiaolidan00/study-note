@@ -100,5 +100,3 @@ Rollup 的构建流程主要包括以下几个步骤：
 # 使用 rollup-plugin-visualizer：
 
 安装并使用 rollup-plugin-visualizer 插件来分析打包后的文件大小分布，这有助于识别和移除不必要的依赖。
-
-Three.js 中的 `WebGLRenderer` 是一个用于在网页上渲染 3D 图形的核心组件。它基于 WebGL API，提供了一种在浏览器中创建和显示 3D 场景和模型的方法。`WebGLRenderer` 的渲染过程可以分为以下几个主要步骤：

@@ -3,47 +3,30 @@
 主页-xiaolidan00.top </div>
 
 - [主页](index.md)
+- [掘金博客](https://juejin.cn/user/224781403162798)
+- [面试题](interview/index.md)
 
-# 面试题
+# 算法题
 
-- [代码阅读](interview/readcode.md)
-- [js/es6](interview/js.md)
-- [html5/css3](interview/html.md)
-- [vue](interview/vue.md)
-- [react](interview/react.md)
-- [工程化](interview/project.md)
-- [手写代码](interview/code.md)
-- [Three.js](interview/three.md)
-- [node.js](interview/node.md)
-- [网络](interview/network.md)
-- [Rollup](interview/Rollup.md)
-- [webpack](interview/webpack.md)
-- [package.json](interview/project.md)
-
-# 前端整理
-
-- [基础](interview/interview-base.md)
-- [网络](interview/interview-netword.md)
-- [vue](interview/interview-vue.md)
-- [react](interview/interview-react.md)
-- [工程化](interview/interview-project.md)
-- [手写代码](interview/interview-code.md)
-- [性能优化](interview/performance.md)
+- [手写代码](code/interview-code.md)
+- [Leetcode学习笔记](code/code-study.md)
+- [练习算法题](code/code.md)
+- [动态规划算法题学习笔记](code/dongtai.md)
 
 # 学习笔记
 
-- [Three.js开发注意事项](note/three.md)
-- [《Vue.js 技术内幕》学习笔记](note/vue3.md)
-- [react18 学习笔记](note/react-guide.md)
-- [拉钩 React 面试题](interview/lagou-react.md)
-- [《React技术揭秘》学习笔记](note/react-tech.md)
-- [canvas 学习笔记](note/canvas.md)
-- [typescript 学习笔记](note/ts.md)
-- [2022 年 11 月软考架构师](note/note.md)
-- [Leetcode学习笔记](note/code-study.md)
-- [练习算法题](note/code.md)
-- [动态规划算法题学习笔记](note/dongtai.md)
-- [系统分析师笔记](note/analysis.md)
-- [《React Hooks 开发实战》](note/react-hook.md)
-- [《前端开发必知必会：从工程核心到前沿实战》](note/book1.md)
 - [2024 年 4 月读书笔记](study/2024-4.md)
+
+# 软考
+
+- [系统分析师笔记](ruankao/analysis.md)
+- [2022 年 11 月软考架构师](ruankao/note.md)
+
+# 读书笔记
+
+- [《React技术揭秘》学习笔记](books/react-tech.md)
+- [《Vue.js 技术内幕》学习笔记](books/vue3.md)
+- [阮一峰《Typescript 教程》](books/ts.md)
+- [《React Hooks 开发实战》](books/react-hook.md)
+- [《前端开发必知必会：从工程核心到前沿实战》](books/book1.md)
+- [《HTML5 Canvas 核心技术 图形、动画与游戏开发》](books/canvas.md)

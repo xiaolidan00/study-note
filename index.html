@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./assets/style.css" />
     <script src="./assets/showdown.min.js"></script>
     <script src="./assets/highlight.min.js"></script>
+    <script src="./urls.js"></script>
   </head>
   <body onload="init()">
     <div class="left-nav" id="navlist"></div>
@@ -122,63 +123,59 @@
 
         getData(url);
       };
-      function getList() {
-        return new Promise((resolve) => {
-          fetch('urls.json')
-            .then((res) => res.json())
-            .then((res) => {
-              resolve(res);
-            });
-        });
-      }
+
       function init() {
-        getList().then((res) => {
-          const url = window.location.hash.substring(1);
+        const url = window.location.hash.substring(1);
 
-          res.forEach((a) => {
-            const dom = document.createElement('a');
+        window.urls.forEach((a) => {
+          const dom = document.createElement('a');
 
-            if (a.url) {
+          if (a.url) {
+            if (a.url.indexOf('http') == 0) {
+              dom.href = a.url;
+              dom.target = '_blank';
+            } else {
               dom.id = a.url.replace(/\.\//, '_');
               dom.href = '#' + a.url;
-            } else {
-              dom.classList.add('disabled');
+              dom.target = '_self';
             }
-            dom.target = '_self';
-            dom.innerText = a.name;
-            navlist.appendChild(dom);
-          });
-          if (url) {
-            getData(url);
           } else {
-            getData(res[0].url);
+            dom.classList.add('disabled');
           }
-          const leftbtn = document.getElementById('leftbtn');
-          const leftaction = () => {
-            if (navlist.classList.contains('show')) {
-              navlist.classList.remove('show');
-            } else {
-              navlist.classList.add('show');
-              if (menulist.classList.contains('show')) {
-                menulist.classList.remove('show');
-              }
-            }
-          };
-          leftbtn.onclick = leftaction;
 
-          const rightbtn = document.getElementById('rightbtn');
-          const rightaction = () => {
+          dom.innerText = a.name;
+          navlist.appendChild(dom);
+        });
+        if (url) {
+          getData(url);
+        } else {
+          getData('index.md');
+        }
+        const leftbtn = document.getElementById('leftbtn');
+        const leftaction = () => {
+          if (navlist.classList.contains('show')) {
+            navlist.classList.remove('show');
+          } else {
+            navlist.classList.add('show');
             if (menulist.classList.contains('show')) {
               menulist.classList.remove('show');
-            } else {
-              menulist.classList.add('show');
-              if (navlist.classList.contains('show')) {
-                navlist.classList.remove('show');
-              }
             }
-          };
-          rightbtn.onclick = rightaction;
-        });
+          }
+        };
+        leftbtn.onclick = leftaction;
+
+        const rightbtn = document.getElementById('rightbtn');
+        const rightaction = () => {
+          if (menulist.classList.contains('show')) {
+            menulist.classList.remove('show');
+          } else {
+            menulist.classList.add('show');
+            if (navlist.classList.contains('show')) {
+              navlist.classList.remove('show');
+            }
+          }
+        };
+        rightbtn.onclick = rightaction;
       }
       function onHideList() {
         if (navlist.classList.contains('show')) {

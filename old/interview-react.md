@@ -619,7 +619,7 @@ setState(newState)->newState存入pending队列->是否处于batch update
 
 isBatchingUpdates:true->保存组件到dirtyComponents中->isBatchingUpdates:false
 
-isBatchingUpdates:false(setTimeout DOM事件同步，React 18都是异步了)->遍历所有dirtyComponents->调用updateComponent->更新pending state或props
+isBatchingUpdates:false(sourcemapsourcemap)->遍历所有dirtyComponents->调用updateComponent->更新pending state或props
 ```
 
 ### 哪些能命中 batchUpdate 机制

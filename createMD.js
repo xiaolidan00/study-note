@@ -1,5 +1,5 @@
 const fs = require('fs');
-const info = require('./urls.json');
+const info = require('./urls.js');
 function write(fileName, fileContent) {
   fs.writeFile(fileName, fileContent, (err) => {
     if (err) {
@@ -28,7 +28,7 @@ info.forEach((item) => {
     contentIndex.push(title);
   }
 });
-
+// write('./urls.json', JSON.stringify(info));
 write('./index.md', contentIndex.join('\n'));
 
 write('./README.md', readme.join('\n'));

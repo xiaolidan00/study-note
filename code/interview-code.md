@@ -387,340 +387,32 @@ function binarySearch(arr, target) {
 }
 ```
 
-# 排序算法
-
-## 冒泡排序
+# 快速排序
 
 ```js
-function bubbleSort(arr) {
-  var len = arr.length;
-  for (var i = 0; i < len - 1; i++) {
-    for (var j = 0; j < len - 1 - i; j++) {
-      if (arr[j] > arr[j + 1]) {
-        // 相邻元素两两对比
-        var temp = arr[j + 1]; // 元素交换
-        arr[j + 1] = arr[j];
-        arr[j] = temp;
-      }
+function quick_sort(s, l, r) {
+  if (l < r) {
+    //Swap(s[l], s[(l + r) / 2]); //将中间的这个数和第一个数交换 参见注1
+    let i = l,
+      j = r,
+      x = s[l];
+    while (i < j) {
+      while (i < j && s[j] >= x)
+        // 从右向左找第一个小于x的数
+        j--;
+      if (i < j) s[i++] = s[j];
+
+      while (i < j && s[i] < x)
+        // 从左向右找第一个大于等于x的数
+        i++;
+      if (i < j) s[j--] = s[i];
     }
+    s[i] = x;
+    quick_sort(s, l, i - 1); // 递归调用
+    quick_sort(s, i + 1, r);
   }
-  return arr;
 }
 ```
-
-## 选择排序
-
-```js
-function selectionSort(arr) {
-  var len = arr.length;
-  var minIndex, temp;
-  for (var i = 0; i < len - 1; i++) {
-    minIndex = i;
-    for (var j = i + 1; j < len; j++) {
-      if (arr[j] < arr[minIndex]) {
-        // 寻找最小的数
-        minIndex = j; // 将最小数的索引保存
-      }
-    }
-    temp = arr[i];
-    arr[i] = arr[minIndex];
-    arr[minIndex] = temp;
-  }
-  return arr;
-}
-```
-
-## 插入排序
-
-```js
-function insertionSort(arr) {
-  var len = arr.length;
-  var preIndex, current;
-  for (var i = 1; i < len; i++) {
-    preIndex = i - 1;
-    current = arr[i];
-    while (preIndex >= 0 && arr[preIndex] > current) {
-      arr[preIndex + 1] = arr[preIndex];
-      preIndex--;
-    }
-    arr[preIndex + 1] = current;
-  }
-  return arr;
-}
-```
-
-## 希尔排序
-
-```js
-function shellSort(arr) {
-  let length = arr.length;
-  let temp;
-  for (let step = Math.floor(length / 2); step >= 1; step = Math.floor(step / 2)) {
-    for (let i = step; i < length; i++) {
-      temp = arr[i];
-      let j = i - step;
-      while (j >= 0 && arr[j] > temp) {
-        arr[j + step] = arr[j];
-        j -= step;
-      }
-      arr[j + step] = temp;
-    }
-  }
-  return arr;
-}
-```
-
-## 归并排序
-
-```js
-function mergeSort(arr) {
-  // 采用自上而下的递归方法
-  var len = arr.length;
-  if (len < 2) {
-    return arr;
-  }
-  var middle = Math.floor(len / 2),
-    left = arr.slice(0, middle),
-    right = arr.slice(middle);
-  return merge(mergeSort(left), mergeSort(right));
-}
-
-function merge(left, right) {
-  var result = [];
-
-  while (left.length && right.length) {
-    if (left[0] <= right[0]) {
-      result.push(left.shift());
-    } else {
-      result.push(right.shift());
-    }
-  }
-
-  while (left.length) result.push(left.shift());
-
-  while (right.length) result.push(right.shift());
-
-  return result;
-}
-```
-
-## 快速排序
-
-```js
-function quickSort(arr, left, right) {
-  var len = arr.length,
-    partitionIndex,
-    left = typeof left != 'number' ? 0 : left,
-    right = typeof right != 'number' ? len - 1 : right;
-
-  if (left < right) {
-    partitionIndex = partition(arr, left, right);
-    quickSort(arr, left, partitionIndex - 1);
-    quickSort(arr, partitionIndex + 1, right);
-  }
-  return arr;
-}
-
-function partition(arr, left, right) {
-  // 分区操作
-  var pivot = left, // 设定基准值（pivot）
-    index = pivot + 1;
-  for (var i = index; i <= right; i++) {
-    if (arr[i] < arr[pivot]) {
-      swap(arr, i, index);
-      index++;
-    }
-  }
-  swap(arr, pivot, index - 1);
-  return index - 1;
-}
-
-function swap(arr, i, j) {
-  var temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-}
-function partition2(arr, low, high) {
-  let pivot = arr[low];
-  while (low < high) {
-    while (low < high && arr[high] > pivot) {
-      --high;
-    }
-    arr[low] = arr[high];
-    while (low < high && arr[low] <= pivot) {
-      ++low;
-    }
-    arr[high] = arr[low];
-  }
-  arr[low] = pivot;
-  return low;
-}
-
-function quickSort2(arr, low, high) {
-  if (low < high) {
-    let pivot = partition2(arr, low, high);
-    quickSort2(arr, low, pivot - 1);
-    quickSort2(arr, pivot + 1, high);
-  }
-  return arr;
-}
-```
-
-## 堆排序
-
-```js
-var len; // 因为声明的多个函数都需要数据长度，所以把len设置成为全局变量
-
-function buildMaxHeap(arr) {
-  // 建立大顶堆
-  len = arr.length;
-  for (var i = Math.floor(len / 2); i >= 0; i--) {
-    heapify(arr, i);
-  }
-}
-
-function heapify(arr, i) {
-  // 堆调整
-  var left = 2 * i + 1,
-    right = 2 * i + 2,
-    largest = i;
-
-  if (left < len && arr[left] > arr[largest]) {
-    largest = left;
-  }
-
-  if (right < len && arr[right] > arr[largest]) {
-    largest = right;
-  }
-
-  if (largest != i) {
-    swap(arr, i, largest);
-    heapify(arr, largest);
-  }
-}
-
-function swap(arr, i, j) {
-  var temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-}
-
-function heapSort(arr) {
-  buildMaxHeap(arr);
-
-  for (var i = arr.length - 1; i > 0; i--) {
-    swap(arr, 0, i);
-    len--;
-    heapify(arr, 0);
-  }
-  return arr;
-}
-```
-
-## 计数排序
-
-```js
-function countingSort(arr, maxValue) {
-  var bucket = new Array(maxValue + 1),
-    sortedIndex = 0;
-  (arrLen = arr.length), (bucketLen = maxValue + 1);
-
-  for (var i = 0; i < arrLen; i++) {
-    if (!bucket[arr[i]]) {
-      bucket[arr[i]] = 0;
-    }
-    bucket[arr[i]]++;
-  }
-
-  for (var j = 0; j < bucketLen; j++) {
-    while (bucket[j] > 0) {
-      arr[sortedIndex++] = j;
-      bucket[j]--;
-    }
-  }
-
-  return arr;
-}
-```
-
-## 桶排序
-
-```js
-function bucketSort(arr, bucketSize) {
-  if (arr.length === 0) {
-    return arr;
-  }
-
-  var i;
-  var minValue = arr[0];
-  var maxValue = arr[0];
-  for (i = 1; i < arr.length; i++) {
-    if (arr[i] < minValue) {
-      minValue = arr[i]; // 输入数据的最小值
-    } else if (arr[i] > maxValue) {
-      maxValue = arr[i]; // 输入数据的最大值
-    }
-  }
-
-  //桶的初始化
-  var DEFAULT_BUCKET_SIZE = 5; // 设置桶的默认数量为5
-  bucketSize = bucketSize || DEFAULT_BUCKET_SIZE;
-  var bucketCount = Math.floor((maxValue - minValue) / bucketSize) + 1;
-  var buckets = new Array(bucketCount);
-  for (i = 0; i < buckets.length; i++) {
-    buckets[i] = [];
-  }
-
-  //利用映射函数将数据分配到各个桶中
-  for (i = 0; i < arr.length; i++) {
-    buckets[Math.floor((arr[i] - minValue) / bucketSize)].push(arr[i]);
-  }
-
-  arr.length = 0;
-  for (i = 0; i < buckets.length; i++) {
-    insertionSort(buckets[i]); // 对每个桶进行排序，这里使用了插入排序
-    for (var j = 0; j < buckets[i].length; j++) {
-      arr.push(buckets[i][j]);
-    }
-  }
-
-  return arr;
-}
-```
-
-## 基数排序
-
-```js
-//LSD Radix Sort
-var counter = [];
-function radixSort(arr, maxDigit) {
-  var mod = 10;
-  var dev = 1;
-  for (var i = 0; i < maxDigit; i++, dev *= 10, mod *= 10) {
-    for (var j = 0; j < arr.length; j++) {
-      var bucket = parseInt((arr[j] % mod) / dev);
-      if (counter[bucket] == null) {
-        counter[bucket] = [];
-      }
-      counter[bucket].push(arr[j]);
-    }
-    var pos = 0;
-    for (var j = 0; j < counter.length; j++) {
-      var value = null;
-      if (counter[j] != null) {
-        while ((value = counter[j].shift()) != null) {
-          arr[pos++] = value;
-        }
-      }
-    }
-  }
-  return arr;
-}
-```
-
-# 发布订阅者模式
-
-# 观察者模式
 
 # Tree
 
@@ -785,44 +477,63 @@ function tree2list(root, id = 'id', parentId = 'parentId', children = 'children'
 # 实现 Event emitter 类
 
 ```js
-class EventEmitter {
+export class EventEmitter {
   constructor() {
-    this._events = {};
+    this.eventMap = new Map();
   }
-  getEvenCall(event) {
-    return this._events[event] || [];
-  }
-  on(event, callback) {
-    let callbacks = this.getEvenCall(event);
-    callbacks.push(callback);
-    this._events[event] = callbacks;
-    return this;
-  }
-  off(event, callback) {
-    if (callback) {
-      let callbacks = this.getEvenCall(event);
-      this._events[event] = callbacks.filter((fn) => fn !== callback);
-    } else {
-      this._events[event] = [];
+  on(event, fn) {
+    if (typeof fn === 'function') {
+      const fns = this.eventMap.get(event);
+      if (fns) {
+        if (!fns.has(fn)) {
+          fns.set(fn, 1);
+        }
+      } else {
+        //采用map可以更加快速增删改查
+        const fns = new Map();
+        fns.set(fn, 1);
+        this.eventMap.set(event, fns.set(fn, 1));
+      }
     }
-    return this;
   }
-  emit(...args) {
-    const event = args[0];
-    const params = args.slice(1);
-    const callbacks = this._events[event] || [];
-    callbacks.forEach((fn) => {
-      fn.apply(this, params);
-    });
-    return this;
+  off(event, fn) {
+    if (typeof fn === 'function') {
+      const fns = this.eventMap.get(event);
+      if (fns.has(fn)) {
+        fns.delete(fn);
+      }
+    }
   }
-  once(event, callback) {
-    let wrapFanc = (...args) => {
-      callback.apply(this, args);
-      this.off(event, wrapFanc);
+  emit(event, data) {
+    const fns = this.eventMap.get(event);
+    if (fns) {
+      fns.forEach((i, fn) => {
+        fn(data);
+      });
+    }
+  }
+  once(event, fn) {
+    //包裹一层function，一旦触发就销毁
+    const fun = (data) => {
+      fn(data);
+      this.off(event, fun);
     };
-    this.on(event, wrapFanc);
-    return this;
+    this.on(event, fun);
   }
+}
+```
+
+# compose 函数
+
+```js
+//div2(mul3(add1(add1(0))));=>compose(div2, mul3, add1, add1)(0)
+function compose(...fn) {
+  if (!fn.length) return (v) => v;
+  if (fn.length === 1) return fn[0];
+  return fn.reduce(
+    (pre, cur) =>
+      (...args) =>
+        pre(cur(...args))
+  );
 }
 ```
