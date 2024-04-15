@@ -1,4 +1,4 @@
-## 手写 promise
+# 手写 promise
 
 - 初始化和异步回调
 - then catch 链式调用
@@ -159,7 +159,7 @@ MyPromise.race([
 });
 ```
 
-## 深度拷贝 deepClone
+# 深度拷贝 deepClone
 
 - 浅拷贝：Object.assign()、Array.prototype.concat()、Array.prototype.slice()、扩展运算符...
 
