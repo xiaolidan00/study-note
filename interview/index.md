@@ -357,7 +357,12 @@ rollup-plugin-postcss，rollup-plugin-scss，rollup-plugin-vue，@rollup/plugin-
 
 ## pnpm 软链接和硬链接
 
-1.硬链接:文件指向相同的数据块，共享数据块。不会占用额外的磁盘空间 2.软链接：指向实际文件夹的快捷方式
+1.硬链接:文件指向相同的数据块，共享数据块。不会占用额外的磁盘空间(实际的文件路径，同一磁盘下：D:\pnpm-cache\store\v3\files)
+
+2.软链接：指向实际文件夹的快捷方式
+
+软链接可理解为指向源文件的指针，它是单独的一个文件，仅仅只有几个字节，它拥有独立的 inode
+硬链接与源文件同时指向一个物理地址，它与源文件共享存储数据，它俩拥有相同的 inode
 
 ## webpack 性能优化
 
@@ -466,6 +471,12 @@ errorCaptured->onErrorCaptured
 renderTracked->onRenderTracked
 renderTriggered->onRenderTrigger
 
+# vue的diff算法
+
+1.删除子节点
+从头部开始同步，patch相同的
+遇到不同的后，再从尾部开始同步，确认改变的节点
+
 ## v-if 与 v-show 优先级
 
 v-if>v-show
@@ -532,7 +543,7 @@ Vue.$set,$delete//给新属性添加响应式
 
 ## vue 的性能优化
 
-https://cn.vuejs.org/guide/best-practices/performance.html
+<https://cn.vuejs.org/guide/best-practices/performance.html>
 
 1. 合理使用 v-show 和 v-if,v-once
 2. 合理使用 computed
@@ -639,7 +650,7 @@ redux,flux 单向数据流，mobx 数据劫持
 
 # typescript
 
-https://typescript.p6p.net/typescript-tutorial/interface.html
+<https://typescript.p6p.net/typescript-tutorial/interface.html>
 
 ## interface 与 type 的区别
 
@@ -677,9 +688,9 @@ https://typescript.p6p.net/typescript-tutorial/interface.html
 - `?. 可选链` 遇到 null 和 undefined 可以立即停止表达式的运行。
 - `?? 空值合并运算符` 当左侧操作数为 null 或 undefined 时，其返回右侧的操作数，否则返回左侧的操作数。
 - `! 非空断言运算符` x! 将从 x 值域中排除 null 和 undefined
-- `!. `在变量名后添加，可以断言排除 undefined 和 null 类型
+- `!.`在变量名后添加，可以断言排除 undefined 和 null 类型
 - `_ 数字分割符` 分隔符不会改变数值字面量的值，使人更容易读懂数字 .e.g 1_101_324。
-- `** `求幂
+- `**`求幂
 
 ## TypeScript 中 const 和 readonly 的区别？枚举和常量枚举的区别？接口和类型别名的区别？
 

@@ -14,7 +14,7 @@ AST 解析阶段: 词法分析(Lexical Analysis)和语法分析(Syntactic Analys
 - 语法高亮，如 highlight/prism 使之代码高亮
 - 模板语法，如 ejs 等模板也离不开
 
-https://github.com/jamiebuilds/the-super-tiny-compiler
+<https://github.com/jamiebuilds/the-super-tiny-compiler>
 
 # webpack 的 runtime 做了什么事情
 
@@ -122,7 +122,7 @@ thread-loader 为官方推荐的开启多进程的 loader，可对 babel 解析 
 # 如何分析前端打包体积
 
 可以使用 webpack-bundle-analyzer 分析打包后体积分析
-https://webpack.js.org/api/stats/
+<https://webpack.js.org/api/stats/>
 
 ```js
 npx webpack --profile --json=compilation-stats.json
@@ -210,15 +210,19 @@ npx browserslist@latest --update-db
 
 # 什么是 semver，~1.2.3 与 ^1.2.3 的版本号范围是多少
 
-semver，Semantic Versioning 语义化版本的缩写，文档可见 https://semver.org/，它由 [major, minor, patch] 三部分组成，其中
+semver，Semantic Versioning 语义化版本的缩写，文档可见 <https://semver.org/，它由> [major, minor, patch] 三部分组成，其中
 
 - major: 当你发了一个含有 Breaking Change 的 API
 - minor: 当你新增了一个向后兼容的功能时
 - patch: 当你修复了一个向后兼容的 Bug 时
 
-# package-lock 的工作流程。
+# package-lock 的工作流程
 
-1.` npm i webpack`，此时下载最新 webpack 版本 5.58.2，在 package.json 中显示为 webpack: ^5.58.2，版本号范围是 `>=5.58.2 < 6.0.0` 2. 在 package-lock.json 中全局搜索 webpack，发现 webpack 的版本是被锁定的，也是说它是确定的 webpack: 5.58.2 3. 经过一个月后，webpack 最新版本为 5.100.0，但由于 webpack 版本在 package-lock.json 中锁死，每次上线时仍然下载 5.58.2 版本号 4. 经过一年后，webpack 最新版本为 6.0.0，但由于 webpack 版本在 package-lock.json 中锁死，且 package.json 中 webpack 版本号为 ^5.58.2，与 package-lock.json 中为一致的版本范围。每次上线时仍然下载 5.58.2 版本号 5. 支线剧情：经过一年后，webpack 最新版本为 6.0.0，需要进行升级，此时手动改写 package.json 中 webpack 版本号为 ^6.0.0，与 package-lock.json 中不是一致的版本范围。此时 npm i 将下载 6.0.0 最新版本号，并重写 package-lock.json 中锁定的版本号为 6.0.0
+1. `npm i webpack`，此时下载最新 webpack 版本 5.58.2，在 package.json 中显示为 webpack: ^5.58.2，版本号范围是 `>=5.58.2 < 6.0.0`
+2. 在 package-lock.json 中全局搜索 webpack，发现 webpack 的版本是被锁定的，也是说它是确定的 webpack: 5.58.2
+3. 经过一个月后，webpack 最新版本为 5.100.0，但由于 webpack 版本在 package-lock.json 中锁死，每次上线时仍然下载 5.58.2 版本号
+4. 经过一年后，webpack 最新版本为 6.0.0，但由于 webpack 版本在 package-lock.json 中锁死，且 package.json 中 webpack 版本号为 ^5.58.2，与 package-lock.json 中为一致的版本范围。每次上线时仍然下载 5.58.2 版本号
+5. 支线剧情：经过一年后，webpack 最新版本为 6.0.0，需要进行升级，此时手动改写 package.json 中 webpack 版本号为 ^6.0.0，与 package-lock.json 中不是一致的版本范围。此时 npm i 将下载 6.0.0 最新版本号，并重写 package-lock.json 中锁定的版本号为 6.0.0
 
 ## npm i 某个 package 时会修改 package-lock.json 中的版本号吗？
 
