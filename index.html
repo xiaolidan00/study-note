@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>叮叮丹-xiaolidan00.top</title>
+    <link rel="stylesheet" href="./assets/highlight-github.min.css" />
+    <!-- <link rel="stylesheet" href="./assets/normalize.css" /> -->
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script src="./assets/showdown.min.js"></script>
+    <script src="./assets/highlight.min.js"></script>
+    <script src="./urls.js"></script>
+  </head>
+  <body onload="init()">
+    <div class="left-nav" id="navlist"></div>
+    <div class="content" onclick="onHideList()" id="markdown-content">
+      <div class="markdown-content">
+        <div class="markdown-body" id="markdown"></div>
+        <div class="footer">2024年 Copyright © xiaolidan00@qq.com 粤ICP备17139828号</div>
+      </div>
+    </div>
+    <div class="right-menu" id="menulist"></div>
+    <button class="left-nav-btn" id="leftbtn">nav</button>
+    <button class="right-menu-btn" id="rightbtn">menu</button>
+    <!-- <div id="loading">loading...</div> -->
+    <script>
+      const converter = new showdown.Converter({ tables: true });
+      const markdown = document.getElementById('markdown');
+      const markdownContent = document.getElementById('markdown-content');
+      // console.log(showdown, showdown.getDefaultOptions());
+      var menulist = document.getElementById('menulist');
+      var navlist = document.getElementById('navlist');
+
+      function getData(url, cb) {
+        const d = document.getElementById(url.replace(/\.\//, '_'));
+        if (d) {
+          const ac = navlist.querySelector('.active');
+          if (ac) {
+            ac.classList.remove('active');
+          }
+
+          d.classList.add('active');
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, false);
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            let html = converter.makeHtml(xhr.responseText);
+            markdown.innerHTML = html;
+            //生成本章目录
+            const result = [];
+            setTimeout(() => {
+              menulist.innerHTML = '';
+              let cs = markdown.children;
+              let h1count = 1;
+              let h2count = 1;
+              let h3count = 1;
+              for (let i = 0; i < cs.length; i++) {
+                let c = cs[i];
+                let tagName = c.tagName.toLowerCase();
+
+                if (['h1', 'h2', 'h3'].includes(tagName)) {
+                  let dom = document.createElement('a');
+                  if (tagName == 'h3') {
+                    dom.setAttribute('level', 3);
+                    c.innerText =
+                      h1count - 1 + '.' + (h2count - 1) + '.' + h3count + '  ' + c.innerText;
+                    h3count++;
+                  } else if (tagName == 'h2') {
+                    dom.setAttribute('level', 2);
+                    c.innerText = h1count - 1 + '.' + h2count + '  ' + c.innerText;
+                    h2count++;
+                    h3count = 1;
+                  } else {
+                    c.innerText = '第' + h1count + '章 ' + c.innerText;
+                    dom.setAttribute('level', 1);
+                    h2count = 1;
+                    h3count = 1;
+                    h1count++;
+                  }
+                  dom.title = c.innerText;
+                  dom.innerText = c.innerText;
+                  c.id = 'a' + Math.round(Math.random() * 99999);
+                  dom.id = 'M' + c.id;
+
+                  dom.target = '_self';
+                  menulist.appendChild(dom);
+                }
+              }
+              menulist.onclick = (ev) => {
+                let a = menulist.querySelector('.active');
+                if (a) {
+                  a.className = '';
+                }
+
+                ev.target.classList.add('active');
+
+                markdownContent.scrollTo(
+                  0,
+                  document.getElementById(ev.target.id.substring(1)).offsetTop - 10
+                );
+              };
+              let codes = markdown.querySelectorAll('pre code');
+              for (let i = 0; i < codes.length; i++) {
+                let code = codes[i];
+                hljs.highlightElement(code);
+              }
+              markdown.onclick = (e) => {
+                if (e.target.tagName.toLowerCase() == 'img') {
+                  window.open(e.target.src);
+                }
+              };
+            }, 50);
+          }
+        };
+
+        xhr.send();
+      }
+
+      window.onhashchange = (ev) => {
+        const url = window.location.hash.substring(1);
+
+        getData(url);
+      };
+
+      function init() {
+        const url = window.location.hash.substring(1);
+
+        window.urls.forEach((a) => {
+          const dom = document.createElement('a');
+
+          if (a.url) {
+            if (a.url.indexOf('http') == 0) {
+              dom.href = a.url;
+              dom.target = '_blank';
+            } else {
+              dom.id = a.url.replace(/\.\//, '_');
+              dom.href = '#' + a.url;
+              dom.target = '_self';
+            }
+          } else {
+            dom.classList.add('disabled');
+          }
+
+          dom.innerText = a.name;
+          navlist.appendChild(dom);
+        });
+        if (url) {
+          getData(url);
+        } else {
+          getData('index.md');
+        }
+        const leftbtn = document.getElementById('leftbtn');
+        const leftaction = () => {
+          if (navlist.classList.contains('show')) {
+            navlist.classList.remove('show');
+          } else {
+            navlist.classList.add('show');
+            if (menulist.classList.contains('show')) {
+              menulist.classList.remove('show');
+            }
+          }
+        };
+        leftbtn.onclick = leftaction;
+
+        const rightbtn = document.getElementById('rightbtn');
+        const rightaction = () => {
+          if (menulist.classList.contains('show')) {
+            menulist.classList.remove('show');
+          } else {
+            menulist.classList.add('show');
+            if (navlist.classList.contains('show')) {
+              navlist.classList.remove('show');
+            }
+          }
+        };
+        rightbtn.onclick = rightaction;
+      }
+      function onHideList() {
+        if (navlist.classList.contains('show')) {
+          navlist.classList.remove('show');
+        }
+        if (menulist.classList.contains('show')) {
+          menulist.classList.remove('show');
+        }
+      }
+    </script>
+  </body>
+</html>
