@@ -964,15 +964,15 @@ function tree2list(root, id = 'id', parentId = 'parentId', children = 'children'
 
 ```js
 function binarySearch (data, dest, start, end){
-		var end = end || data.length-1;
-		var start = start || 0;
-		var m = Math.floor((start+end)/2);
-		if (dest<data[m]){
-			return binarySearch(data, dest, start, m-1)
-		} else {
-			return binarySearch(data, dest, m+1, end)
-		}}
-		return false
+  var end = end || data.length-1;
+  var start = start || 0;
+  var m = Math.floor((start+end)/2);
+  if (dest<data[m]){
+   return binarySearch(data, dest, start, m-1)
+  } else {
+   return binarySearch(data, dest, m+1, end)
+  }}
+  return false
 }
 
 ```
@@ -1471,10 +1471,10 @@ shoeObj.trigger('黑色', 42);
 
 发布-订阅模式，消息的发送方，叫做发布者（publishers），消息不会直接发送给特定的接收者，叫做订阅者。意思就是发布者和订阅者不知道对方的存在。需要一个第三方组件，叫做信息中介，它将订阅者和发布者串联起来，它过滤和分配所有输入的消息。换句话说，发布-订阅模式用来处理不同系统组件的信息交流，即使这些组件不知道对方的存在。
 
-在观察者模式中，观察者是知道 Subject 的，Subject 一直保持对观察者进行记录。然而，在发布订阅模式中，发布者和订阅者不知道对方的存在。它们只有通过消息代理进行通信。
+- 在观察者模式中，观察者是知道 Subject 的，Subject 一直保持对观察者进行记录。然而，在发布订阅模式中，发布者和订阅者不知道对方的存在。它们只有通过消息代理进行通信。
 
-在发布订阅模式中，组件是松散耦合的，正好和观察者模式相反。
+- 在发布订阅模式中，组件是松散耦合的，正好和观察者模式相反。
 
-观察者模式大多数时候是同步的，比如当事件触发，Subject 就会去调用观察者的方法。而发布-订阅模式大多数时候是异步的（使用消息队列）。
+- 观察者模式大多数时候是同步的，比如当事件触发，Subject 就会去调用观察者的方法。而发布-订阅模式大多数时候是异步的（使用消息队列）。
 
-观察者 模式需要在单个应用程序地址空间中实现，而发布-订阅更像交叉应用模式。
+- 观察者 模式需要在单个应用程序地址空间中实现，而发布-订阅更像交叉应用模式。

@@ -11,9 +11,9 @@ function write(fileName, fileContent) {
 
 const contentIndex = [];
 const readme = [];
-const header = `<div style='text-align:center;font-size:32px;color:#1a67ff'> 
+const header = `<a style='text-align:center;font-size:32px;color:#1a67ff;white-space: nowrap;' href='https://www.xiaolidan00.top'>
 <img style="height:32px;width:32px;border-radius:50%" src='http://www.xiaolidan00.top/bell-icon.png'/>
-主页-xiaolidan00.top </div>
+主页-xiaolidan00.top </a>
 `;
 contentIndex.push(header);
 readme.push(header);
