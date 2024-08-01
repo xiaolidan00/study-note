@@ -22,6 +22,8 @@
     { name: '2024 年 4 月读书笔记', url: 'study/2024-4.md' },
     { name: '2024 年 5 月读书笔记', url: 'study/2024-5.md' },
     { name: '2024 年 6 月读书笔记', url: 'study/2024-6.md' },
+    { name: '2024 年 7 月读书笔记', url: 'study/2024-7.md' },
+    { name: '2024 年 8 月读书笔记', url: 'study/2024-8.md' },
     { name: '软考' },
     { name: '系统分析师笔记', url: 'ruankao/analysis.md' },
     { name: '2022 年 11 月软考架构师', url: 'ruankao/note.md' },
