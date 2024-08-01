@@ -142,6 +142,15 @@ webpack 模块加载
 
 6 位转 8 位 ASCII 码，6 和 8 的最小公倍数是 24，也就是 3 个字节，每 6 位一组，也就是 4 组，每组前面补 2 个 0，凑够 8 位。所以这个时候就变成了 4 个字节，也就是增加了 33.33%
 
+## 浮点数精度问题
+
+<https://developer.baidu.com/article/details/3146447>
+
+JavaScript 中浮点数精度问题的根源在于它们是如何存储和计算的。由于它们使用二进制表示，所以对于一些不能精确表示为十进制数的分数，它们可能会出现精度损失。例如，0.1 在二进制中是一个无限重复的小数，所以当它在 JavaScript 中被存储时，它可能会被近似为一个稍微不同的值。
+
+1. 使用 decimal libraries：有一些库，如 decimal.js 或 bignumber.js，mathjs
+2. 将小数点像右多移动 n 位，取整后再除以 (10 * n)
+
 # 网络
 
 ## http 状态码
@@ -347,13 +356,21 @@ Access-Controll-Allow-Credentials:true
 - webpack: 所有文件都是模块，可进行复杂处理，生态完善，项目大打包慢
 - rollup: ES Modules 打包器，纯净小巧，支持 tree-shaking，不支持 HMR（热更新），cjs 转换有限
 
+## webpack打包后发布到浏览器es5环境
+
+通过babel编译，将es6转为es5，配置target
+<https://www.webpackjs.com/loaders/babel-loader/>
+
 ## Rollup 常用插件
 
 rollup-plugin-postcss，rollup-plugin-scss，rollup-plugin-vue，@rollup/plugin-node-resolve，@rollup/plugin-commonjs，@rollup/plugin-babel，@rollup/plugin-terser，@rollup/plugin-strip，'@rollup/plugin-json
 
 ## pnpm 解决问题
 
-1.避免重复安装依赖 ，安装速度快 2.幽灵依赖：没有 package.json 安装的包，因为依赖关系扁平化，导致安装了许多不认识的包 3.软链接和硬链接 4.解决版本冲突和兼容问题
+1. 避免重复安装依赖 ，安装速度快
+2. 幽灵依赖：没有 package.json 安装的包，因为依赖关系扁平化，导致安装了许多不认识的包
+3. 软链接和硬链接,复用同一数据块
+4. 解决版本冲突和兼容问题
 
 ## pnpm 软链接和硬链接
 
@@ -505,6 +522,28 @@ Vue.$set,$delete//给新属性添加响应式
 1. Vue2 diff 算法：遍历所有结点，导致 vnode 的更新新能跟模板大小正相关，跟动态结点的数量无关。当一些组件的整个模板内只有少量动态节点是，这些遍历就是浪费性能。
 2. Vue3 将 vnode 的更新性能由于模板整体大小相关提升为与动态内容的数量相关。
 
+## vue style scoped防止样式污染原理
+
+<https://mp.weixin.qq.com/s?__biz=MzkzMzYzNzMzMQ==&mid=2247485249&idx=1&sn=7c573086fc3e7994eac295666908d18e&scene=21#wechat_redirect>
+
+<https://mp.weixin.qq.com/s/HXLfl0ChI4pB2S7TuxVYeA>
+
+1. 首先在编译时会根据当前vue文件的路径进行加密算法生成一个id，这个id就是自定义属性data-v-x中的x。
+
+2. 然后给编译后的vue组件对象增加一个属性__scopeId，属性值就是data-v-x。
+
+3. 在运行时的renderComponentRoot函数中，这个函数接收的参数是vue实例instance对象，instance.type的值就是编译后的vue组件对象。
+
+4. 在renderComponentRoot函数中会执行setCurrentRenderingInstance函数，将全局变量currentScopeId的值赋值为instance.type.__scopeId，也就是data-v-x。
+
+5. 在renderComponentRoot函数中接着会执行render函数，在生成虚拟DOM的过程中会去读取全局变量currentScopeId，并且将其赋值给虚拟DOM的scopeId属性。
+
+6. 接着就是拿到render函数生成的虚拟DOM去执行patch函数生成真实DOM，在我们这个场景中最终生成真实DOM的是mountElement函数。
+
+7. 在mountElement函数中首先会调用document.createElement函数去生成一个div标签，然后使用textContent属性将div标签的文本节点设置为hello world。
+
+8. 最后就是调用setAttribute方法给div标签设置自定义属性data-v-x。
+
 ## Vue 通信方式
 
 1. 父子组件 props 和 emit
@@ -589,6 +628,17 @@ new Props,setState,forceUpdate->(getDerivedStateFromProps)->(shouldComponentUpda
 componentWillUnmount
 ```
 
+## React合成事件与Js原生事件有什么区别？
+
+<https://cloud.tencent.com/developer/article/2399123>
+1.处理机制：JS原生事件直接绑定在DOM元素上，React合成事件通过事件委托实现。
+2.事件对象：JS原生事件对象直接反映浏览器实现，React合成事件对象消除了浏览器差异。
+3.事件传播：JS原生事件支持冒泡和捕获，React合成事件只支持冒泡。
+4.使用方式：JS原生事件通过addEventListener绑定，React合成事件通过JSX属性绑定。
+5.执行顺序：不要混用JS原生事件和React合成事件，JS原生事件会先执行。
+
+总的来说，React合成事件提供了更好的性能和兼容性，能满足大部分开发需求。但某些场景下，如果需要更精细地控制事件行为或使用不支持的特性，可以考虑使用JS原生事件。
+
 ## 类组件和函数组件的区别
 
 - class 面向对象 ，继承，内部状态管理，生命周期，shouldComponentUpdate 优化
@@ -597,6 +647,10 @@ componentWillUnmount
 ## setState 是同步更新还是异步更新
 
 setTimeout DOM 事件同步，React 18 都是异步了
+
+## 在 React 类组件中，为什么修改状态要使用 setState 而不是用 this.state.xxx = xxx
+
+使用setState来告知React，数据发生改变了你需要更新视图了
 
 ## 组件通讯的方式
 

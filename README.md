@@ -1,6 +1,6 @@
-<div style='text-align:center;font-size:32px;color:#1a67ff'> 
+<a style='text-align:center;font-size:32px;color:#1a67ff;white-space: nowrap;' href='https://www.xiaolidan00.top'>
 <img style="height:32px;width:32px;border-radius:50%" src='http://www.xiaolidan00.top/bell-icon.png'/>
-主页-xiaolidan00.top </div>
+主页-xiaolidan00.top </a>
 
 - [主页](index.md)
 - [掘金博客](https://juejin.cn/user/224781403162798)
@@ -18,6 +18,8 @@
 - [2024 年 4 月读书笔记](study/2024-4.md)
 - [2024 年 5 月读书笔记](study/2024-5.md)
 - [2024 年 6 月读书笔记](study/2024-6.md)
+- [2024 年 7 月读书笔记](study/2024-7.md)
+- [2024 年 8 月读书笔记](study/2024-8.md)
 
 # 软考
 
