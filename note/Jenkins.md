@@ -62,3 +62,8 @@ system>github server
 凭证：secret text>git token(admin:org, admin:repo_hook, repo)
 
 item中git配置的账号ssh私钥
+
+# 修改jenkins workspace地址
+
+`C:\ProgramData\Jenkins\.jenkins\config.xml`
+<workspaceDir>D:/JenkinsWorkspace/${ITEM_FULL_NAME}</workspaceDir>
