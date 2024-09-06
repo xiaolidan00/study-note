@@ -42,6 +42,18 @@ iis开启ftp,直接本机账号密码
 ![alt text](image-1.png)
 system>ftp
 ![alt text](image.png)
+勾选Use active data mode
+
+![alt text](image-7.png)
+
+The filename, directory name, or volume label syntax is incorrect
+
+设置encoding utf8
+
+<https://blog.csdn.net/m0_57013068/article/details/128000192>
+<https://blog.csdn.net/bin470398393/article/details/82149075>
+<https://blog.csdn.net/smooth00/article/details/88734958>
+<https://blog.csdn.net/Dancen/article/details/140105562>
 
 # 配置部署item
 
@@ -59,9 +71,9 @@ system>ftp
 
 system>github server
 
-凭证：secret text>git token(admin:org, admin:repo_hook, repo)
+凭证：secret text>github assess token(admin:org, admin:repo_hook, repo)
 
-item中git配置的账号ssh私钥
+item中git配置凭证的账号ssh私钥
 
 # 修改jenkins workspace地址
 
