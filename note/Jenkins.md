@@ -22,7 +22,7 @@ config
 
 ```ini
 # gitlab
-Host 192.168.20.10
+Host 192.168.1.10
 HostName gitlab.com
 PreferredAuthentications publickey
 IdentityFile ~/.ssh/id_rsa
@@ -33,7 +33,7 @@ IdentityFile ~/.ssh/id_rsa
 测试ssh是否成功
 
 ```bash
-ssh -T git@192.168.20.10
+ssh -T git@192.168.1.10
 ```
 
 # 配置ftp server
