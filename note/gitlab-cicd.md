@@ -16,7 +16,7 @@ build:
 deploy:
   stage:deploy
   script:
-    - move dist/  C:\data\app\apache-tomcat-8.5.91\webapps\GBAFloodControlDemoPlatform-test
+    - move dist/  C:\data\app\apache-tomcat\webapps\
   rules:
     - if: $CI_COMMIT_BRANCH == dev-xld
 

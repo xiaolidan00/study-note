@@ -20,6 +20,6 @@ git submoulde sync
 ```ini
 [submodule "src/components"]
  path = src/components 
- url = http://192.168.20.10:8090/xhy/spatial-ui-module.git
+ url = 
  branch= dev
 ```
