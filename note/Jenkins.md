@@ -55,6 +55,11 @@ The filename, directory name, or volume label syntax is incorrect
 <https://blog.csdn.net/smooth00/article/details/88734958>
 <https://blog.csdn.net/Dancen/article/details/140105562>
 
+# 配置node版本
+
+tools里面配置
+![alt text](image-8.png)
+
 # 配置部署item
 
 凭证是gitlab账号密码
