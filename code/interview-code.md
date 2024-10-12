@@ -537,3 +537,5 @@ function compose(...fn) {
   );
 }
 ```
+
+# KMP字符串匹配算法
