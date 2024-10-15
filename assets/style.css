@@ -115,6 +115,10 @@ body {
   width: 100%;
   font-size: 14px;
 }
+.left-nav a[target],
+.right-menu a[target] {
+  padding-left: 20px;
+}
 .left-nav a:hover, .left-nav a:active, .left-nav a.active,
 .right-menu a:hover,
 .right-menu a:active,

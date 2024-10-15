@@ -114,6 +114,9 @@ body {
     overflow: hidden;
     width: 100%;
     font-size: 14px;
+    &[target] {
+      padding-left: 20px;
+    }
     &:hover,
     &:active,
     &.active {
