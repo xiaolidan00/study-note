@@ -335,7 +335,7 @@ Access-Controll-Allow-Credentials:true
 
 **别人概括：**
 
-- loader 是文件加载转换
+- loader 是文件加载转换成js可以理解的模块
 - plugin:拓展编译功能，在 webpack 运行的生命周期中会广播出许多事件，plugin 可以监听这些事件，在合适的时机通过 webpack 提供的 API 改变输出结果。
 
 ## webpack 中 chunk,module,bundle 区别
