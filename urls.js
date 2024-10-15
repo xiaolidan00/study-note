@@ -10,8 +10,12 @@
   return (urls = [
     { name: '主页', url: 'index.md' },
     { name: '掘金博客', url: 'https://juejin.cn/user/224781403162798' },
-    { name: '面试题', url: 'interview/index.md' },
-
+    { name: '面试题' },
+    { name: '基础面试题', url: 'interview/index.md' },
+    { name: '工程化', url: 'interview/project.md' },
+    { name: 'Typescript面试题', url: 'interview/ts.md' },
+    { name: 'React面试题', url: 'interview/react.md' },
+    { name: 'Vue面试题', url: 'interview/vue.md' },
     { name: '算法题' },
     { name: '手写代码', url: 'code/interview-code.md' },
     { name: 'Leetcode学习笔记', url: 'code/code-study.md' },

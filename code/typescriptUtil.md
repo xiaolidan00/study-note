@@ -248,7 +248,7 @@ type T4 = ConstructorParameters<any>;
 //type T4 = unknown[]
 ```
 
-# ReturnType<Type>
+# `ReturnType<Type>`
 
 ```ts
 declare function f1(): { a: number; b: string };
