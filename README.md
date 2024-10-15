@@ -9,6 +9,7 @@
 
 - [基础面试题](interview/index.md)
 - [工程化](interview/project.md)
+- [git基本操作](interview/git.md)
 - [Typescript面试题](interview/ts.md)
 - [React面试题](interview/react.md)
 - [Vue面试题](interview/vue.md)

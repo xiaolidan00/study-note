@@ -13,6 +13,7 @@
     { name: '面试题' },
     { name: '基础面试题', url: 'interview/index.md' },
     { name: '工程化', url: 'interview/project.md' },
+    { name: 'git基本操作', url: 'interview/git.md' },
     { name: 'Typescript面试题', url: 'interview/ts.md' },
     { name: 'React面试题', url: 'interview/react.md' },
     { name: 'Vue面试题', url: 'interview/vue.md' },
