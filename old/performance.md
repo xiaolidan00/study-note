@@ -1,7 +1,7 @@
 # 技术资讯
 
-es2024 新特性：https://blog.csdn.net/weixin_50367873/article/details/136174663
-vite 新特性：https://mp.weixin.qq.com/s/mFAboFdgQp6cikq5yrDtMg
+es2024 新特性：<https://blog.csdn.net/weixin_50367873/article/details/136174663>
+vite 新特性：<https://mp.weixin.qq.com/s/mFAboFdgQp6cikq5yrDtMg>
 
 # Vue 性能优化
 
@@ -98,7 +98,7 @@ vite 新特性：https://mp.weixin.qq.com/s/mFAboFdgQp6cikq5yrDtMg
 - 合理使用异步组件，懒加载 lazy
 - 减少函数 bind this 次数
 - 合理使用 SCU 和 memo
-- 合理使用 Immutable
+- 合理使用 useImmer
 - SSR
 - useCallback 和 useMemo
 - Fragment

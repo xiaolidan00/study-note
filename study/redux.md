@@ -217,3 +217,34 @@ const usersSlice = createSlice({
 // Later, dispatch the thunk as needed in the app
 dispatch(fetchUserById(123));
 ```
+
+## redux immer
+
+```js
+import produce from 'immer'
+
+const baseState = [
+  {
+    todo: 'Learn typescript',
+    done: true,
+  },
+  {
+    todo: 'Try immer',
+    done: false,
+  },
+]
+
+const nextState = produce(baseState, (draftState) => {
+  // "mutate" the draft array
+  draftState.push({ todo: 'Tweet about it' })
+  // "mutate" the nested state
+  draftState[1].done = true
+})
+
+console.log(baseState === nextState)
+// false - the array was copied
+console.log(baseState[0] === nextState[0])
+// true - the first item was unchanged, so same reference
+console.log(baseState[1] === nextState[1])
+// false - the second item was copied and update
+```

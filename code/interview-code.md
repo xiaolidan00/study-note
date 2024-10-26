@@ -167,22 +167,76 @@ jquery 的$.extend,lodash 的 cloneDeep
 
 ```js
 JSON.parse(JSON.stringify()); //存在问题，Date等不会对应转换
-function deepClone(obj) {
-  if (typeof object !== 'object' || obj == null) {
+function deepclone(obj) {
+  if (typeof obj === 'object') {
+    const newobj = Array.isArray(obj) ? [] : {};
+    for (let k in obj) {
+      if (obj.hasOwnProperty(k)) {
+        newobj[k] = deepclone(obj[k]);
+      }
+    }
+    return newobj;
+  } else {
+    if (typeof obj === 'boolean') {
+      return new Boolean(obj);
+    } else if (typeof obj === 'string') {
+      return obj + '';
+    } else if (typeof obj === 'number') {
+      return obj + 0;
+    } else if (obj instanceof Date) {
+      return new Date(obj);
+    } else if (obj instanceof RegExp) {
+      return new RegExp(obj.source, obj.flags);
+    } else if (typeof obj === 'function') {
+      return new Function(`return ${obj.toString()}`)();
+    }
     return obj;
   }
-  let res;
-  if (obj instanceof Array) {
-    res = [];
-  } else {
-    res = {};
+}
+
+```
+
+```js
+class DeepClone {
+  constructor() {
+    this.cacheList = [];
   }
-  for (let key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      res[key] = deepClone(obj[key]);
+  clone(source) {
+    if (source instanceof Object) {
+      const cache = this.findCache(source);
+      if (cache) return cache; // 如果找到缓存，直接返回
+      else {
+        let target;
+        if (source instanceof Array) {
+          target = new Array();
+        } else if (source instanceof Function) {
+          target = function () {
+            return source.apply(this, arguments);
+          };
+        } else if (source instanceof Date) {
+          target = new Date(source);
+        } else if (source instanceof RegExp) {
+          target = new RegExp(source.source, source.flags);
+        }
+        this.cacheList.push([source, target]); // 把源对象和新对象放进缓存列表
+        for (let key in source) {
+          if (source.hasOwnProperty(key)) { // 不拷贝原型上的属性，太浪费内存
+            target[key] = this.clone(source[key]); // 递归克隆
+          }
+        }
+        return target;
+      }
     }
+    return source;
   }
-  return res;
+  findCache(source) {
+    for (let i = 0; i < this.cacheList.length; ++i) {
+      if (this.cacheList[i][0] === source) {
+        return this.cacheList[i][1]; // 如果有环，返回对应的新对象
+      }
+    }
+    return undefined;
+  }
 }
 ```
 
@@ -538,4 +592,51 @@ function compose(...fn) {
 }
 ```
 
-# KMP字符串匹配算法
+# 手写bind
+
+```js
+// 初级：ES6 新语法 const/...
+function bind_1(asThis, ...args) {
+  const fn = this; // 这里的 this 就是调用 bind 的函数 func
+  return function (...args2) {
+    return fn.apply(asThis, ...args, ...args2);
+  };
+}
+```
+
+```js
+// 中级：兼容 ES5
+function bind_2(asThis) {
+  var slice = Array.prototype.slice;
+  var args = slice.call(arguments, 1);
+  var fn = this;
+  if (typeof fn !== "function") {
+    throw new Error("cannot bind non_function");
+  }
+  return function () {
+    var args2 = slice.call(arguments, 0);
+    return fn.apply(asThis, args.concat(args2));
+  };
+}
+```
+
+```js
+// 高级：支持 new，例如 new (funcA.bind(thisArg, args))
+function bind_3(asThis) {
+  var slice = Array.prototype.slice;
+  var args1 = slice.call(arguments, 1);
+  var fn = this;
+  if (typeof fn !== "function") {
+    throw new Error("Must accept function");
+  }
+  function resultFn() {
+    var args2 = slice.call(arguments, 0);
+    return fn.apply(
+      resultFn.prototype.isPrototypeOf(this) ? this : asThis, // 用来绑定 this
+      args1.concat(args2)
+    );
+  }
+  resultFn.prototype = fn.prototype;
+  return resultFn;
+}
+```

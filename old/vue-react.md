@@ -12,7 +12,7 @@
 
 1. 数据流向：react 单向数据流，数据不可变，vue 双向数据流绑定，数据可变
 2. 组件化通信：react 函数回调来通信，vue 有子组件向父组件发送事件和回调两种
-3. diff 算法：react 主要使用 diff 队列保存需要更新哪些 DOM，得到 patch 树，再统一操作批量更新 DOM。Vue 使用双向指针，边对比，边更新 DOM
+3. diff 算法：react 主要使用 diff 队列保存需要更新哪些 DOM，得到 patch 树，再统一操作批量更新 DOM,采用双缓冲，修改workInProgress的current指向最新节点。Vue 使用双向指针，边对比，边更新 DOM
 4. vue 有指令系统，computed，watch，react 只能用 jsx 语法
 5. vue 组件全局注册和局部注册，react 通过 import 来引用
 
