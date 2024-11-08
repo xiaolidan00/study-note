@@ -1,22 +1,25 @@
-float PI = acos(-1.0);
-uniform vec2 uOffset;
+float PI = 3.1415926;
+float rad = 3.1415926 / 180.;
+uniform vec2 uResolution;
+uniform vec2 uSize;
+uniform float radius;
+
 varying vec2 vUv;
-float getMove(float u, float offset) {
-    float a = u * PI * 2.0;
-    return sin(a + PI * 0.25) * u * offset;
+      //经纬度坐标转为三维坐标
+vec3 lnglat2pos(vec2 p) {
+    float lng = p.x * rad;
+    float lat = p.y * rad;
+    float x = cos(lat) * cos(lng);
+    float y = cos(lat) * sin(lng);
+    float z = sin(lat);
+    return vec3(x, z, y);
 }
-float getHeight(float u, float offset) {
-    float a = u * PI * 3.0;
-    return cos(a) * u * offset;
-}
+void main() {
+    vUv = vec2(position.z);
+            //转换成经纬度
+    vec2 p = vec2(position.x, -position.y) - vec2(180., 90.);
+           //经纬度转三维坐标
+    vec3 newPosition = radius * lnglat2pos(p);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.);
 
-void main(void) {
-    vUv = uv;
-    float m = getMove(uv.x, uOffset.x);
-    float h = getHeight(uv.x, uOffset.y);
-
-    vec3 newPosition = position;
-    newPosition.x = newPosition.x + m;
-    newPosition.y = newPosition.y + h;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
 }

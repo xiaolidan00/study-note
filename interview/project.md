@@ -175,3 +175,11 @@ http.createServer，req.url 内容进行路径匹配，对应处理 req 的内�
 
 - 优势：首屏的用户体验，SEO 支持。
 - 劣势：运维麻烦，兼容 node 和浏览器两端，代码复杂度增加
+
+## webpack跨域代理
+
+<https://vue3js.cn/interview/webpack/proxy.html>
+
+ http-proxy-middleware
+
+当本地发送请求的时候，代理服务器响应该请求，并将请求转发到目标服务器，目标服务器响应数据后再将数据返回给代理服务器，最终再由代理服务器将数据响应给本地

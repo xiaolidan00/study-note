@@ -39,7 +39,7 @@ v-if>v-show
 
 vue2 中 v-for 优先级高于 v-if
 
-vue3 中 v-if 比 v-for 的优先级更高，可采用 template 包裹，尽量用 filter 后结果
+vue3 中 v-if 比 v-for 的优先级更高，需要一起使用时可采用 template 包裹，尽量用 data.filter 后结果
 
 ## vue2，vue3 的数据劫持有什么不同
 

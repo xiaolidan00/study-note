@@ -244,7 +244,12 @@ module.exports = {
     new webpack.ProvidePlugin({
       _: 'lodash',
       join: ['lodash', 'join']
-    })
+    }),
+//忽略文件
+new webpack.IgnorePlugin({
+  resourceRegExp: /^\.\/locale$/,//./locale'匹配的任何require语句都将被忽略
+  contextRegExp: /moment$/,//任何以'moment'结尾的目录中被忽略
+});
   ]
 };
 
