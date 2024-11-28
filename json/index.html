@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        padding: 0px;
+        margin: 0px;
+        display: flex;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      #menu {
+        display: inline-block;
+        width: 200px;
+        height: 100%;
+        overflow: auto;
+        border-right: solid 1px #ccc;
+      }
+      #menu > a {
+        display: block;
+        line-height: 40px;
+        padding: 0 10px;
+      }
+      #menu > a:hover {
+        background-color: dodgerblue;
+        color: white;
+      }
+      #content {
+        padding: 20px;
+        overflow: auto;
+        height: 100%;
+        width: calc(100% - 200px);
+      }
+      #content > h1:hover {
+        color: dodgerblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="menu"></div>
+    <div id="content"></div>
+    <script>
+      const menus = [
+        { label: 'js', value: 'js' },
+        { label: 'html', value: 'html' },
+        { label: 'css', value: 'css' },
+        { label: 'es', value: 'es' },
+        { label: 'typescript', value: 'typescript' },
+        { label: 'vue', value: 'vue' },
+        { label: 'react', value: 'react' },
+        { label: '工程化', value: 'project' },
+        { label: '性能优化', value: 'performance' },
+        { label: 'node', value: 'node' },
+        { label: '计算机网络', value: 'network' },
+        { label: '安全', value: 'safe' },
+        { label: '工具', value: 'tool' },
+        { label: '跨端技术', value: 'tech' },
+        { label: '小程序', value: 'minprogram' },
+        { label: '场景题', value: 'scene' },
+        { label: 'leetcode', value: 'leetcode' },
+        { label: '手写题', value: 'code' },
+        { label: '算法题', value: 'program' }
+      ];
+      const l = [];
+      menus.forEach((it) => {
+        l.push(`<a  href="#${it.value}">${it.label}</a>`);
+      });
+      document.getElementById('menu').innerHTML = l.join('');
+      const loadPage = () => {
+        console.log(window.location.hash);
+        if (window.location.hash)
+          fetch(window.location.hash.substring(1) + '.json')
+            .then((res) => res.json())
+            .then((res) => {
+              const content = [];
+              res
+                .sort((a, b) => a.level - b.level)
+                .forEach((item, i) => {
+                  content.push(
+                    `<h1>${i + 1}. ${item.title}<a target="_blank" href="detail.html?id=${
+                      item.exerciseKey
+                    }">(难度：${item.level})</a></h1>`
+                  );
+                });
+              document.getElementById('content').innerHTML = content.join('');
+            });
+      };
+      window.onhashchange = loadPage;
+      loadPage();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/style.css" />
+    <script src="../assets/showdown.min.js"></script>
+    <style>
+      body {
+        width: 100%;
+        position: absolute;
+        margin: 0px;
+        padding: 0px;
+        height: 100%;
+        text-align: center;
+      }
+      #markdown {
+        margin: auto;
+        text-align: left;
+        overflow: auto;
+        width: 800px;
+        height: 100%;
+      }
+      #button {
+        background-color: dodgerblue;
+        border: none;
+        height: 32px;
+        font-size: 14px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div><button id="button" onclick="copyMd()">复制</button></div>
+    <div class="markdown-body" id="markdown"></div>
+    <script>
+      const id = window.location.search.substring(4);
+      const url = `http://127.0.0.1:8000/detail/${id}`;
+      let md = '';
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          const converter = new showdown.Converter({ tables: true });
+          md = data.explanation;
+          const html = converter.makeHtml(data.explanation);
+          const markdown = document.getElementById('markdown');
+          markdown.innerHTML = html;
+        });
+      function copyMd() {
+        const dom = document.createElement('textarea');
+        dom.value = md;
+        document.body.appendChild(dom);
+        dom.select();
+        dom.setSelectionRange(0, md.length);
+        navigator.clipboard.writeText(md);
+        document.body.removeChild(dom);
+      }
+    </script>
+  </body>
+</html>

@@ -32,6 +32,14 @@ componentWillUnmount
 
 setTimeout DOM 事件同步，React 18 都是异步了
 
+```js
+setState(preState=>{
+    preState.count++
+
+    return preState;
+})
+```
+
 ## 在 React 类组件中，为什么修改状态要使用 setState 而不是用 this.state.xxx = xxx
 
 使用setState来告知React，数据发生改变了你需要更新视图了
@@ -97,3 +105,7 @@ redux,flux 单向数据流，mobx 数据劫持
 # React Hooks
 
 [React Hooks](#/books/react-hook.md)
+
+# 如何取消Promise
+
+<https://sorrycc.com/cancel-promises-in-javascript/>
