@@ -38,7 +38,7 @@
 
 **别人概括：**
 
-- loader 是文件加载转换成js可以理解的模块
+- loader 是文件加载转换成 js 可以理解的模块
 - plugin:拓展编译功能，在 webpack 运行的生命周期中会广播出许多事件，plugin 可以监听这些事件，在合适的时机通过 webpack 提供的 API 改变输出结果。
 
 ## webpack 中 chunk,module,bundle 区别
@@ -59,9 +59,9 @@
 - webpack: 所有文件都是模块，可进行复杂处理，生态完善，项目大打包慢
 - rollup: ES Modules 打包器，纯净小巧，支持 tree-shaking，不支持 HMR（热更新），cjs 转换有限
 
-## webpack打包后发布到浏览器es5环境
+## webpack 打包后发布到浏览器 es5 环境
 
-通过babel编译，将es6转为es5，配置target
+通过 babel 编译，将 es6 转为 es5，配置 target
 <https://www.webpackjs.com/loaders/babel-loader/>
 
 ## Rollup 常用插件
@@ -71,17 +71,17 @@ rollup-plugin-postcss，rollup-plugin-scss，rollup-plugin-vue，@rollup/plugin-
 ## pnpm 解决问题
 
 1. 避免重复安装依赖 ，安装速度快
-2. 幽灵依赖：没有 package.json 安装的包，因为依赖关系扁平化，导致安装了许多不认识的包
-3. 软链接和硬链接,复用同一数据块
-4. 解决版本冲突和兼容问题
+2. 解决了幽灵依赖的问题：package.json 中没有安装的包，因为依赖关系扁平化，导致安装了许多不认识的包.
+3. 软链接和硬链接，复用同一数据块，实际文件路径在同一磁盘下的 pnpm-cache/store/v3/files
+4. 解决版本冲突和兼容问题，通过符号链接形成依赖树结构
 
 ## pnpm 软链接和硬链接
 
-1.硬链接:文件指向相同的数据块，共享数据块。不会占用额外的磁盘空间(实际的文件路径，同一磁盘下：D:\pnpm-cache\store\v3\files)
+1.硬链接:文件指向相同的数据块，共享数据块。不会占用额外的磁盘空间(实际的文件路径，同一磁盘下：D:\.pnpm-store\v3\files)
 
 2.软链接：指向实际文件夹的快捷方式
 
-软链接可理解为指向源文件的指针，它是单独的一个文件，仅仅只有几个字节，它拥有独立的 inode
+软链接可理解为指向源文件的指针，它是单独的一个文件，仅仅只有几个字节，它拥有独立的 索引节点 inode
 硬链接与源文件同时指向一个物理地址，它与源文件共享存储数据，它俩拥有相同的 inode
 
 ## webpack 性能优化
@@ -176,10 +176,10 @@ http.createServer，req.url 内容进行路径匹配，对应处理 req 的内�
 - 优势：首屏的用户体验，SEO 支持。
 - 劣势：运维麻烦，兼容 node 和浏览器两端，代码复杂度增加
 
-## webpack跨域代理
+## webpack 跨域代理
 
 <https://vue3js.cn/interview/webpack/proxy.html>
 
- http-proxy-middleware
+http-proxy-middleware
 
 当本地发送请求的时候，代理服务器响应该请求，并将请求转发到目标服务器，目标服务器响应数据后再将数据返回给代理服务器，最终再由代理服务器将数据响应给本地
