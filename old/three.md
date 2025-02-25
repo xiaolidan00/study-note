@@ -52,9 +52,9 @@ MeshBasicMaterial ➡ MeshLambertMaterial ➡ MeshPhongMaterial ➡ MeshStandard
 
 <https://blog.csdn.net/u014361280/article/details/124285654>
 
-1. InstancedMesh复用网格
-2. Merge合并形状
-3. 复用材质和形状和clone
+1. InstancedMesh 复用网格
+2. Merge 合并形状
+3. 复用材质和形状和 clone
 4. LOD
 5. 及时清理释放内存
 6. 低模用高细节的贴图代替
@@ -62,8 +62,8 @@ MeshBasicMaterial ➡ MeshLambertMaterial ➡ MeshPhongMaterial ➡ MeshStandard
 8. 显示才渲染和可操作
 9. 分时分区加载，大场景模型也根据分区拆分和加载
 10. 降低帧率,60->30
-11. controls发生change才render
-12. material降级
+11. controls 发生 change 才 render
+12. material 降级
 
 # 空间
 
@@ -143,19 +143,38 @@ k[x,y,z]=[kx,ky,kz]
 ```
 [x1,y1,z1].[x2,y2,z2]=x1*x2+y1*y2+z1*z2
 
+dot(A,B)=|A||B|cosa
+
+
+p分解成各个方向向量
+
+p=dot(p,x)x+dot(p,y)y+dot(p,z)z
+
 ```
 
-在标准化向量中，点积等于两向量夹角的余弦值，方向相同，点积为 1，方向相反点积为-1，相互垂直为 0
+两个向量的模乘以夹角 cos
+两个向量都是单位向量时，点乘等于夹角 cos
+
+在标准化向量中，点积等于两向量夹角的余弦值
+
+- 方向相同，点积为 1-
+- 方向相反，点积为-1
+- 相互垂直，点积为 0
 
 ## 叉乘（叉积、外积）
 
 ```
 [x1,y1,z1]x[x2,y2,z2]=[y1*z2-z1*y2,z1*x2-x1*z2,x1*y2-y1*x2]
+|cross(A,B)|=|A||B|sinb
 ```
 
 两个向量面所组成面的垂直向量
 
 模长=两个向量的模乘积再乘夹角正弦值
+
+判断 B 向量在 A 向量的顺时针还是逆时针旋转方向（左侧右侧），AxB 得到的向量 z 为正，则 B 在 A 的左侧，否则右侧
+
+判断点 P 是否在三角形 ABC 内，ABxAP 在左侧/右侧，同理 BCxBP,CAxCP 也在同一侧
 
 ## 两个向量距离
 
@@ -186,6 +205,11 @@ rxn 矩阵 A \* nxc 矩阵 B = rxc 矩阵 C
 Cij 的结果等于 A 的第 i 行向量与 B 的第 j 列向量点乘的结果
 
 ## 向量与矩阵的乘法
+
+(MxN)(NxP)=(MxP)
+N 必须相同
+
+新矩阵的第几行第几列的元素值，等于原矩阵第几行第几列的点乘值
 
 ```
            a b c

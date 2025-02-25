@@ -1,0 +1,14 @@
+https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API
+https://www.w3.org/TR/webgpu/
+https://webgpufundamentals.org/webgpu/lessons/webgpu-fundamentals.html
+https://gpuweb.github.io/gpuweb/explainer/
+https://webkit.org/demos/webgpu/
+https://webgpu.rocks/
+https://blog.browserscan.net/docs/what-is-webgpu
+https://webgpu.github.io/webgpu-samples/
+https://www.orillusion.com/
+https://tympanus.net/codrops/2025/01/29/particles-progress-and-perseverance-a-journey-into-webgpu-fluids/
+https://qiita.com/emadurandal/items/624fe7edd147d5a648b1
+https://ics.media/entry/230426/
+https://github.com/mikbry/awesome-webgpu
+https://webgpufundamentals.org/webgpu/lessons/webgpu-wgsl-function-reference.html

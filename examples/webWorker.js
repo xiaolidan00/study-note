@@ -1,0 +1,3 @@
+class WorkerManage {
+  constructor() {}
+}

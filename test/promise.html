@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 id="content" onclick="onClick()">Hello World</h1>
+    <script>
+      console.log(1111);
+      const dom = document.getElementById('content');
+      const p = Promise.resolve();
+      let count = 0;
+      function changeDom() {
+        return new Promise((resolve) => {
+          count++;
+          dom.textContent = 'click ' + count;
+          console.log('dom:' + dom.textContent);
+          resolve();
+        });
+      }
+      function onClick() {
+        p.then(changeDom).then(() => {
+          console.log('end', dom.textContent);
+        });
+      }
+    </script>
+  </body>
+</html>

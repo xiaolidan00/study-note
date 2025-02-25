@@ -1,11 +1,12 @@
-# git命令
+# git 命令
 
 ```bash
 git init
 # clone仓库
 git clone https://github.com/user/repo.git projectName
+```
 
-
+```bash
 # 查看所有远程
 git remote -v
 # 添加远程git
@@ -18,7 +19,11 @@ git remote remove new-origin
 git remote set-url origin https://github.com/user/new-repo.git
 # 查看某个远程
 git remote show origin
+```
 
+## config
+
+```bash
 
 # 查看git配置
 git config --list
@@ -29,7 +34,11 @@ git config -e --global
 # 设置用户名和邮箱
 git config --global user.name "xiaolidan00"
 git config --global user.email 764937567@qq.com
+```
 
+## branch
+
+```bash
 # 创建新分支
 git checkout -b new-feature
 # 切换到某个分支
@@ -50,7 +59,9 @@ git branch
 git switch branch-name
 # 创建并切换到新分支
 git switch -c new-branch
+```
 
+```bash
 # 暂存某个文件
 git add file.txt
 git add *.c
@@ -59,20 +70,28 @@ git add .
 # 查看暂存区的文件
 git status
 # 查看历史提交信息
-git log 
+git log
 # 以简洁模式显示提交历史
 git log --oneline
 # 查看工作区和暂存区之间的差异
 git diff
 # 查看暂存区和最后一次提交之间的差异
 git diff --cached
+```
 
+```bash
 git branch -M main
 git push -u origin main
 
+```
 
+```bash
 git commit -m "feat:init"
+```
 
+## merge
+
+```bash
 # 推送当前分支到远程
 git push
 # 推送到远程某个分支
@@ -84,8 +103,11 @@ git pull origin branch-name
 git fetch origin branch-name
 git merge origin/branch-name
 
+```
 
+## stash
 
+```bash
 # 保存到暂存区
 git  stash
 # 从暂存区恢复
@@ -100,35 +122,43 @@ git stash clear
 git add -p
 # 删除特定存储
 git stash drop stash@{n}
+```
 
+## reset
+
+```bash
 # 回退所有内容到上一个版本
-git reset HEAD^            
+git reset HEAD^
 # 回退 hello.php 文件的版本到上一个版本
-git reset HEAD^ hello.php  
+git reset HEAD^ hello.php
 # 回退到指定版本
 git  reset  052e
 # 回退到某个版本
 git reset --soft HEAD
-# 回退上上上一个版本 
-git reset --soft HEAD~3 
+# 回退上上上一个版本
+git reset --soft HEAD~3
 # 撤销工作区中所有未提交的修改内容，将暂存区与工作区都回到上一次版本，并删除之前的所有信息提交
-git reset --hard HEAD 
+git reset --hard HEAD
 # 回退上上上一个版本
 git reset --hard HEAD~3
-# 回退到某个版本回退点之前的所有信息。   
-git reset –hard bae128   
-# 将本地的状态回退到和远程的一样 
-git reset --hard origin/master  
+# 回退到某个版本回退点之前的所有信息。
+git reset –hard bae128
+# 将本地的状态回退到和远程的一样
+git reset --hard origin/master
 # HEAD 表示当前版本
 
 # HEAD^ 上一个版本
 
 # HEAD^^ 上上一个版本
 
-# HEAD^^^ 上上上一个版本  
+# HEAD^^^ 上上上一个版本
+```
 
+## tag
+
+```bash
 # 列出所有标签
-git tag 
+git tag
 # 创建一个新标签
 git tag v1.0
 # 删除标签
@@ -147,7 +177,11 @@ git push origin v1.0
 git push origin --tags
 # 删除远程标签
 git push origin --delete v1.0
+```
 
+## submodule
+
+```bash
 # 初始化子模块
 git submodule init
 # 更新子模块
@@ -163,11 +197,12 @@ git submodule
 git submodule update --recursive --remote
 # 检查子模块状态
 git submodule status
+```
 
-
+```bash
 # 将一个分支上的更改移到另一个分支之上
 git rebase main
-# 交互式变基 
+# 交互式变基
 git rebase -i <commit>
 # 交互式变基，编辑提交历史
 git rebase -i HEAD~3
@@ -197,7 +232,7 @@ git cherry-pick <commit>
 从 develop 分支创建，开发完成后合并回 develop 分支。
 命名规范：feature/feature-name。
 
-- release 分支(test分支)：
+- release 分支(test 分支)：
 
 用于准备新版本的发布。
 从 develop 分支创建，进行最后的测试和修复，然后合并回 develop 和 master 分支，并打上版本标签。
@@ -216,7 +251,7 @@ Feature 分支完成后合并回 Develop 分支，并通常删除该分支。
 Release 分支基于 Develop 创建，用于测试和修复 Bug，发布后合并回 Master 和 Develop，并打 Tag 标记版本号。
 Hotfix 分支基于 Master 创建，完成后合并回 Master 和 Develop，并打 Tag 1。
 
-# gitflow命令
+# gitflow 命令
 
 ```bash
 # 初始化 Git Flow
