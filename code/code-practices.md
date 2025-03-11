@@ -20,7 +20,7 @@
 
 输入：nums = [1]
 输出：[]
- 
+
 
 提示：
 
@@ -58,7 +58,7 @@ var findDuplicates = function (nums) {
 
 <https://leetcode.cn/problems/lru-cache/description/>
 
-请你设计并实现一个满足  LRU (最近最少使用) 缓存 约束的数据结构。
+请你设计并实现一个满足 LRU (最近最少使用) 缓存 约束的数据结构。
 实现 LRUCache 类：
 LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存
 int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
@@ -85,7 +85,7 @@ lRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=
 lRUCache.get(1);    // 返回 -1 (未找到)
 lRUCache.get(3);    // 返回 3
 lRUCache.get(4);    // 返回 4
- 
+
 
 提示：
 
@@ -96,43 +96,42 @@ lRUCache.get(4);    // 返回 4
 ```
 
 ```js
-var LRUCache = function(capacity) {
-    this.capacity = capacity;
-    this.map = new Map();
+var LRUCache = function (capacity) {
+  this.capacity = capacity;
+  this.map = new Map();
 };
 
-/** 
+/**
  * @param {number} key
  * @return {number}
  */
-LRUCache.prototype.get = function(key) {
-    if(this.map.has(key)){
-        let temp=this.map.get(key)
-         this.map.delete(key);
-         //有key 缓存value 删掉key 再set一遍,该key会置底
-         this.map.set(key, temp);
-         return temp
-    }else{
-        return -1
-    }
+LRUCache.prototype.get = function (key) {
+  if (this.map.has(key)) {
+    let temp = this.map.get(key);
+    this.map.delete(key);
+    //有key 缓存value 删掉key 再set一遍,该key会置底
+    this.map.set(key, temp);
+    return temp;
+  } else {
+    return -1;
+  }
 };
 
-/** 
- * @param {number} key 
+/**
+ * @param {number} key
  * @param {number} value
  * @return {void}
  */
-LRUCache.prototype.put = function(key, value) {
-    if(this.map.has(key)){
-        this.map.delete(key);
-    }
-    this.map.set(key,value);
-    if(this.map.size > this.capacity){
-        //put 有key 删掉 重新set 超出内存 删掉第一个key
-        this.map.delete(this.map.keys().next().value);
-    }
+LRUCache.prototype.put = function (key, value) {
+  if (this.map.has(key)) {
+    this.map.delete(key);
+  }
+  this.map.set(key, value);
+  if (this.map.size > this.capacity) {
+    //put 有key 删掉 重新set 超出内存 删掉第一个key
+    this.map.delete(this.map.keys().next().value);
+  }
 };
- 
 ```
 
 双链表
@@ -143,77 +142,130 @@ LRUCache.prototype.put = function(key, value) {
  */
 
 class ListNode {
-    constructor(key = null, val = null) {
-        this.key = key;
-        this.val = val;
-        this.prev = null;
-        this.next = null;
-    }
+  constructor(key = null, val = null) {
+    this.key = key;
+    this.val = val;
+    this.prev = null;
+    this.next = null;
+  }
 }
 
-var LRUCache = function(capacity) {
-    this.cache = new Map();
-    this.capacity = capacity;
-    this.tail = null;
-    this.head = new ListNode();
-    this.tail = new ListNode();
-    this.head.next = this.tail;
-    this.tail.prev = this.head;
+var LRUCache = function (capacity) {
+  this.cache = new Map();
+  this.capacity = capacity;
+  this.tail = null;
+  this.head = new ListNode();
+  this.tail = new ListNode();
+  this.head.next = this.tail;
+  this.tail.prev = this.head;
 };
 
-/** 
+/**
  * @param {number} key
  * @return {number}
  */
-LRUCache.prototype.get = function(key) {
-    if(this.cache.has(key)){
-        let node = this.cache.get(key);
-        this.move(node);
-        return node.val; 
-    }
-    return -1;
+LRUCache.prototype.get = function (key) {
+  if (this.cache.has(key)) {
+    let node = this.cache.get(key);
+    this.move(node);
+    return node.val;
+  }
+  return -1;
 };
 
-
-LRUCache.prototype._remove = function(node) {
-        let temp1 = node.prev;
-        let temp2 = node.next;
-        temp1.next = temp2;
-        temp2.prev = temp1;
+LRUCache.prototype._remove = function (node) {
+  let temp1 = node.prev;
+  let temp2 = node.next;
+  temp1.next = temp2;
+  temp2.prev = temp1;
 };
 
-LRUCache.prototype._add = function(node) {
-    node.next = this.head.next;
-    node.prev = this.head;
-    this.head.next.prev = node;
-    this.head.next = node;
+LRUCache.prototype._add = function (node) {
+  node.next = this.head.next;
+  node.prev = this.head;
+  this.head.next.prev = node;
+  this.head.next = node;
 };
 
-LRUCache.prototype.move = function(node) {
-        this._remove(node);
-        this._add(node);
+LRUCache.prototype.move = function (node) {
+  this._remove(node);
+  this._add(node);
 };
 
-/** 
- * @param {number} key 
+/**
+ * @param {number} key
  * @param {number} value
  * @return {void}
  */
-LRUCache.prototype.put = function(key, value) {
-    if (this.cache.has(key)) {
-        let node = this.cache.get(key);
-        node.val = value;
-        this.move(node);
-    } else {
-        if (this.cache.size >= this.capacity) {
-            let node = this.tail.prev;
-            this._remove(node);
-            this.cache.delete(node.key);
-        }
-        let newNode = new ListNode(key, value);
-        this.cache.set(key, newNode);
-        this._add(newNode);
+LRUCache.prototype.put = function (key, value) {
+  if (this.cache.has(key)) {
+    let node = this.cache.get(key);
+    node.val = value;
+    this.move(node);
+  } else {
+    if (this.cache.size >= this.capacity) {
+      let node = this.tail.prev;
+      this._remove(node);
+      this.cache.delete(node.key);
     }
-}; 
- 
+    let newNode = new ListNode(key, value);
+    this.cache.set(key, newNode);
+    this._add(newNode);
+  }
+};
+```
+
+# 接雨水
+
+https://leetcode.cn/problems/trapping-rain-water/description/
+
+给定 `n` 个非负整数表示每个宽度为 `1` 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+**示例 1：**
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/22/rainwatertrap.png)
+
+```
+输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+输出：6
+解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。
+```
+
+**示例 2：**
+
+```
+输入：height = [4,2,0,3,2,5]
+输出：9
+```
+
+**提示：**
+
+- `n == height.length`
+- `1 <= n <= 2 * 104`
+- `0 <= height[i] <= 105`
+
+```js
+//接雨水
+
+function trap(height) {
+  let n = height.length;
+  let left = new Array(n).fill(0),
+    right = new Array(n).fill(0);
+
+  left[0] = height[0];
+  right[n - 1] = height[n - 1];
+  for (let i = 1; i < n; i++) {
+    left[i] = Math.max(left[i - 1], height[i]);
+  }
+  for (let i = n - 2; i >= 0; i--) {
+    right[i] = Math.max(right[i + 1], height[i]);
+  }
+  let res = 0;
+  for (let i = 1; i < n - 1; i++) {
+    res += Math.min(left[i], right[i]) - height[i];
+  }
+  return res;
+}
+
+console.log(trap([0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]));
 ```

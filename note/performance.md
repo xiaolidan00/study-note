@@ -1,18 +1,14 @@
-
 # 静态资源优化
 
-1.图片
-2.字体
-3.模型
-4.文件
+1.图片 2.字体 3.模型 4.文件
 
 # vue
 
 # react
 
-# 样式css
+# 样式 css
 
-# 打包工具vite,webpack,rollup
+# 打包工具 vite,webpack,rollup
 
 # three.js，webgl
 
@@ -28,4 +24,6 @@
 
 # 地图
 
-#
+# WebGL 大场景性能优化
+
+https://mp.weixin.qq.com/s/MZHSZpP2U4d6rEfe7RDQjQ
