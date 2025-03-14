@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="
+    https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.8.0/webcomponents-loader.min.js
+    "></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="changeChart()">change</button>
+    <line-chart
+      id="myChart"
+      loop="true"
+      time="2000"
+      tooltipType="item"
+      tooltipFormatter='{"isColor":true,"isX":true,"isName":true,"isVal":true,"isPrefix":false,"isSuffix":true,"suffix":["件","元"]}'
+      series='[{"name":"销量","type":"line"},{"name":"盈利","type":"bar"}]'
+      yName="单位：每天"
+      dataProps='{"name":"date","value0":"value","value1":"value1"}'
+      data='[{"name":"jkdh3","value":234,"value1":819},{"name":"oixbo","value":321,"value1":909},{"name":"csgj7","value":666,"value1":102},{"name":"cw2n5","value":150,"value1":843},{"name":"4r4mc","value":484,"value1":111},{"name":"epx39","value":850,"value1":396},{"name":"w7a0y","value":765,"value1":802},{"name":"6fwhc","value":933,"value1":164},{"name":"h31ku","value":113,"value1":174},{"name":"8lalb","value":216,"value1":673}]'
+    ></line-chart>
+    <script type="module" src="./webComponent.js"></script>
+  </body>
+</html>
