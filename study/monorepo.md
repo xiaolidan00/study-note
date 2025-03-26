@@ -116,3 +116,176 @@ https://nx.dev/concepts/decisions/why-monorepos#monorepos?utm_source=monorepo.to
 
 https://juejin.cn/post/7215886869199896637
 
+# pnpm monorepo
+
+项目结构
+
+- `examples`组件使用示例
+  - `vuedemos` vue 使用示例
+  - `reactdemos` react 使用示例
+  - `angulardemos` angular 使用示例
+- `docs`文档
+  - `apis`组件配置 API
+  - `guide`使用指南,版本记录，常见问题
+  - package.json
+- `packages`组件库
+  - `components` class 组件
+  - `types`公共类型
+  - `utils`公共工具
+  - `configs`公共配置参数
+  - `index.ts`所有组件入口
+- `@types` typescript 类型
+- `tests`组件测试
+- `scripts`构建脚本
+- `README.md` 记录相关开发注意事项
+- `package.json`
+
+**pnpm-workspace.yaml**
+
+```yaml
+packages:
+  - packages/*
+  - examples/vuedemos
+  - examples/reactdemos
+  - examples/angulardemos
+  - docs
+```
+
+**package.json**
+
+```json
+{
+  "name": "my-components",
+  "packageManager": "pnpm@10.6.2",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "build/clazz/index.umd.js",
+  "module": "build/clazz/index.js",
+  "types": "build/index.d.ts",
+  "files": ["build"],
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/clazz/index.js",
+      "require": "./build/clazz/index.umd.js"
+    },
+    "./*": "./build/*"
+  },
+  "workspaces": ["packages/*", "examples/vuedemos", "examples/reactdemos", "examples/angulardemos", "docs"],
+  //不会安装到node_modules
+  "devDependencies": {},
+  //引用组件库的时候会按照到node_modules
+  "dependencies": {
+    "echarts": "^5.6.0",
+    "echarts-gl": "^2.0.9"
+  }
+}
+```
+
+**项目中使用组件库**
+直接在依赖中写当前组件库的名称，版本是`workspace:*`，然后`pnpm install`通过 install 从 `node_modules` 软链接到组件库目录
+
+```json
+{
+  "name": "vuedemos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.1",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.2.8",
+    //使用组件库
+    "my-components": "workspace:*"
+  }
+}
+```
+
+```vue
+<template>
+  <div>
+    <div style="height: 500px; width: 500px" ref="chartRef"></div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import 'echarts-gl';
+import {ref, useTemplateRef, onMounted, onBeforeMount} from 'vue';
+import 'sw-components/clazz/index.css';
+import SWCOMP from 'sw-components';
+
+const dataRef = ref([]);
+const chartRef = useTemplateRef<HTMLElement>('chartRef');
+const chart = new SWCOMP.LineBarChart();
+
+const getData = () => {
+  fetch('https://www.xiaolidan00.top/getRandNum.php')
+    .then((res) => res.json())
+    .then(({data}) => {
+      dataRef.value = data;
+      chartRef.value &&
+        chart.init(
+          chartRef.value,
+          {
+            loop: false,
+            time: 2000,
+            dataProps: {name: 'name', value0: 'value', value1: 'value1'},
+            series: [
+              {name: '销量', type: 'line'},
+              {name: '盈利', type: 'bar'}
+            ]
+          },
+          data
+        );
+    });
+};
+onMounted(() => {
+  getData();
+});
+onBeforeMount(() => {
+  chart.destory();
+});
+</script>
+```
+
+```vue
+<template>
+  <div>
+    <line-bar-chart
+      color='["#3fb1e3","#6be6c1"]'
+      ref="chartRef"
+      time="2000"
+      style="height: 500px; width: 500px"
+      series='[{"name":"销量","type":"line"},{"name":"盈利","type":"bar"}]'
+      dataProps='{"name":"name","value0":"value","value1":"value1"}'
+      :data="JSON.stringify(dataRef)"
+    ></line-bar-chart>
+  </div>
+</template>
+
+<script setup lang="ts">
+import {ref} from 'vue';
+import 'sw-components/webcomponents/index.css';
+import {install} from 'sw-components/webcomponents/index.js';
+
+//引入注册组件
+install();
+const dataRef = ref([]);
+
+fetch('https://www.xiaolidan00.top/getRandNum.php')
+  .then((res) => res.json())
+  .then(({data}) => {
+    console.log('🚀 ~ WebComponents ~ data:', data);
+    dataRef.value = data;
+  });
+</script>
+```
