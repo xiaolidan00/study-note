@@ -182,6 +182,11 @@ class LineChart extends HTMLElement {
     this.addEventListener('mouseleave', () => {
       isHover = false;
     });
+    chart.on('click', (ev) => {
+      console.log('🚀 ~ webComponent.js ~ LineChart ~ chart.on ~ ev:', ev);
+      const event = new CustomEvent('clickchart', ev);
+      this.dispatchEvent(event);
+    });
 
     updateOption();
     const observer = new MutationObserver(updateOption);
@@ -190,9 +195,8 @@ class LineChart extends HTMLElement {
 }
 
 customElements.define('line-chart', LineChart);
-
+const chart = document.getElementById('myChart');
 function changeChart() {
-  const chart = document.getElementById('myChart');
   chart.setAttribute(
     'data',
     JSON.stringify([
@@ -202,3 +206,9 @@ function changeChart() {
   );
 }
 window.changeChart = changeChart;
+chart.addEventListener('clickchart', (ev) => {
+  console.log('🚀 ~ webComponent.js ~ chart.addEventListener ~ ev:', ev);
+});
+function onClickChart(ev) {
+  console.log(ev);
+}
