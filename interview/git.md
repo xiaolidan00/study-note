@@ -211,6 +211,30 @@ git cherry-pick <commit>
 
 ```
 
+```bash
+git submodule add url 路径
+
+# 目录存在时不可submodule
+git rm -r --cached 路径
+
+# clone后
+git submodule init
+git submodule update
+
+git submodule foreach git pull
+git submodule sync
+
+```
+
+.gitmodules
+
+```ini
+[submodule "src/components"]
+	path = src/components
+	url = http://192.168.20.10:8090/xhy/spatial-ui-module.git
+	branch= dev
+```
+
 # gitflow
 
 ## 分支命名
@@ -279,4 +303,33 @@ git flow hotfix start hotfix-1.0.1. # 修复紧急问题
 git flow hotfix finish hotfix-1.0.1
 
 
+```
+
+# ssh rsa
+
+`D:\softwares\Git\etc\ssh\ssh_config`
+
+```ini
+# github
+Host github.com
+HostName github.com
+PreferredAuthentications publickey
+IdentityFile C:/Users/lx/.ssh/github_id_rsa
+
+# gitlab
+Host 192.168.20.10
+HostName gitlab.com
+PreferredAuthentications publickey
+IdentityFile C:/Users/lx/.ssh/id_rsa
+
+# 如果生成多个 SSH-Key , 则按上面的格式继续往下写
+```
+
+https://blog.csdn.net/qq_53528578/article/details/120897053
+
+```bash
+
+ssh-keygen -t rsa -C "764937567@qq.com"
+ssh-agent bash
+ssh-add  ~/.ssh/id_rsa
 ```

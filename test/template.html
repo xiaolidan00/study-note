@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      :root {
+        --color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <my-comp>
+      <template slot="header">
+        <h1>Hello World</h1>
+      </template>
+    </my-comp>
+    <script>
+      //   let template = document.querySelector("[slot='header']");
+      //   let templateContent = template.content;
+      //   document.body.appendChild(templateContent);
+      //   console.log(getComputedStyle(document.body).getPropertyValue('--color'));
+
+      class MyComp extends HTMLElement {
+        constructor() {
+          super();
+        }
+        connectedCallback() {
+          const wrap = document.createElement('div');
+          wrap.style.background = getComputedStyle(document.body).getPropertyValue('--color');
+          this.appendChild(wrap);
+          const header = this.querySelector("[slot='header']");
+          wrap.appendChild(header.content);
+        }
+      }
+
+      customElements.define('my-comp', MyComp);
+    </script>
+  </body>
+</html>
