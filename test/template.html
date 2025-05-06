@@ -16,6 +16,7 @@
         <h1>Hello World</h1>
       </template>
     </my-comp>
+    <input id="myinput" />
     <script>
       //   let template = document.querySelector("[slot='header']");
       //   let templateContent = template.content;
@@ -36,6 +37,10 @@
       }
 
       customElements.define('my-comp', MyComp);
+
+      document.getElementById('myinput').oninput = (ev) => {
+        console.log('🚀 ~ template.html ~ document.getElementById ~ ev:', ev);
+      };
     </script>
   </body>
 </html>
