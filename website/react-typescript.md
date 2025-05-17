@@ -1,4 +1,3 @@
-
 # React Typescript
 
 <https://react-typescript-cheatsheet.netlify.app/>
@@ -13,7 +12,7 @@ type AppProps = {
   /** array of a type! */
   names: string[];
   /** string literals to specify exact string values, with a union type to join them together */
-  status: "waiting" | "success";
+  status: 'waiting' | 'success';
   /** an object with known properties (but could have more at runtime) */
   obj: {
     id: string;
@@ -59,11 +58,9 @@ export declare interface AppProps {
   style?: React.CSSProperties; // to pass through style props
   onChange?: React.FormEventHandler<HTMLInputElement>; // form events! the generic parameter is the type of event.target
   //  more info: https://react-typescript-cheatsheet.netlify.app/docs/advanced/patterns_by_usecase/#wrappingmirroring
-  props: Props & React.ComponentPropsWithoutRef<"button">; // to impersonate all the props of a button element and explicitly not forwarding its ref
+  props: Props & React.ComponentPropsWithoutRef<'button'>; // to impersonate all the props of a button element and explicitly not forwarding its ref
   props2: Props & React.ComponentPropsWithRef<MyButtonWithForwardRef>; // to impersonate all the props of MyButtonForwardedRef and explicitly forwarding its ref
 }
-
-
 ```
 
 ## 定义组件
@@ -75,28 +72,25 @@ type AppProps = {
 }; /* use `interface` if exporting so that consumers can extend */
 
 // Easiest way to declare a Function Component; return type is inferred.
-const App = ({ message }: AppProps) => <div>{message}</div>;
+const App = ({message}: AppProps) => <div>{message}</div>;
 
 // You can choose to annotate the return type so an error is raised if you accidentally return some other type
-const App = ({ message }: AppProps): React.JSX.Element => <div>{message}</div>;
+const App = ({message}: AppProps): React.JSX.Element => <div>{message}</div>;
 
 // You can also inline the type declaration; eliminates naming the prop types, but looks repetitive
-const App = ({ message }: { message: string }) => <div>{message}</div>;
+const App = ({message}: {message: string}) => <div>{message}</div>;
 
 // Alternatively, you can use `React.FunctionComponent` (or `React.FC`), if you prefer.
 // With latest React types and TypeScript 5.1. it's mostly a stylistic choice, otherwise discouraged.
-const App: React.FunctionComponent<{ message: string }> = ({ message }) => (
-  <div>{message}</div>
-);
+const App: React.FunctionComponent<{message: string}> = ({message}) => <div>{message}</div>;
 // or
-const App: React.FC<AppProps> = ({ message }) => <div>{message}</div>;
+const App: React.FC<AppProps> = ({message}) => <div>{message}</div>;
 ```
 
 ## useState
 
 ```tsx
 const [state, setState] = useState(false);
-
 
 const [user, setUser] = useState<User | null>(null);
 
@@ -180,8 +174,8 @@ export function reducer: Reducer<AppState, Action>() {}
 ## useEffect / useLayoutEffect
 
 ```tsx
-function DelayedEffect(props: { timerMs: number }) {
-  const { timerMs } = props;
+function DelayedEffect(props: {timerMs: number}) {
+  const {timerMs} = props;
 
   useEffect(
     () =>
@@ -250,17 +244,16 @@ const Countdown = forwardRef<CountdownHandle, CountdownProps>((props, ref) => {
   useImperativeHandle(ref, () => ({
     // start() has type inference here
     start() {
-      alert("Start");
-    },
+      alert('Start');
+    }
   }));
 
   return <div>Countdown</div>;
 });
 
-
 // The component uses the Countdown component
 
-import Countdown, { CountdownHandle } from "./Countdown.tsx";
+import Countdown, {CountdownHandle} from './Countdown.tsx';
 
 function App() {
   const countdownEl = useRef<CountdownHandle>(null);
@@ -276,10 +269,10 @@ function App() {
 }
 ```
 
-## 自定义hooks
+## 自定义 hooks
 
 ```tsx
-import { useState } from "react";
+import {useState} from 'react';
 
 export function useLoading() {
   const [isLoading, setState] = useState(false);
@@ -290,8 +283,7 @@ export function useLoading() {
   return [isLoading, load] as const; // infers [boolean, typeof load] instead of (boolean | typeof load)[]
 }
 
-
-import { useState } from "react";
+import {useState} from 'react';
 
 export function useLoading() {
   const [isLoading, setState] = useState(false);
@@ -299,12 +291,8 @@ export function useLoading() {
     setState(true);
     return aPromise.finally(() => setState(false));
   };
-  return [isLoading, load] as [
-    boolean,
-    (aPromise: Promise<any>) => Promise<any>
-  ];
+  return [isLoading, load] as [boolean, (aPromise: Promise<any>) => Promise<any>];
 }
-
 
 function tuplify<T extends any[]>(...elements: T) {
   return elements;
@@ -323,7 +311,7 @@ function useTuple() {
 }
 ```
 
-## Class组件
+## Class 组件
 
 ```tsx
 type MyProps = {
@@ -336,7 +324,7 @@ type MyState = {
 class App extends React.Component<MyProps, MyState> {
   state: MyState = {
     // optional second annotation for better type inference
-    count: 0,
+    count: 0
   };
   render() {
     return (
@@ -354,9 +342,8 @@ type MyState = {
   readonly count: number;
 };
 
-
-class App extends React.Component<{ message: string }, { count: number }> {
-  state = { count: 0 };
+class App extends React.Component<{message: string}, {count: number}> {
+  state = {count: 0};
   render() {
     return (
       <div onClick={() => this.increment(1)}>
@@ -367,12 +354,10 @@ class App extends React.Component<{ message: string }, { count: number }> {
   increment = (amt: number) => {
     // like this
     this.setState((state) => ({
-      count: state.count + amt,
+      count: state.count + amt
     }));
   };
 }
-
-
 
 class App extends React.Component<{
   message: string;
@@ -390,24 +375,15 @@ class App extends React.Component<{
   }
 }
 
-
 class Comp extends React.Component<Props, State> {
-  static getDerivedStateFromProps(
-    props: Props,
-    state: State
-  ): Partial<State> | null {
+  static getDerivedStateFromProps(props: Props, state: State): Partial<State> | null {
     //
   }
 }
 
-
-class Comp extends React.Component<
-  Props,
-  ReturnType<typeof Comp["getDerivedStateFromProps"]>
-> {
+class Comp extends React.Component<Props, ReturnType<(typeof Comp)['getDerivedStateFromProps']>> {
   static getDerivedStateFromProps(props: Props) {}
 }
-
 
 //缓存 state和props
 type CustomValue = any;
@@ -421,15 +397,15 @@ type State = DefinedState & ReturnType<typeof transformPropsToState>;
 function transformPropsToState(props: Props) {
   return {
     savedPropA: props.propA, // save for memoization
-    derivedState: props.propA,
+    derivedState: props.propA
   };
 }
 class Comp extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      otherStateField: "123",
-      ...transformPropsToState(props),
+      otherStateField: '123',
+      ...transformPropsToState(props)
     };
   }
   static getDerivedStateFromProps(props: Props, state: State) {
@@ -558,7 +534,7 @@ export class MyComponent extends React.Component<IMyComponentProps> {
 }
 ```
 
-## Event事件
+## Event 事件
 
 ```tsx
 type State = {
@@ -566,12 +542,12 @@ type State = {
 };
 class App extends React.Component<Props, State> {
   state = {
-    text: "",
+    text: ''
   };
 
   // typing on RIGHT hand side of =
   onChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    this.setState({ text: e.currentTarget.value });
+    this.setState({text: e.currentTarget.value});
   };
   render() {
     return (
@@ -582,20 +558,18 @@ class App extends React.Component<Props, State> {
   }
 }
 
-
-  // typing on LEFT hand side of =
-  onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    this.setState({text: e.currentTarget.value})
-  }
-
+// typing on LEFT hand side of =
+onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  this.setState({text: e.currentTarget.value});
+};
 
 <form
   ref={formRef}
   onSubmit={(e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
-      email: { value: string };
-      password: { value: string };
+      email: {value: string};
+      password: {value: string};
     };
     const email = target.email.value; // typechecks!
     const password = target.password.value; // typechecks!
@@ -617,43 +591,41 @@ class App extends React.Component<Props, State> {
   <div>
     <input type="submit" value="Log in" />
   </div>
-</form>
+</form>;
 ```
 
-| Event Type       | Description                                                  |
-| ---------------- | ------------------------------------------------------------ |
-| AnimationEvent   | CSS Animations.                                              |
-| ChangeEvent      | Changing the value of `<input>`, `<select>` and `<textarea>` element. |
-| ClipboardEvent   | Using copy, paste and cut events.                            |
-| CompositionEvent | Events that occur due to the user indirectly entering text (e.g. depending on Browser and PC setup, a popup window may appear with additional characters if you e.g. want to type Japanese on a US Keyboard) |
-| DragEvent        | Drag and drop interaction with a pointer device (e.g. mouse). |
-| FocusEvent       | Event that occurs when elements gets or loses focus.         |
-| FormEvent        | Event that occurs whenever a form or form element gets/loses focus, a form element value is changed or the form is submitted. |
-| InvalidEvent     | Fired when validity restrictions of an input fails (e.g `<input type="number" max="10">` and someone would insert number 20). |
-| KeyboardEvent    | User interaction with the keyboard. Each event describes a single key interaction. |
-| MouseEvent       | Events that occur due to the user interacting with a pointing device (e.g. mouse) |
+| Event Type       | Description                                                                                                                                                                                                                                                            |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AnimationEvent   | CSS Animations.                                                                                                                                                                                                                                                        |
+| ChangeEvent      | Changing the value of `<input>`, `<select>` and `<textarea>` element.                                                                                                                                                                                                  |
+| ClipboardEvent   | Using copy, paste and cut events.                                                                                                                                                                                                                                      |
+| CompositionEvent | Events that occur due to the user indirectly entering text (e.g. depending on Browser and PC setup, a popup window may appear with additional characters if you e.g. want to type Japanese on a US Keyboard)                                                           |
+| DragEvent        | Drag and drop interaction with a pointer device (e.g. mouse).                                                                                                                                                                                                          |
+| FocusEvent       | Event that occurs when elements gets or loses focus.                                                                                                                                                                                                                   |
+| FormEvent        | Event that occurs whenever a form or form element gets/loses focus, a form element value is changed or the form is submitted.                                                                                                                                          |
+| InvalidEvent     | Fired when validity restrictions of an input fails (e.g `<input type="number" max="10">` and someone would insert number 20).                                                                                                                                          |
+| KeyboardEvent    | User interaction with the keyboard. Each event describes a single key interaction.                                                                                                                                                                                     |
+| MouseEvent       | Events that occur due to the user interacting with a pointing device (e.g. mouse)                                                                                                                                                                                      |
 | PointerEvent     | Events that occur due to user interaction with a variety pointing of devices such as mouse, pen/stylus, a touchscreen and which also supports multi-touch. Unless you develop for older browsers (IE10 or Safari 12), pointer events are recommended. Extends UIEvent. |
-| TouchEvent       | Events that occur due to the user interacting with a touch device. Extends UIEvent. |
-| TransitionEvent  | CSS Transition. Not fully browser supported. Extends UIEvent |
-| UIEvent          | Base Event for Mouse, Touch and Pointer events.              |
-| WheelEvent       | Scrolling on a mouse wheel or similar input device. (Note: `wheel` event should not be confused with the `scroll` event) |
-| SyntheticEvent   | The base event for all above events. Should be used when unsure about event type |
+| TouchEvent       | Events that occur due to the user interacting with a touch device. Extends UIEvent.                                                                                                                                                                                    |
+| TransitionEvent  | CSS Transition. Not fully browser supported. Extends UIEvent                                                                                                                                                                                                           |
+| UIEvent          | Base Event for Mouse, Touch and Pointer events.                                                                                                                                                                                                                        |
+| WheelEvent       | Scrolling on a mouse wheel or similar input device. (Note: `wheel` event should not be confused with the `scroll` event)                                                                                                                                               |
+| SyntheticEvent   | The base event for all above events. Should be used when unsure about event type                                                                                                                                                                                       |
 
 ## Context
 
 ```tsx
-import { createContext } from "react";
+import {createContext} from 'react';
 
-type ThemeContextType = "light" | "dark";
+type ThemeContextType = 'light' | 'dark';
 
-const ThemeContext = createContext<ThemeContextType>("light");
+const ThemeContext = createContext<ThemeContextType>('light');
 
-
-
-import { useState } from "react";
+import {useState} from 'react';
 
 const App = () => {
-  const [theme, setTheme] = useState<ThemeContextType>("light");
+  const [theme, setTheme] = useState<ThemeContextType>('light');
 
   return (
     <ThemeContext.Provider value={theme}>
@@ -662,9 +634,7 @@ const App = () => {
   );
 };
 
-
-
-import { useContext } from "react";
+import {useContext} from 'react';
 
 const MyComponent = () => {
   const theme = useContext(ThemeContext);
@@ -673,7 +643,7 @@ const MyComponent = () => {
 };
 
 //空值context
-import { createContext } from "react";
+import {createContext} from 'react';
 
 interface CurrentUserContextType {
   username: string;
@@ -683,7 +653,7 @@ const CurrentUserContext = createContext<CurrentUserContextType | null>(null);
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUserContextType>({
-    username: "filiptammergard",
+    username: 'filiptammergard'
   });
 
   return (
@@ -693,7 +663,7 @@ const App = () => {
   );
 };
 
-import { useContext } from "react";
+import {useContext} from 'react';
 
 const MyComponent = () => {
   const currentUser = useContext(CurrentUserContext);
@@ -701,9 +671,8 @@ const MyComponent = () => {
   return <p>Name: {currentUser?.username}.</p>;
 };
 
-
 //hooks形式使用
-import { createContext } from "react";
+import {createContext} from 'react';
 
 interface CurrentUserContextType {
   username: string;
@@ -715,16 +684,13 @@ const useCurrentUser = () => {
   const currentUserContext = useContext(CurrentUserContext);
 
   if (!currentUserContext) {
-    throw new Error(
-      "useCurrentUser has to be used within <CurrentUserContext.Provider>"
-    );
+    throw new Error('useCurrentUser has to be used within <CurrentUserContext.Provider>');
   }
 
   return currentUserContext;
 };
 
-
-import { useContext } from "react";
+import {useContext} from 'react';
 
 const MyComponent = () => {
   const currentUser = useCurrentUser();
@@ -732,8 +698,7 @@ const MyComponent = () => {
   return <p>Username: {currentUser.username}.</p>;
 };
 
-
-import { useContext } from "react";
+import {useContext} from 'react';
 
 const MyComponent = () => {
   const currentUser = useContext(CurrentUserContext);
@@ -741,16 +706,14 @@ const MyComponent = () => {
   return <p>Name: {currentUser!.username}.</p>;
 };
 
-const CurrentUserContext = createContext<CurrentUserContextType>(
-  {} as CurrentUserContextType
-);
+const CurrentUserContext = createContext<CurrentUserContextType>({} as CurrentUserContextType);
 const CurrentUserContext = createContext<CurrentUserContextType>(null!);
 ```
 
 ## forwardRef/createRef
 
 ```tsx
-import { createRef, PureComponent } from "react";
+import {createRef, PureComponent} from 'react';
 
 class CssThemeProvider extends PureComponent<Props> {
   private rootRef = createRef<HTMLDivElement>(); // like this
@@ -759,12 +722,11 @@ class CssThemeProvider extends PureComponent<Props> {
   }
 }
 
-
-import { forwardRef, ReactNode } from "react";
+import {forwardRef, ReactNode} from 'react';
 
 interface Props {
   children?: ReactNode;
-  type: "submit" | "button";
+  type: 'submit' | 'button';
 }
 export type Ref = HTMLButtonElement;
 
@@ -774,12 +736,11 @@ export const FancyButton = forwardRef<Ref, Props>((props, ref) => (
   </button>
 ));
 
-
-import { forwardRef, ReactNode, Ref } from "react";
+import {forwardRef, ReactNode, Ref} from 'react';
 
 interface Props {
   children?: ReactNode;
-  type: "submit" | "button";
+  type: 'submit' | 'button';
 }
 
 export const FancyButton = forwardRef(
@@ -792,9 +753,6 @@ export const FancyButton = forwardRef(
     </button>
   )
 );
-
-
-
 
 type ClickableListProps<T> = {
   items: T[];
@@ -815,26 +773,22 @@ export function ClickableList<T>(props: ClickableListProps<T>) {
   );
 }
 
-
 // Redeclare forwardRef
-declare module "react" {
+declare module 'react' {
   function forwardRef<T, P = {}>(
     render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
   ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
 }
 
 // Just write your components like you're used to!
-import { forwardRef, ForwardedRef } from "react";
+import {forwardRef, ForwardedRef} from 'react';
 
 interface ClickableListProps<T> {
   items: T[];
   onSelect: (item: T) => void;
 }
 
-function ClickableListInner<T>(
-  props: ClickableListProps<T>,
-  ref: ForwardedRef<HTMLUListElement>
-) {
+function ClickableListInner<T>(props: ClickableListProps<T>, ref: ForwardedRef<HTMLUListElement>) {
   return (
     <ul ref={ref}>
       {props.items.map((item, i) => (
@@ -849,28 +803,22 @@ function ClickableListInner<T>(
 
 export const ClickableList = forwardRef(ClickableListInner);
 
-
-
-
 // Redeclare forwardRef
-declare module "react" {
+declare module 'react' {
   function forwardRef<T, P = {}>(
     render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
   ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
 }
 
 // Just write your components like you're used to!
-import { forwardRef, ForwardedRef } from "react";
+import {forwardRef, ForwardedRef} from 'react';
 
 interface ClickableListProps<T> {
   items: T[];
   onSelect: (item: T) => void;
 }
 
-function ClickableListInner<T>(
-  props: ClickableListProps<T>,
-  ref: ForwardedRef<HTMLUListElement>
-) {
+function ClickableListInner<T>(props: ClickableListProps<T>, ref: ForwardedRef<HTMLUListElement>) {
   return (
     <ul ref={ref}>
       {props.items.map((item, i) => (
@@ -884,27 +832,23 @@ function ClickableListInner<T>(
 }
 
 export const ClickableList = forwardRef(ClickableListInner);
-
 
 // Add to `index.d.ts`
 interface ForwardRefWithGenerics extends React.FC<WithForwardRefProps<Option>> {
-  <T extends Option>(props: WithForwardRefProps<T>): ReturnType<
-    React.FC<WithForwardRefProps<T>>
-  >;
+  <T extends Option>(props: WithForwardRefProps<T>): ReturnType<React.FC<WithForwardRefProps<T>>>;
 }
 
-export const ClickableListWithForwardRef: ForwardRefWithGenerics =
-  forwardRef(ClickableList);
+export const ClickableListWithForwardRef: ForwardRefWithGenerics = forwardRef(ClickableList);
 ```
 
 ## Portals
 
 ```ts
-const modalRoot = document.getElementById("modal-root") as HTMLElement;
+const modalRoot = document.getElementById('modal-root') as HTMLElement;
 // assuming in your html file has a div with id 'modal-root';
 
-export class Modal extends React.Component<{ children?: React.ReactNode }> {
-  el: HTMLElement = document.createElement("div");
+export class Modal extends React.Component<{children?: React.ReactNode}> {
+  el: HTMLElement = document.createElement('div');
 
   componentDidMount() {
     modalRoot.appendChild(this.el);
@@ -919,22 +863,21 @@ export class Modal extends React.Component<{ children?: React.ReactNode }> {
   }
 }
 
-
 //hooks
 
-import { useEffect, useRef, ReactNode } from "react";
-import { createPortal } from "react-dom";
+import {useEffect, useRef, ReactNode} from 'react';
+import {createPortal} from 'react-dom';
 
-const modalRoot = document.querySelector("#modal-root") as HTMLElement;
+const modalRoot = document.querySelector('#modal-root') as HTMLElement;
 
 type ModalProps = {
   children: ReactNode;
 };
 
-function Modal({ children }: ModalProps) {
+function Modal({children}: ModalProps) {
   // create div element only once using ref
   const elRef = useRef<HTMLDivElement | null>(null);
-  if (!elRef.current) elRef.current = document.createElement("div");
+  if (!elRef.current) elRef.current = document.createElement('div');
 
   useEffect(() => {
     const el = elRef.current!; // non-null assertion because it will never be null
@@ -947,10 +890,9 @@ function Modal({ children }: ModalProps) {
   return createPortal(children, elRef.current);
 }
 
-
 //使用
 
-import { useState } from "react";
+import {useState} from 'react';
 
 function App() {
   const [showModal, setShowModal] = useState(false);
@@ -963,19 +905,16 @@ function App() {
         <Modal>
           <div
             style={{
-              display: "grid",
-              placeItems: "center",
-              height: "100vh",
-              width: "100vh",
-              background: "rgba(0,0,0,0.1)",
-              zIndex: 99,
+              display: 'grid',
+              placeItems: 'center',
+              height: '100vh',
+              width: '100vh',
+              background: 'rgba(0,0,0,0.1)',
+              zIndex: 99
             }}
           >
-            I'm a modal!{" "}
-            <button
-              style={{ background: "papyawhip" }}
-              onClick={() => setShowModal(false)}
-            >
+            I'm a modal!{' '}
+            <button style={{background: 'papyawhip'}} onClick={() => setShowModal(false)}>
               close
             </button>
           </div>
@@ -991,7 +930,7 @@ function App() {
 ## 错误边界
 
 ```tsx
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import React, {Component, ErrorInfo, ReactNode} from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -1008,11 +947,11 @@ class ErrorBoundary extends Component<Props, State> {
 
   public static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true };
+    return {hasError: true};
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   public render() {
@@ -1025,7 +964,6 @@ class ErrorBoundary extends Component<Props, State> {
 }
 
 export default ErrorBoundary;
-
 ```
 
 ## 类型
@@ -1188,7 +1126,7 @@ const someMethod = (obj: typeof state) => {
   setState(obj); // this works
 };
 
- 
+
 const partialStateUpdate = (obj: Partial<typeof state>) =>
   setState({ ...state, ...obj });
 
@@ -1247,7 +1185,7 @@ let baz2: SubInstType2 = {
 };
 ```
 
-## d.ts生成
+## d.ts 生成
 
 ```bash
 npm install -g dts-gen
@@ -1286,9 +1224,9 @@ const useDarkMode = (
     classNameDark,
     classNameLight,
     onChange,
-    storageKey = "darkMode",
+    storageKey = 'darkMode',
     storageProvider,
-    global,
+    global
   } = {}
 ) => {
   // ...
@@ -1297,14 +1235,14 @@ const useDarkMode = (
     value: state,
     enable: useCallback(() => setState(true), [setState]),
     disable: useCallback(() => setState(false), [setState]),
-    toggle: useCallback(() => setState((current) => !current), [setState]),
+    toggle: useCallback(() => setState((current) => !current), [setState])
   };
 };
 export default useDarkMode;
 ```
 
 ```ts
-declare module "use-dark-mode" {
+declare module 'use-dark-mode' {
   /**
    * A config object allowing you to specify certain aspects of `useDarkMode`
    */
@@ -1329,10 +1267,7 @@ declare module "use-dark-mode" {
   /**
    * A custom React Hook to help you implement a "dark mode" component for your application.
    */
-  export default function useDarkMode(
-    initialState?: boolean,
-    config?: DarkModeConfig
-  ): DarkMode;
+  export default function useDarkMode(initialState?: boolean, config?: DarkModeConfig): DarkMode;
 }
 ```
 
@@ -1361,19 +1296,18 @@ declare global {
 
 // declaration.d.ts
 // anywhere in your project, NOT the same name as any of your .ts/tsx files
-declare module "*.png";
+declare module '*.png';
 
 // importing in a tsx file
-import * as logo from "./logo.png";
-
+import * as logo from './logo.png';
 
 declare module '*.module.scss' {
-  const classes: { [key: string]: string };
+  const classes: {[key: string]: string};
   export default classes;
 }
 
 import styles from './index.module.scss';
-<div className={styles.container}></div>
+<div className={styles.container}></div>;
 ```
 
 ## tsconfig.json
@@ -1423,20 +1357,40 @@ import styles from './index.module.scss';
 ## process.env
 
 ```ts
-
 // ambient utility type
 type ToArray<T> = T extends unknown[] ? T : T[];
 // ambient variable
 declare let process: {
   env: {
-    NODE_ENV: "development" | "production";
+    NODE_ENV: 'development' | 'production';
   };
 };
 process = {
   env: {
-    NODE_ENV: "production",
-  },
+    NODE_ENV: 'production'
+  }
 };
+```
+
+## vite-env.d.ts
+
+```ts
+/// <reference types="vite/client" />
+
+interface ViteTypeOptions {
+  // 添加这行代码，你就可以将 ImportMetaEnv 的类型设为严格模式，
+  // 这样就不允许有未知的键值了。
+  // strictImportMetaEnv: unknown
+}
+
+interface ImportMetaEnv {
+  readonly MODE: 'development' | 'production';
+  // 更多环境变量...
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
 ```
 
 ## eslint
@@ -1447,7 +1401,7 @@ pnpm add -D @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint
 
 ```json
 {
-    "scripts": {
+  "scripts": {
     "lint": "eslint 'src/**/*.ts'"
   }
 }
@@ -1460,28 +1414,28 @@ module.exports = {
   env: {
     es6: true,
     node: true,
-    jest: true,
+    jest: true
   },
-  extends: "eslint:recommended",
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  extends: 'eslint:recommended',
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
   parserOptions: {
     ecmaVersion: 2017,
-    sourceType: "module",
+    sourceType: 'module'
   },
   rules: {
-    indent: ["error", 2],
-    "linebreak-style": ["error", "unix"],
-    quotes: ["error", "single"],
-    "no-console": "warn",
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { vars: "all", args: "after-used", ignoreRestSiblings: false },
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    'no-console': 'warn',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {vars: 'all', args: 'after-used', ignoreRestSiblings: false}
     ],
-    "@typescript-eslint/explicit-function-return-type": "warn", // Consider using explicit annotations for object literals and function return types even when they can be inferred.
-    "no-empty": "warn",
-  },
+    '@typescript-eslint/explicit-function-return-type': 'warn', // Consider using explicit annotations for object literals and function return types even when they can be inferred.
+    'no-empty': 'warn'
+  }
 };
 ```
 
@@ -1531,11 +1485,7 @@ module.exports = {
 ## HOC
 
 ```tsx
-
-type PropsAreEqual<P> = (
-  prevProps: Readonly<P>,
-  nextProps: Readonly<P>
-) => boolean;
+type PropsAreEqual<P> = (prevProps: Readonly<P>, nextProps: Readonly<P>) => boolean;
 
 const withSampleHoC = <P extends {}>(
   component: {
@@ -1549,7 +1499,6 @@ const withSampleHoC = <P extends {}>(
   (props: P): React.JSX.Element;
   displayName: string;
 } => {
-
   function WithSampleHoc(props: P) {
     //Do something special to justify the HoC.
     return component(props) as React.JSX.Element;
@@ -1557,11 +1506,12 @@ const withSampleHoC = <P extends {}>(
 
   WithSampleHoc.displayName = `withSampleHoC(${componentName})`;
 
-  let wrappedComponent = propsAreEqual === false ? WithSampleHoc : React.memo(WithSampleHoc, propsAreEqual);
+  let wrappedComponent =
+    propsAreEqual === false ? WithSampleHoc : React.memo(WithSampleHoc, propsAreEqual);
 
   //copyStaticProperties(component, wrappedComponent);
 
-  return wrappedComponent as typeof WithSampleHoc
+  return wrappedComponent as typeof WithSampleHoc;
 };
 ```
 
@@ -1588,8 +1538,7 @@ export function withTheme<T extends WithThemeProps = WithThemeProps>(
   WrappedComponent: React.ComponentType<T>
 ) {
   // Try to create a nice displayName for React Dev Tools.
-  const displayName =
-    WrappedComponent.displayName || WrappedComponent.name || "Component";
+  const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   // Creating the inner component. The calculated Props type here is the where the magic happens.
   const ComponentWithTheme = (props: Omit<T, keyof WithThemeProps>) => {
@@ -1624,18 +1573,18 @@ const Comment = (_: any) => null;
 const TextBlock = Comment;
 
 /** dummy Data */
-type CommentType = { text: string; id: number };
+type CommentType = {text: string; id: number};
 const comments: CommentType[] = [
   {
-    text: "comment1",
-    id: 1,
+    text: 'comment1',
+    id: 1
   },
   {
-    text: "comment2",
-    id: 2,
-  },
+    text: 'comment2',
+    id: 2
+  }
 ];
-const blog = "blogpost";
+const blog = 'blogpost';
 
 /** mock data source */
 const DataSource = {
@@ -1650,7 +1599,7 @@ const DataSource = {
   },
   getBlogPost(id: number) {
     return blog;
-  },
+  }
 };
 /** type aliases just to deduplicate */
 type DataType = typeof DataSource;
@@ -1661,7 +1610,7 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 // type Optionalize<T extends K, K> = Omit<T, keyof K>;
 
 /** Rewritten Components from the React docs that just uses injected data prop */
-function CommentList({ data }: WithDataProps<typeof comments>) {
+function CommentList({data}: WithDataProps<typeof comments>) {
   return (
     <div>
       {data.map((comment: CommentType) => (
@@ -1673,7 +1622,7 @@ function CommentList({ data }: WithDataProps<typeof comments>) {
 interface BlogPostProps extends WithDataProps<string> {
   id: number;
 }
-function BlogPost({ data, id }: BlogPostProps) {
+function BlogPost({data, id}: BlogPostProps) {
   return (
     <div key={id}>
       <TextBlock text={data} />;
@@ -1697,12 +1646,12 @@ export function withSubscription<T, P extends WithDataProps<T>, C>(
   // props is Readonly because it's readonly inside of the class
   selectData: (
     dataSource: typeof DataSource,
-    props: Readonly<React.JSX.LibraryManagedAttributes<C, Omit<P, "data">>>
+    props: Readonly<React.JSX.LibraryManagedAttributes<C, Omit<P, 'data'>>>
   ) => T
 ) {
   // the magic is here: React.JSX.LibraryManagedAttributes will take the type of WrapedComponent and resolve its default props
   // against the props of WithData, which is just the original P type with 'data' removed from its requirements
-  type Props = React.JSX.LibraryManagedAttributes<C, Omit<P, "data">>;
+  type Props = React.JSX.LibraryManagedAttributes<C, Omit<P, 'data'>>;
   type State = {
     data: T;
   };
@@ -1711,52 +1660,45 @@ export function withSubscription<T, P extends WithDataProps<T>, C>(
       super(props);
       this.handleChange = this.handleChange.bind(this);
       this.state = {
-        data: selectData(DataSource, props),
+        data: selectData(DataSource, props)
       };
     }
 
     componentDidMount = () => DataSource.addChangeListener(this.handleChange);
 
-    componentWillUnmount = () =>
-      DataSource.removeChangeListener(this.handleChange);
+    componentWillUnmount = () => DataSource.removeChangeListener(this.handleChange);
 
     handleChange = () =>
       this.setState({
-        data: selectData(DataSource, this.props),
+        data: selectData(DataSource, this.props)
       });
 
     render() {
       // the typing for spreading this.props is... very complex. best way right now is to just type it as any
       // data will still be typechecked
-      return (
-        <WrappedComponent data={this.state.data} {...(this.props as any)} />
-      );
+      return <WrappedComponent data={this.state.data} {...(this.props as any)} />;
     }
   };
   // return WithData;
 }
 
 /** HOC usage with Components */
-export const CommentListWithSubscription = withSubscription(
-  CommentList,
-  (DataSource: DataType) => DataSource.getComments()
+export const CommentListWithSubscription = withSubscription(CommentList, (DataSource: DataType) =>
+  DataSource.getComments()
 );
 
 export const BlogPostWithSubscription = withSubscription(
   BlogPost,
-  (DataSource: DataType, props: Omit<BlogPostProps, "data">) =>
-    DataSource.getBlogPost(props.id)
+  (DataSource: DataType, props: Omit<BlogPostProps, 'data'>) => DataSource.getBlogPost(props.id)
 );
 ```
 
 ```tsx
 function logProps<T>(WrappedComponent: React.ComponentType<T>) {
   return class extends React.Component {
-    componentWillReceiveProps(
-      nextProps: React.ComponentProps<typeof WrappedComponent>
-    ) {
-      console.log("Current props: ", this.props);
-      console.log("Next props: ", nextProps);
+    componentWillReceiveProps(nextProps: React.ComponentProps<typeof WrappedComponent>) {
+      console.log('Current props: ', this.props);
+      console.log('Next props: ', nextProps);
     }
     render() {
       // Wraps the input component in a container, without mutating it. Good!
@@ -1771,21 +1713,21 @@ function logProps<T>(WrappedComponent: React.ComponentType<T>) {
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 /** dummy Data */
-type CommentType = { text: string; id: number };
+type CommentType = {text: string; id: number};
 const comments: CommentType[] = [
   {
-    text: "comment1",
-    id: 1,
+    text: 'comment1',
+    id: 1
   },
   {
-    text: "comment2",
-    id: 2,
-  },
+    text: 'comment2',
+    id: 2
+  }
 ];
 /** dummy child components that take anything */
 const Comment = (_: any) => null;
 /** Rewritten Components from the React docs that just uses injected data prop */
-function CommentList({ data }: WithSubscriptionProps<typeof comments>) {
+function CommentList({data}: WithSubscriptionProps<typeof comments>) {
   return (
     <div>
       {data.map((comment: CommentType) => (
@@ -1798,11 +1740,10 @@ function CommentList({ data }: WithSubscriptionProps<typeof comments>) {
 
 ```tsx
 const commentSelector = (_: any, ownProps: any) => ({
-  id: ownProps.id,
+  id: ownProps.id
 });
 const commentActions = () => ({
-  addComment: (str: string) =>
-    comments.push({ text: str, id: comments.length }),
+  addComment: (str: string) => comments.push({text: str, id: comments.length})
 });
 
 const ConnectedComment = connect(commentSelector, commentActions)(CommentList);
@@ -1815,7 +1756,7 @@ function connect(mapStateToProps: Function, mapDispatchToProps: Function) {
   return function <T, P extends WithSubscriptionProps<T>, C>(
     WrappedComponent: React.ComponentType<T>
   ) {
-    type Props = React.JSX.LibraryManagedAttributes<C, Omit<P, "data">>;
+    type Props = React.JSX.LibraryManagedAttributes<C, Omit<P, 'data'>>;
     // Creating the inner component. The calculated Props type here is the where the magic happens.
     return class ComponentWithTheme extends React.Component<Props> {
       public render() {
@@ -1823,13 +1764,7 @@ function connect(mapStateToProps: Function, mapDispatchToProps: Function) {
         const mappedStateProps = mapStateToProps(this.state, this.props);
         const mappedDispatchProps = mapDispatchToProps(this.state, this.props);
         // this.props comes afterwards so the can override the default ones.
-        return (
-          <WrappedComponent
-            {...this.props}
-            {...mappedStateProps}
-            {...mappedDispatchProps}
-          />
-        );
+        return <WrappedComponent {...this.props} {...mappedStateProps} {...mappedDispatchProps} />;
       }
     };
   };
@@ -1841,20 +1776,18 @@ interface WithSubscriptionProps {
   data: any;
 }
 
-function withSubscription<
-  T extends WithSubscriptionProps = WithSubscriptionProps
->(WrappedComponent: React.ComponentType<T>) {
+function withSubscription<T extends WithSubscriptionProps = WithSubscriptionProps>(
+  WrappedComponent: React.ComponentType<T>
+) {
   class WithSubscription extends React.Component {
     /* ... */
-    public static displayName = `WithSubscription(${getDisplayName(
-      WrappedComponent
-    )})`;
+    public static displayName = `WithSubscription(${getDisplayName(WrappedComponent)})`;
   }
   return WithSubscription;
 }
 
 function getDisplayName<T>(WrappedComponent: React.ComponentType<T>) {
-  return WrappedComponent.displayName || WrappedComponent.name || "Component";
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 ```
 
@@ -2046,7 +1979,7 @@ const PrivateRoute = ({ component: Component, ...rest }: PrivateRouteProps) => {
 renderList
 
 ```ts
-import { ReactNode, useState } from "react";
+import {ReactNode, useState} from 'react';
 
 interface Props<T> {
   items: T[];
@@ -2054,7 +1987,7 @@ interface Props<T> {
 }
 
 function List<T>(props: Props<T>) {
-  const { items, renderItem } = props;
+  const {items, renderItem} = props;
   const [state, setState] = useState<T[]>([]); // You can use type T in List function scope.
   return (
     <div>
@@ -2067,7 +2000,7 @@ function List<T>(props: Props<T>) {
 
 ReactDOM.render(
   <List
-    items={["a", "b"]} // type of 'string' inferred
+    items={['a', 'b']} // type of 'string' inferred
     renderItem={(item) => (
       <li key={item}>
         {/* Error: Property 'toPrecision' does not exist on type 'string'. */}
@@ -2080,13 +2013,13 @@ ReactDOM.render(
 
 ReactDOM.render(
   <List<number>
-    items={["a", "b"]} // Error: Type 'string' is not assignable to type 'number'.
+    items={['a', 'b']} // Error: Type 'string' is not assignable to type 'number'.
     renderItem={(item) => <li key={item}>{item.toPrecision(3)}</li>}
   />,
   document.body
 );
 
-import { ReactNode, useState } from "react";
+import {ReactNode, useState} from 'react';
 
 interface Props<T> {
   items: T[];
@@ -2097,7 +2030,7 @@ interface Props<T> {
 // You can't use just `<T>` as it will confuse the TSX parser whether it's a JSX tag or a Generic Declaration.
 // You can also use <T,> https://github.com/microsoft/TypeScript/issues/15713#issuecomment-499474386
 const List = <T extends unknown>(props: Props<T>) => {
-  const { items, renderItem } = props;
+  const {items, renderItem} = props;
   const [state, setState] = useState<T[]>([]); // You can use type T in List function scope.
   return (
     <div>
@@ -2110,7 +2043,7 @@ const List = <T extends unknown>(props: Props<T>) => {
 ```
 
 ```tsx
-import { PureComponent, ReactNode } from "react";
+import {PureComponent, ReactNode} from 'react';
 
 interface Props<T> {
   items: T[];
@@ -2124,16 +2057,16 @@ interface State<T> {
 class List<T> extends PureComponent<Props<T>, State<T>> {
   // You can use type T inside List class.
   state: Readonly<State<T>> = {
-    items: [],
+    items: []
   };
   render() {
-    const { items, renderItem } = this.props;
+    const {items, renderItem} = this.props;
     // You can use type T inside List class.
     const clone: T[] = items.slice(0);
     return (
       <div>
         {items.map(renderItem)}
-        <button onClick={() => this.setState({ items: clone })}>Clone</button>
+        <button onClick={() => this.setState({items: clone})}>Clone</button>
         {JSON.stringify(this.state, null, 2)}
       </div>
     );
@@ -2145,13 +2078,13 @@ class List<T> extends PureComponent<Props<T>, State<T>> {
 class List<T> extends React.PureComponent<Props<T>, State<T>> {
   // Static members cannot reference class type parameters.ts(2302)
   static getDerivedStateFromProps(props: Props<T>, state: State<T>) {
-    return { items: props.items };
+    return {items: props.items};
   }
 }
 
 class List<T> extends React.PureComponent<Props<T>, State<T>> {
   static getDerivedStateFromProps<T>(props: Props<T>, state: State<T>) {
-    return { items: props.items };
+    return {items: props.items};
   }
 }
 
@@ -2159,9 +2092,9 @@ Parent.propTypes = {
   children: PropTypes.shape({
     props: PropTypes.shape({
       // could share `propTypes` to the child
-      value: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
+      value: PropTypes.string.isRequired
+    })
+  }).isRequired
 };
 ```
 
@@ -2201,8 +2134,7 @@ type Overload = {
 };
 
 // Guard to check if href exists in props
-const hasHref = (props: ButtonProps | AnchorProps): props is AnchorProps =>
-  "href" in props;
+const hasHref = (props: ButtonProps | AnchorProps): props is AnchorProps => 'href' in props;
 
 // Component
 const Button: Overload = (props: ButtonProps | AnchorProps) => {
@@ -2214,14 +2146,12 @@ const Button: Overload = (props: ButtonProps | AnchorProps) => {
 ```
 
 ```tsx
-type ButtonProps = React.JSX.IntrinsicElements["button"];
-type AnchorProps = React.JSX.IntrinsicElements["a"];
+type ButtonProps = React.JSX.IntrinsicElements['button'];
+type AnchorProps = React.JSX.IntrinsicElements['a'];
 
 // optionally use a custom type guard
-function isPropsForAnchorElement(
-  props: ButtonProps | AnchorProps
-): props is AnchorProps {
-  return "href" in props;
+function isPropsForAnchorElement(props: ButtonProps | AnchorProps): props is AnchorProps {
+  return 'href' in props;
 }
 
 function Clickable(props: ButtonProps | AnchorProps) {
@@ -2232,12 +2162,12 @@ function Clickable(props: ButtonProps | AnchorProps) {
   }
 }
 
-type LinkProps = Omit<React.JSX.IntrinsicElements["a"], "href"> & {
+type LinkProps = Omit<React.JSX.IntrinsicElements['a'], 'href'> & {
   to?: string;
 };
 
 function RouterLink(props: LinkProps | AnchorProps) {
-  if ("href" in props) {
+  if ('href' in props) {
     return <a {...props} />;
   } else {
     return <Link {...props} />;
@@ -2248,7 +2178,7 @@ function RouterLink(props: LinkProps | AnchorProps) {
 ```tsx
 interface LinkProps {}
 type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
-type RouterLinkProps = Omit<NavLinkProps, "href">;
+type RouterLinkProps = Omit<NavLinkProps, 'href'>;
 
 const Link = <T extends {}>(
   props: LinkProps & T extends RouterLinkProps ? RouterLinkProps : AnchorProps
@@ -2269,18 +2199,18 @@ const Link = <T extends {}>(
 
 ```tsx
 type UserTextEvent = {
-  type: "TextEvent";
+  type: 'TextEvent';
   value: string;
   target: HTMLInputElement;
 };
 type UserMouseEvent = {
-  type: "MouseEvent";
+  type: 'MouseEvent';
   value: [number, number];
   target: HTMLElement;
 };
 type UserEvent = UserTextEvent | UserMouseEvent;
 function handle(event: UserEvent) {
-  if (event.type === "TextEvent") {
+  if (event.type === 'TextEvent') {
     event.value; // string
     event.target; // HTMLInputElement
     return;
@@ -2289,13 +2219,11 @@ function handle(event: UserEvent) {
   event.target; // HTMLElement
 }
 
-
-
-type UserTextEvent = { value: string; target: HTMLInputElement };
-type UserMouseEvent = { value: [number, number]; target: HTMLElement };
+type UserTextEvent = {value: string; target: HTMLInputElement};
+type UserMouseEvent = {value: [number, number]; target: HTMLElement};
 type UserEvent = UserTextEvent | UserMouseEvent;
 function handle(event: UserEvent) {
-  if (typeof event.value === "string") {
+  if (typeof event.value === 'string') {
     event.value; // string
     event.target; // HTMLInputElement | HTMLElement (!!!!)
     return;
@@ -2306,7 +2234,7 @@ function handle(event: UserEvent) {
 ```
 
 ```tsx
-import { useMemo } from "react";
+import {useMemo} from 'react';
 
 interface SingleElement {
   isArray: true;
@@ -2323,7 +2251,7 @@ function Sequence(p: Props) {
     () => (
       <div>
         value(s):
-        {p.isArray && p.value.join(",")}
+        {p.isArray && p.value.join(',')}
         {!p.isArray && p.value}
       </div>
     ),
@@ -2334,19 +2262,19 @@ function Sequence(p: Props) {
 function App() {
   return (
     <div>
-      <Sequence isArray={false} value={"foo"} />
-      <Sequence isArray={true} value={["foo", "bar", "baz"]} />
+      <Sequence isArray={false} value={'foo'} />
+      <Sequence isArray={true} value={['foo', 'bar', 'baz']} />
     </div>
   );
 }
 ```
 
 ```tsx
-type Props1 = { foo: string; bar?: never };
-type Props2 = { bar: string; foo?: never };
+type Props1 = {foo: string; bar?: never};
+type Props2 = {bar: string; foo?: never};
 
 const OneOrTheOther = (props: Props1 | Props2) => {
-  if ("foo" in props && typeof props.foo === "string") {
+  if ('foo' in props && typeof props.foo === 'string') {
     // `props.bar` is of type `undefined`
     return <>{props.foo}</>;
   }
@@ -2362,13 +2290,11 @@ const Component = () => (
   </>
 );
 
-
-
-type Props1 = { type: "foo"; foo: string };
-type Props2 = { type: "bar"; bar: string };
+type Props1 = {type: 'foo'; foo: string};
+type Props2 = {type: 'bar'; bar: string};
 
 const OneOrTheOther = (props: Props1 | Props2) => {
-  if (props.type === "foo") {
+  if (props.type === 'foo') {
     // `props.bar` does not exist
     return <>{props.foo}</>;
   }
@@ -2388,7 +2314,6 @@ const Component = () => (
   </>
 );
 
-
 interface All {
   a: string;
   b: string;
@@ -2397,7 +2322,7 @@ interface All {
 type Nothing = Record<string, never>;
 
 const AllOrNothing = (props: All | Nothing) => {
-  if ("a" in props) {
+  if ('a' in props) {
     return <>{props.b}</>;
   }
   return <>Nothing</>;
@@ -2411,8 +2336,6 @@ const Component = () => (
     <AllOrNothing a="" b="" /> {/* ok */}
   </>
 );
-
-
 
 interface Props {
   obj?: {
@@ -2431,9 +2354,9 @@ const AllOrNothing = (props: Props) => {
 const Component = () => (
   <>
     <AllOrNothing /> {/* ok */}
-    <AllOrNothing obj={{ a: "" }} /> {/* error */}
-    <AllOrNothing obj={{ b: "" }} /> {/* error */}
-    <AllOrNothing obj={{ a: "", b: "" }} /> {/* ok */}
+    <AllOrNothing obj={{a: ''}} /> {/* error */}
+    <AllOrNothing obj={{b: ''}} /> {/* error */}
+    <AllOrNothing obj={{a: '', b: ''}} /> {/* ok */}
   </>
 );
 ```
@@ -2452,23 +2375,23 @@ const App = () => (
   </>
 );
 
-import { ReactNode } from "react";
+import {ReactNode} from 'react';
 
 interface CommonProps {
   children?: ReactNode;
   miscProps?: any;
 }
 
-type NoTruncateProps = CommonProps & { truncate?: false };
+type NoTruncateProps = CommonProps & {truncate?: false};
 
-type TruncateProps = CommonProps & { truncate: true; expanded?: boolean };
+type TruncateProps = CommonProps & {truncate: true; expanded?: boolean};
 
 // Function overloads to accept both prop types NoTruncateProps & TruncateProps
 function Text(props: NoTruncateProps): React.JSX.Element;
 function Text(props: TruncateProps): React.JSX.Element;
-function Text(props: CommonProps & { truncate?: boolean; expanded?: boolean }) {
-  const { children, truncate, expanded, ...otherProps } = props;
-  const classNames = truncate ? ".truncate" : "";
+function Text(props: CommonProps & {truncate?: boolean; expanded?: boolean}) {
+  const {children, truncate, expanded, ...otherProps} = props;
+  const classNames = truncate ? '.truncate' : '';
   return (
     <div className={classNames} aria-expanded={!!expanded} {...otherProps}>
       {children}
@@ -2486,10 +2409,8 @@ export interface Props {
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 // usage
-export const Checkbox = (
-  props: Props & Omit<React.HTMLProps<HTMLInputElement>, "label">
-) => {
-  const { label } = props;
+export const Checkbox = (props: Props & Omit<React.HTMLProps<HTMLInputElement>, 'label'>) => {
+  const {label} = props;
   return (
     <div className="Checkbox">
       <label className="Checkbox-label">
@@ -2505,29 +2426,27 @@ export interface Props {
   onChange: (text: string) => void; // conflicts with InputElement's onChange
 }
 
-export const Textbox = (
-  props: Props & Omit<React.HTMLProps<HTMLInputElement>, keyof Props>
-) => {
+export const Textbox = (props: Props & Omit<React.HTMLProps<HTMLInputElement>, keyof Props>) => {
   // implement Textbox component ...
 };
 
 // a Modal component defined elsewhere
 const defaultProps: React.ComponentProps<typeof Modal> = {
-  title: "Hello World",
+  title: 'Hello World',
   visible: true,
-  onClick: jest.fn(),
+  onClick: jest.fn()
 };
 ```
 
 ```tsx
-import { ReactNode } from "react";
+import {ReactNode} from 'react';
 
 interface Props {
   label?: ReactNode;
   children?: ReactNode;
 }
 
-const Card = ({ children, label }: Props) => {
+const Card = ({children, label}: Props) => {
   return (
     <div>
       {label && <div>{label}</div>}
@@ -2536,7 +2455,7 @@ const Card = ({ children, label }: Props) => {
   );
 };
 
-import { ReactNode } from "react";
+import {ReactNode} from 'react';
 
 interface Props {
   children: (foo: string) => ReactNode;
@@ -2554,9 +2473,8 @@ class DateIsInFutureError extends RangeError {}
  *
  */
 function parse(date: string) {
-  if (!isValid(date))
-    throw new InvalidDateFormatError("not a valid date format");
-  if (isInFuture(date)) throw new DateIsInFutureError("date is in the future");
+  if (!isValid(date)) throw new InvalidDateFormatError('not a valid date format');
+  if (isInFuture(date)) throw new DateIsInFutureError('date is in the future');
   // ...
 }
 
@@ -2564,43 +2482,36 @@ try {
   // call parse(date) somewhere
 } catch (e) {
   if (e instanceof InvalidDateFormatError) {
-    console.error("invalid date format", e);
+    console.error('invalid date format', e);
   } else if (e instanceof DateIsInFutureError) {
-    console.warn("date is in future", e);
+    console.warn('date is in future', e);
   } else {
     throw e;
   }
 }
 
-
-
-function parse(
-  date: string
-): Date | InvalidDateFormatError | DateIsInFutureError {
-  if (!isValid(date))
-    return new InvalidDateFormatError("not a valid date format");
-  if (isInFuture(date)) return new DateIsInFutureError("date is in the future");
+function parse(date: string): Date | InvalidDateFormatError | DateIsInFutureError {
+  if (!isValid(date)) return new InvalidDateFormatError('not a valid date format');
+  if (isInFuture(date)) return new DateIsInFutureError('date is in the future');
   // ...
 }
 
 // now consumer *has* to handle the errors
-let result = parse("mydate");
+let result = parse('mydate');
 if (result instanceof InvalidDateFormatError) {
-  console.error("invalid date format", result.message);
+  console.error('invalid date format', result.message);
 } else if (result instanceof DateIsInFutureError) {
-  console.warn("date is in future", result.message);
+  console.warn('date is in future', result.message);
 } else {
   /// use result safely
 }
 
 // alternately you can just handle all errors
 if (result instanceof Error) {
-  console.error("error", result);
+  console.error('error', result);
 } else {
   /// use result safely
 }
-
-
 
 interface Option<T> {
   flatMap<U>(f: (value: T) => None): None;
@@ -2637,7 +2548,7 @@ let result = Option(6) // Some<number>
 let result = ask() // Option<string>
   .flatMap(parse) // Option<Date>
   .flatMap((d) => new Some(d.toISOString())) // Option<string>
-  .getOrElse("error parsing string");
+  .getOrElse('error parsing string');
 ```
 
 ## prettier

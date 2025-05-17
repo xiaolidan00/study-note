@@ -1,4 +1,47 @@
+# nginx 命令
+
+```
+# 启动
+start nginx
+# 关闭
+nginx -s stop
+
+
+# 平滑重启服务
+nginx -s reload
+
+tasklist |findstr nginx.exe
+
+taskkill /f /t /pid 17444
+```
+
+# 常用配置
+
 ```yml
+
+	server{
+        listen       9999;
+        server_name  10.1.136.123;
+        proxy_http_version  1.1;
+
+        location /api/ {
+            proxy_pass http://10.1.136.124:8888/;
+            proxy_connect_timeout 60s;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_set_header from "";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto http;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $http_host;
+        proxy_set_header from "";
+        }
+
+    }
+
 server{
         listen       80;
         server_name  www.myjenkins.com;
@@ -8,7 +51,7 @@ server{
             proxy_set_header X-Real-IP $remote_addr;
         }
     }
-  
+
     server{
         listen       80;
         server_name  www.myfrontend.com;
@@ -26,7 +69,7 @@ server{
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
-         
+
         location / {
             proxy_pass http://192.168.1.123:5501;
             proxy_set_header Host $host;
@@ -36,7 +79,7 @@ server{
     }
 ```
 
-# Nginx配置
+# Nginx 配置
 
 <https://mp.weixin.qq.com/s/uOG-fw3AyJiAaiuf0E7wpw>
 
@@ -47,18 +90,18 @@ user nginx; # nginx进行运行的用户
     http {
         log_format main ...; # nginx日志格式
         access_log /var/log/nginx/access.log main; # 日志位置
-        
+
         # 引入的nginx配置文件，可以将server放在该目录下，方便管理
-        include /etc/nginx/conf.d/*.conf; 
+        include /etc/nginx/conf.d/*.conf;
         # 一个nginx服务一个server
         server {
             listen 80; # 服务启动的端口
             server_name _; # 服务域名或IP
             root /usr/share/nginx/html; # 服务指向的文件地址
-            
+
             error_page 404 /404.html; # 找不到资源重定向到404页面
             location = /40x.html {};
-            
+
             error_page 500 502 503 504 /50x.html; # 系统错误重定向50x页面
             location = /50x.html {};
         }
@@ -68,21 +111,21 @@ user nginx; # nginx进行运行的用户
         #    root /usr/share/nginx/html;
         #    ...
         # }
-        server { 
-            listen 80; 
-            server_name localhost; 
-            root /data/web; 
-            index index.html; 
+        server {
+            listen 80;
+            server_name localhost;
+            root /data/web;
+            index index.html;
         }
 
-        server { 
-            listen 80; 
-            server_name localhost; 
-            root /data/www/; 
+        server {
+            listen 80;
+            server_name localhost;
+            root /data/www/;
             # history模式增加一行try_files配置，当请求的地址找不到时，重新指向index.html文件
-            location / { 
-                try_files $uri $uri/ /index.html; 
-                index index.html; 
+            location / {
+                try_files $uri $uri/ /index.html;
+                index index.html;
             }
           }
 
@@ -90,8 +133,8 @@ user nginx; # nginx进行运行的用户
         server {
             location /api {
                 proxy_pass http://backend1.example.com;
-                proxy_set_header Host $host; 
-                proxy_set_header X-Real-IP $remote_addr; 
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 }
         }
@@ -106,8 +149,8 @@ user nginx; # nginx进行运行的用户
         server {
             location /api {
                 proxy_pass http://api;
-                proxy_set_header Host $host; 
-                proxy_set_header X-Real-IP $remote_addr; 
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             }
         }
@@ -117,8 +160,8 @@ user nginx; # nginx进行运行的用户
             : '"$request" $status $bytes_sent '
             : '"$http_referer" "$http_user_agent" "$gzip_ratio"';
 
-            access_log  /var/logs/nginx-access.log  gzip  buffer=32k;        
-     
+            access_log  /var/logs/nginx-access.log  gzip  buffer=32k;
+
     }
 # 配置Gzip压缩
     http {
@@ -133,7 +176,7 @@ user nginx; # nginx进行运行的用户
         # 配置请求头
         underscores_in_headers on;
 
-## 允许客户端上传文件最大不超过1M，在开发上传接口时一定要注意，否则导致上传失败 
+## 允许客户端上传文件最大不超过1M，在开发上传接口时一定要注意，否则导致上传失败
 
 ## 该字段可以放在`http、server、location`指令模块
         client_max_body_size 1m;
@@ -153,13 +196,13 @@ user nginx; # nginx进行运行的用户
 
 #### 2）代理服务器（Nginx）配置缓存请求头
 
- 
+
 location /static {
  # /static匹配到的资源有效期设置为1d;
- expires 1d;  
+ expires 1d;
  # /设置资源有效期为一周;
- # expires max-age=604800; 
- 
+ # expires max-age=604800;
+
  # 设置浏览器可以被缓存，设置7天后资源过期
  add_header Cache-Control "public, max-age=604800";
  # 阻止浏览器缓存动态内容
@@ -181,11 +224,11 @@ location /static {
     nginx -s start
 ```
 
-# 在前端资源中通过meta声明缓存信息
+# 在前端资源中通过 meta 声明缓存信息
 
 ```html
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Expires" content="0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Expires" content="0" />
 ```
 
 # 跨域处理
@@ -196,7 +239,7 @@ server {
     location / {
         # 允许所有来源的跨域请求
         add_header Access-Control-Allow-Origin *;
-        
+
         # 允许特定的HTTP方法（GET、POST等）
         add_header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE";
 

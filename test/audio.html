@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <canvas height="500" width="500"></canvas>
+    <audio src="./test.mp3" controls></audio>
+    <script>
+      const audio = document.querySelector('audio');
+      const canvas = document.querySelector('canvas');
+      const WIDTH = canvas.width;
+      const HEIGHT = canvas.height;
+      const canvasCtx = canvas.getContext('2d');
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioContext({latencyHint: 'balanced'});
+      let dataArray;
+      let analyser;
+      let drawVisual;
+
+      let isFirst = true;
+      function draw() {
+        analyser.getByteTimeDomainData(dataArray);
+
+        canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+        canvasCtx.strokeStyle = 'blue';
+        canvasCtx.lineCap = 'round';
+
+        canvasCtx.beginPath();
+        const len = dataArray.length;
+        const sliceWidth = WIDTH / len;
+        canvasCtx.lineWidth = sliceWidth;
+        const half = HEIGHT * 0.5;
+        let pre = 0;
+        let x = 0;
+        // dataArray.forEach((item) => {
+
+        //     const v = (item - 128.0) / 30;
+        //     const y = half - v * HEIGHT;
+
+        //     canvasCtx.moveTo(x, y);
+        //     canvasCtx.lineTo(x + sliceWidth, y + v * HEIGHT);
+        //     pre = item;
+        //     x += sliceWidth;
+
+        // });
+
+        dataArray.forEach((item, i) => {
+          const v = (item - 128.0) / 50;
+          const y = half - v * HEIGHT;
+          const posx = x;
+          const posy = y;
+          if (i == 0) {
+            canvasCtx.moveTo(x, y);
+          } else {
+            canvasCtx.lineTo(x, y);
+          }
+          pre = item;
+          x += sliceWidth;
+        });
+
+        canvasCtx.stroke();
+        drawVisual = requestAnimationFrame(draw);
+      }
+
+      audio.onplay = () => {
+        if (isFirst) {
+          isFirst = false;
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 1024;
+          const source = audioCtx.createMediaElementSource(audio);
+          dataArray = new Uint8Array(analyser.frequencyBinCount);
+          // 将源连接到分析器节点
+          source.connect(analyser);
+          // 将分析器节点连接到输出设备
+          analyser.connect(audioCtx.destination);
+        }
+        draw();
+      };
+      audio.onpause = () => {
+        console.log('🚀 ~ audio.html ~ draw ~ dataArray:', dataArray);
+        window.cancelAnimationFrame(drawVisual);
+      };
+    </script>
+  </body>
+</html>
