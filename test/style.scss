@@ -1,0 +1,9 @@
+::slotted(*) {
+  font-weight: bold;
+}
+::slotted(h1) {
+  background: pink;
+}
+::slotted(.border) {
+  color: green;
+}
