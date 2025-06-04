@@ -120,7 +120,7 @@
           const h = totalHeight * (1 - item.percent);
           const lineHeight = h + top;
           ctx.moveTo(0, lineHeight);
-          ctx.lineTo(boxWidth, lineHeight);
+          ctx.lineTo(boxWidth + 2, lineHeight);
           ctx.strokeStyle = item.lineColor;
           ctx.lineWidth = item.lineWidth;
           ctx.stroke();
