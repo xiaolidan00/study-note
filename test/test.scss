@@ -165,3 +165,10 @@ $black: #000000;
   @include var-val('font-weight-primary', 500);
   @include var-val('font-line-height-primary', 24px);
 }
+
+
+@for  $i from 1 through 9 {
+    .el-col-#{$type} {
+        width: 4.16667% * $i;
+    }
+}
