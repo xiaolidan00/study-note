@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/gh/Kaiido/roundRect/roundRect.js"></script>
+    <style>
+      body {
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+
+    <script>
+      function main() {
+        const lineWidth = 20;
+        const width = 300;
+        const height = 200;
+        const textWidth = 30;
+        const lineColor = '#e6f5f5';
+        const bg = 'white';
+        const fillColor = ['#39cccc', '#45a8d9'];
+        const canvas = document.querySelector('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const line = lineWidth * 0.5;
+        const percent = 60;
+
+        const lineValues = [
+          {
+            percent: 1,
+            lineColor: 'green',
+            val: 100,
+            dash: [5, 5],
+            lineWidth: 1,
+            fontSize: 12,
+            fontColor: 'green',
+            pos: 'left'
+          },
+          //最大
+          {
+            percent: 0.8,
+            lineColor: 'red',
+            val: 10,
+            dash: [5, 5],
+            lineWidth: 1,
+            fontSize: 12,
+            fontColor: 'gray',
+            pos: 'right'
+          },
+          //最小
+          {
+            percent: 0.2,
+            lineColor: 'red',
+            val: 2,
+            dash: [5, 5],
+            lineWidth: 1,
+            fontSize: 12,
+            fontColor: 'gray',
+            pos: 'right'
+          }
+        ];
+        const currentPercent = 0.6;
+        const top = 6;
+        const ctx = canvas.getContext('2d');
+
+        const totalHeight = height - lineWidth - top;
+        const fillHeight = totalHeight * currentPercent;
+        const blankHeight = totalHeight - fillHeight;
+
+        const boxWidth = width - textWidth * 2;
+        const fillWidth = boxWidth - lineWidth * 2;
+
+        //外框
+        {
+          ctx.beginPath();
+          ctx.roundRect(textWidth + line, top, boxWidth - lineWidth, totalHeight + line, [
+            0,
+            0,
+            lineWidth * 2,
+            lineWidth * 2
+          ]);
+          ctx.strokeStyle = lineColor;
+          ctx.lineWidth = lineWidth;
+
+          ctx.stroke();
+        }
+        //空白
+        {
+          ctx.beginPath();
+          ctx.clearRect(0, 0, width, top);
+          ctx.clearRect(textWidth + lineWidth, top, fillWidth, line);
+        }
+        //水部分
+        if (currentPercent) {
+          ctx.beginPath();
+          ctx.roundRect(textWidth + lineWidth, top + blankHeight, fillWidth, fillHeight, [
+            0,
+            0,
+            lineWidth * 2 - line,
+            lineWidth * 2 - line
+          ]);
+          const grd = ctx.createLinearGradient(0, top + blankHeight, 0, top + totalHeight);
+          grd.addColorStop(0, fillColor[0]);
+          grd.addColorStop(1, fillColor[1]);
+
+          ctx.fillStyle = grd;
+          ctx.fill();
+        }
+        //标注线
+        ctx.lineCap = 'round';
+        lineValues.forEach((item) => {
+          ctx.beginPath();
+          if (item.dash) {
+            ctx.setLineDash(item.dash);
+          } else {
+            ctx.setLineDash([]);
+          }
+
+          const h = totalHeight * (1 - item.percent);
+          const lineHeight = h + top;
+          ctx.moveTo(textWidth, lineHeight);
+          ctx.lineTo(textWidth + boxWidth + 2, lineHeight);
+          ctx.strokeStyle = item.lineColor;
+          ctx.lineWidth = item.lineWidth;
+          ctx.stroke();
+          ctx.font = `${item.fontSize}px serif`;
+          ctx.fillStyle = item.fontColor;
+          ctx.textAlign = 'left';
+          if (item.pos == 'left') {
+            const t = ctx.measureText(item.val + '').width;
+            ctx.fillText(item.val + '', textWidth - 5 - t, lineHeight + item.fontSize * 0.5);
+          } else {
+            ctx.fillText(item.val + '', textWidth + boxWidth + 5, lineHeight + item.fontSize * 0.5);
+          }
+        });
+      }
+      main();
+    </script>
+  </body>
+</html>

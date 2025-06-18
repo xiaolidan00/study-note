@@ -1,0 +1,174 @@
+@use 'sass:math';
+@use 'sass:color';
+$namespace: 'sw';
+$primary: #409eff;
+$success: #67c23a;
+$warning: #e6a23c;
+$danger: #f56c6c;
+$error: #f56c6c;
+$info: #909399;
+$white: #ffffff;
+$black: #000000;
+
+@mixin var-val($name, $value) {
+  --#{$namespace}-#{$name}: #{$value};
+}
+@function cssvar($name) {
+  @return var(--#{$namespace}-#{$name});
+}
+
+@function color-level($color, $number, $mode: 'light') {
+  @if $mode== 'light' {
+    @return color.mix($white, $color, math.percentage(math.div($number, 10)));
+  } @else {
+    @return color.mix($black, $color, math.percentage(math.div($number, 10)));
+  }
+}
+
+:root {
+  @each $type,
+    $color
+      in (
+        black: $black,
+        white: $white,
+        primary: $primary,
+        success: $success,
+        warning: $warning,
+        danger: $danger,
+        error: $error,
+        info: $info
+      )
+  {
+    @include var-val('#{$type}-color', $color);
+
+    @for $i from 1 through 9 {
+      @include var-val(
+        '--#{$namespace}-color-#{$type}-light-#{$i}',
+        color-level($color, $i, 'light')
+      );
+    }
+    @for $i from 1 through 9 {
+      @include var-val(
+        '--#{$namespace}-color-#{$type}-dark-#{$i}',
+        color-level($color, $i, 'dark')
+      );
+    }
+  }
+
+  @each $type,
+    $color
+      in (
+        primary: #303133,
+        regular: #606266,
+        secondary: #909399,
+        placeholder: #a8abb2,
+        disabled: #c0c4cc
+      )
+  {
+    @include var-val('text-color-#{$type}', $color);
+  }
+  @include var-val('border-color', #dcdfe6);
+
+  @each $type,
+    $color
+      in (light: #e4e7ed, lighter: #ebeef5, extra-light: #f2f6fc, dark: #d4d7de, darker: #cdd0d6)
+  {
+    @include var-val('border-color-#{$type}', $color);
+  }
+
+  @include var-val('fill-color', #f0f2f5);
+
+  @each $type,
+    $color
+      in (
+        light: #f5f7fa,
+        lighter: #fafafa,
+        extra-light: #fafcff,
+        dark: #ebedf0,
+        darker: #e6e8eb,
+        blank: #ffffff
+      )
+  {
+    @include var-val('fill-color-#{$type}', $color);
+  }
+
+  @each $type, $color in (base: 4px, small: 2px, round: 20px, circle: 100%) {
+    @include var-val('border-radius-#{$type}', $color);
+  }
+
+  @include var-val(
+    'box-shadow',
+    (0px 12px 32px 4px rgba(0, 0, 0, 0.04), 0px 8px 20px rgba(0, 0, 0, 0.08))
+  );
+
+  @each $type,
+    $color
+      in (
+        light: (
+          0px 0px 12px rgba(0, 0, 0, 0.12)
+        ),
+        lighter: (
+          0px 0px 6px rgba(0, 0, 0, 0.12)
+        ),
+        dark: (
+          0px 16px 48px 16px rgba(0, 0, 0, 0.08),
+          0px 12px 32px rgba(0, 0, 0, 0.12),
+          0px 8px 16px -8px rgba(0, 0, 0, 0.16)
+        )
+      )
+  {
+    @include var-val('box-shadow-#{$type}', $color);
+  }
+  @include var-val('border-width', 1px);
+  @include var-val('border-style', solid);
+
+  @include var-val(
+    'font-family',
+    (
+      'Helvetica Neue',
+      Helvetica,
+      'PingFang SC',
+      'Hiragino Sans GB',
+      'Microsoft YaHei',
+      '微软雅黑',
+      Arial,
+      sans-serif
+    )
+  );
+
+  @each $type,
+    $color
+      in (extra-large: 20px, large: 18px, medium: 16px, base: 14px, small: 13px, extra-small: 12px)
+  {
+    @include var-val('font-size-#{$type}', $color);
+  }
+
+  @each $type,
+    $color
+      in (
+        bg-color: cssvar('fill-color-light'),
+        text-color: cssvar('text-color-placeholder'),
+        border-color: cssvar('border-color-light')
+      )
+  {
+    @include var-val('#{$type}-disabled', $color);
+  }
+
+  @each $type, $color in (large: 40px, default: 32px, small: 24px) {
+    @include var-val('size-#{$type}', $color);
+  }
+
+  @include var-val(
+    'border',
+    (#{cssvar('border-width')} #{cssvar('border-style')} #{cssvar('border-color')})
+  );
+  @include var-val('font-weight-primary', 500);
+  @include var-val('font-line-height-primary', 24px);
+}
+
+
+@for  $i from 1 through 9 {
+    .el-col-#{$type} {
+        width: 4.16667% * $i;
+    }
+}
