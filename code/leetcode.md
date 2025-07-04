@@ -194,6 +194,8 @@ console.log(letterCasePermutation("a1b2"));
 
 # 779
 
+https://mp.weixin.qq.com/s/P4naJB9ee969nlmYzUJHtA
+
 我们构建了一个包含 `n` 行( 索引从 `1` 开始 )的表。首先在第一行我们写上一个 `0`。接下来的每一行，将前一行中的 `0` 替换为 `01`，`1` 替换为 `10`。
 
 例如，对于 `n = 3`，第 `1` 行是 `0` ，第 `2` 行是 `01`，第 `3` 行是 `0110` 。
@@ -269,5 +271,201 @@ function kthGrammar(n, k) {
 }
 console.log(kthGrammar(2, 2));
 console.log(kthGrammar(2, 1));
+```
+
+# 1802
+
+https://mp.weixin.qq.com/s/pIRyd1yrENSEDbTLPoVG8g
+
+给你三个正整数 `n`、`index` 和 `maxSum`。
+
+你需要构造一个同时满足下述所有条件的数组 `nums`（下标 从 `0` 开始 计数）：
+
+- `nums.length == n`
+- `nums[i]` 是 正整数 ，其中 `0 <= i < n`
+- `abs(nums[i] - nums[i+1]) <= 1` ，其中 `0 <= i < n-1`
+- `nums` 中所有元素之和不超过 `maxSum`
+- `nums[index]` 的值被 最大化
+- 返回你所构造的数组中的 `nums[index]`
+
+注意：`abs(x)` 等于 `x` 的前提是 `x >= 0`；否则，`abs(x)` 等于 `-x`。
+
+示例 1：
+
+```
+输入：n = 4, index = 2,  maxSum = 6
+
+输出：2
+
+解释：数组 [1,1,2,1] 和 [1,2,2,1] 满足所有条件。不存在其他在指定下标处具有更大值的有效数组。
+```
+
+示例 2：
+
+```
+输入：n = 6, index = 1,  maxSum = 10
+
+输出：3
+```
+
+提示：
+
+- `1<=n<=maxSum<=10^9`
+- `0<=index<n`
+
+## 题解
+
+根据题意，容易想到以 `ans` 为分割点的正整数数组具有二段性，其中 `ans` 为最大的`nums[idx]` 。
+
+小于等于 `ans` 的值均能通过直接调整`nums[idx]` 来构造，不会违反总和不超过 `max` 的限制；大于 `ans` 的值则无法满足 `max` 限制。基于此我们可通过「二分」的方式来找分割点。
+
+假设当前二分到的值为 `x`，考虑如何实现一个 `check` 函数，该函数用于判断 `x` 能否作为 `nums[idx]`：
+
+为了令 `nums[idx]=x`时，数组总和 `sum` 不超过 `max` 限制，我们应当贪心构造`nums` 的剩余元素：从` idx`开始往两侧构造，按照递减的方式进行逐个构造，若递减到 `1`则维持不变。
+
+这样可确保构造出来的`nums`既满足`nums[idx]=x`同时元素总和最小。
+
+位置 `idx` 的值为 `x`，其左边有 `idx` 个元素，其右边有 `n - idx - 1` 个元素。
+
+利用「等差数列求和」公式分别从 `x - 1` 开始构造（注意：这里说的构造仅是计算`nums`总和），若总和不超过 `max` 说明 `nums[idx]=x`满足要求，我们令 `l=mid`，否则令`r=mid-1` 。
+
+- 时间复杂度`O(logN)`
+- 空间复杂度`O(1)`
+
+```js
+function maxValue(n, index, maxSum) {
+  function check(n, x, idx, maxSum) {
+    let sum = x;
+    if (idx > x - 1) {
+      let an = x - 1,
+        a1 = 1,
+        cnt = x - 1;
+      sum += (cnt * (a1 + an)) / 2;
+      sum += idx - cnt;
+    } else {
+      let cnt = idx,
+        an = x - 1,
+        a1 = an - cnt - 1;
+      sum += (cnt * (a1 + an)) / 2;
+    }
+    if (n - idx - 1 > x - 1) {
+      let an = x - 1,
+        a1 = 1,
+        cnt = x - 1;
+      sum += (cnt * (a1 + an)) / 2;
+      sum += n - idx - 1 - cnt;
+    } else {
+      let cnt = n - idx,
+        an = x - 1,
+        a1 = an - cnt + 1;
+      sum += (cnt * (a1 + an)) / 2;
+    }
+    return sum < maxSum;
+  }
+  let l = 1,
+    r = maxSum;
+  //贪心+二分法
+  while (l < r) {
+    let mid = (l + r + 1) >> 1;
+    if (check(n, mid, index, maxSum)) l = mid;
+    else r = mid - 1;
+  }
+  return r;
+}
+console.log(maxValue(4, 2, 6)); //2
+console.log(maxValue(6, 1, 10)); //3
+```
+
+# 904
+
+https://mp.weixin.qq.com/s/KyrcqLogEXjdBAhFJWrgKA
+
+你正在探访一家农场，农场从左到右种植了一排果树。
+
+这些树用一个整数数组 `fruits` 表示，其中 `fruits[i]` 是第 `i` 棵树上的水果种类。
+
+你想要尽可能多地收集水果。然而，农场的主人设定了一些严格的规矩，你必须按照要求采摘水果：
+
+- 你只有两个篮子，并且每个篮子只能装单一类型 的水果。每个篮子能够装的水果总量没有限制。
+- 你可以选择任意一棵树开始采摘，你必须从每棵树（包括开始采摘的树）上恰好摘一个水果。采摘的水果应当符合篮子中的水果类型。每采摘一次，你将会向右移动到下一棵树，并继续采摘。
+- 一旦你走到某棵树前，但水果不符合篮子的水果类型，那么就必须停止采摘。
+
+给你一个整数数组 `fruits`，返回你可以收集的水果的最大数目。
+
+示例 1：
+
+```
+输入：fruits = [1,2,1]
+
+输出：3
+
+解释：可以采摘全部 3 棵树。
+```
+
+示例 2：
+
+```
+输入：fruits = [0,1,2,2]
+
+输出：3
+
+解释：可以采摘 [1,2,2] 这三棵树。
+如果从第一棵树开始采摘，则只能采摘 [0,1] 这两棵树。
+```
+
+示例 3：
+
+```
+输入：fruits = [1,2,3,2,2]
+
+输出：4
+
+解释：可以采摘 [2,3,2,2] 这四棵树。
+如果从第一棵树开始采摘，则只能采摘 [1,2] 这两棵树。
+```
+
+示例 4：
+
+```
+输入：fruits = [3,3,3,1,2,1,1,2,3,3,4]
+
+输出：5
+
+解释：可以采摘 [1,2,1,1,2] 这五棵树。
+```
+
+提示：
+
+- `1<=fruits.length<=10^5`
+- `0<=fruits[i]<fruits.length`
+
+ 
+
+## 题解：滑动窗口
+
+通过对先看「示例」再阅读「题面」的理解方式，整理出基本题意：从任意位置开始，**「同时使用」**两个篮子采集，一旦选择后不能修改篮子所装的水果种类，当所有树处理完或遇到第一棵种类不同的树则停止。
+
+核心求解思路为滑动窗口：使用 `j` 和 `i` 分别代表滑动窗口的两端，窗口种类不超过`2`种为合法。
+
+- 时间复杂度O(n)
+- 空间复杂度O(n)
+
+```js
+//滑动窗口
+function totalFruit(fruits) {
+  let n = fruits.length,
+    ans = 0;
+  const cnts = new Array(n + 10).fill(0);
+  for (let i = 0, j = 0, tot = 0; i < n; i++) {
+    if (++cnts[fruits[i]] == 1) tot++;
+    while (tot > 2) {
+      if (--cnts[fruits[j++]] == 0) tot--;
+    }
+    ans = Math.max(ans, i - j + 1);
+  }
+  return ans;
+}
+console.log(totalFruit([3, 3, 3, 1, 2, 1, 1, 2, 3, 3, 4])); //5
+
 ```
 
