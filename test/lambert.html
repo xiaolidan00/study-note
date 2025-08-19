@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 定义常量
+      const PI = Math.PI;
+      const PI_4 = PI / 4;
+
+      // 定义兰伯特等角投影的参数
+      function LambertConformalConic(lat1, lat2, lat0, lon0, R) {
+        this.lat1 = lat1; // 标准纬度1（单位：度）
+        this.lat2 = lat2; // 标准纬度2（单位：度）
+        this.lat0 = lat0; // 中心纬度（单位：度）
+        this.lon0 = lon0; // 中心经度（单位：度）
+        this.R = R; // 地球半径（单位：米）
+
+        // 将度转换为弧度
+        this.phi1 = this.degToRad(lat1);
+        this.phi2 = this.degToRad(lat2);
+        this.phi0 = this.degToRad(lat0);
+        this.lambda0 = this.degToRad(lon0);
+
+        // 计算参数n和F
+        this.n =
+          Math.log(Math.cos(this.phi1) / Math.cos(this.phi2)) /
+          Math.log(Math.tan(PI_4 + this.phi1 / 2) / Math.tan(PI_4 + this.phi2 / 2));
+        this.F = Math.cos(this.phi1) / (this.n * Math.pow(Math.sin(this.phi1), this.n));
+      }
+
+      // 度转弧度
+      LambertConformalConic.prototype.degToRad = function (deg) {
+        return (deg * PI) / 180;
+      };
+
+      // 弧度转度
+      LambertConformalConic.prototype.radToDeg = function (rad) {
+        return (rad * 180) / PI;
+      };
+
+      // 投影计算
+      LambertConformalConic.prototype.project = function (lat, lon) {
+        // 将输入的纬度和经度转换为弧度
+        const phi = this.degToRad(lat);
+        const lambda = this.degToRad(lon);
+
+        // 计算投影坐标x和y
+        const x =
+          this.R *
+          this.F *
+          Math.pow(Math.sin(phi), this.n) *
+          Math.sin(this.n * (lambda - this.lambda0));
+        const y =
+          this.R *
+          this.F *
+          Math.pow(Math.sin(phi), this.n) *
+          Math.cos(this.n * (lambda - this.lambda0));
+
+        return {x: x, y: y};
+      };
+
+      // 示例使用
+      const projection = new LambertConformalConic(25, 47, 34, 105, 6371000); // 示例参数
+      const result = projection.project(39, 116);
+      console.log('投影坐标：', result);
+    </script>
+  </body>
+</html>
