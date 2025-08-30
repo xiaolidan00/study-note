@@ -1916,21 +1916,20 @@ function App() {
   // Property 'type' does not exist on type 'IntrinsicAttributes & ButtonProps'
   return <Button type="submit"> text </Button>;
 }
+```
 
-
-
-import { CSSProperties } from "react";
+```tsx
+import {CSSProperties} from 'react';
 
 const Box = (props: CSSProperties) => <div style={props} />;
 
 const Card = (
-  { title, children, ...props }: { title: string } & $ElementProps<typeof Box> // new utility, see below
+  {title, children, ...props}: {title: string} & $ElementProps<typeof Box> // new utility, see below
 ) => (
   <Box {...props}>
     {title}: {children}
   </Box>
 );
-
 
 // ReactUtilityTypes.d.ts
 declare type $ElementProps<T> = T extends React.ComponentType<infer Props>
@@ -1939,21 +1938,17 @@ declare type $ElementProps<T> = T extends React.ComponentType<infer Props>
     : never
   : never;
 
-import * as Recompose from "recompose";
-export const defaultProps = <
-  C extends React.ComponentType,
-  D extends Partial<$ElementProps<C>>
->(
+import * as Recompose from 'recompose';
+export const defaultProps = <C extends React.ComponentType, D extends Partial<$ElementProps<C>>>(
   defaults: D,
   Component: C
 ): React.ComponentType<$ElementProps<C> & Partial<D>> =>
   Recompose.defaultProps(defaults)(Component);
 
-
-import { forwardRef, ReactNode } from "react";
+import {forwardRef, ReactNode} from 'react';
 
 // base button, with ref forwarding
-type Props = { children: ReactNode; type: "submit" | "button" };
+type Props = {children: ReactNode; type: 'submit' | 'button'};
 export type Ref = HTMLButtonElement;
 
 export const FancyButton = forwardRef<Ref, Props>((props, ref) => (
@@ -1962,15 +1957,14 @@ export const FancyButton = forwardRef<Ref, Props>((props, ref) => (
   </button>
 ));
 
-
-function PassThrough(props: { as: React.ElementType<any> }) {
-  const { as: Component } = props;
+function PassThrough(props: {as: React.ElementType<any>}) {
+  const {as: Component} = props;
 
   return <Component />;
 }
 
-const PrivateRoute = ({ component: Component, ...rest }: PrivateRouteProps) => {
-  const { isLoggedIn } = useAuth();
+const PrivateRoute = ({component: Component, ...rest}: PrivateRouteProps) => {
+  const {isLoggedIn} = useAuth();
 
   return isLoggedIn ? <Component {...rest} /> : <Redirect to="/" />;
 };
