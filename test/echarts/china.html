@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://registry.npmmirror.com/echarts/5.6.0/files/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <div id="chart" style="height: 800px; width: 800px"></div>
+    <script type="module">
+      fetch('./china.json')
+        .then((res) => res.json())
+        .then((china) => {
+          echarts.registerMap('china', china);
+          const chart = echarts.init(document.getElementById('chart'));
+          chart.setOption({
+            geo: {roam: true, map: 'china', zoom: 1.2},
+            visualMap: {calculable: true, min: 0, max: 100, text: ['高', '低']},
+            series: [
+              {
+                roam: true,
+                geoIndex: 0,
+                data: china.features.map((it) => ({
+                  name: it.properties.name,
+                  value: Math.round(Math.random() * 100)
+                })),
+                type: 'map'
+              }
+            ]
+          });
+        });
+    </script>
+  </body>
+</html>
