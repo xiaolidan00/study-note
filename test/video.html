@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video</title>
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+    <style>
+      button {
+        background-color: dodgerblue;
+        border: none;
+        color: white;
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 4px;
+      }
+      body {
+        position: absolute;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="margin-bottom: 20px">
+      <input type="file" accept=".mp4" />
+      <button>截图</button>
+    </div>
+    <video controls style="width: 100%"></video>
+    <script>
+      const vConsole = new VConsole();
+      const state = {
+        width: 0,
+        height: 0
+      };
+      function convertBase64UrlToFile(base64, fileName) {
+        let parts = base64.split(';base64,');
+        let contentType = parts[0].split(':')[1];
+        let raw = window.atob(parts[1]);
+        let rawLength = raw.length;
+        let uInt8Array = new Uint8Array(rawLength);
+        for (let i = 0; i < rawLength; i++) {
+          uInt8Array[i] = raw.charCodeAt(i);
+        }
+        return new File([uInt8Array], fileName, {type: contentType});
+      }
+      const downloadFile = (buffer, filename) => {
+        const url = URL.createObjectURL(buffer);
+        const a = document.createElement('a');
+        a.style = 'display: none';
+        a.download = filename;
+        a.href = url;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+      const theButton = document.querySelector('button');
+
+      const theFile = document.querySelector('input');
+
+      const theVideo = document.querySelector('video');
+
+      theFile.onchange = () => {
+        if (theFile.files.length) {
+          const f = theFile.files[0];
+          console.log(f);
+          theVideo.pause();
+          const url = URL.createObjectURL(f);
+          theVideo.src = url;
+          //   theVideo.play();
+          theVideo.onloadeddata = () => {
+            state.width = theVideo.videoWidth;
+            state.height = theVideo.videoHeight;
+          };
+        }
+      };
+      theButton.onclick = () => {
+        const canvas = document.createElement('canvas');
+        canvas.height = state.height;
+        canvas.width = state.width;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(theVideo, 0, 0, canvas.width, canvas.height);
+
+        const image = canvas.toDataURL('image/png');
+        const fileName = new Date().getTime() + '.png';
+        const file = convertBase64UrlToFile(image, fileName);
+        downloadFile(file, file.name);
+      };
+    </script>
+  </body>
+</html>
