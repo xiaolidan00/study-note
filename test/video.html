@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="data:image/png;base64," />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+
     <title>Video</title>
     <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
     <style>
@@ -29,7 +31,7 @@
       <input type="file" accept=".mp4" />
       <button>截图</button>
     </div>
-    <video controls style="width: 100%"></video>
+    <video controls style="width: 100%; height: 300px"></video>
     <script>
       const vConsole = new VConsole();
       const state = {
