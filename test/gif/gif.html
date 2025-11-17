@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+  </head>
+  <body>
+    <button onclick="onAdd()">add Frame</button>
+    <button onclick="onRender()">Render GIF</button>
+    <script>
+      var gif = new GIF({
+        workers: 2, // 使用2个Web Worker进行并行处理
+        quality: 10, // GIF质量，数字越小图像质量越高，文件越大
+        width: 500, // 输出GIF的宽度
+        height: 400, // 输出GIF的高度
+        background: 'rgba(0,0,0,0)',
+        workerScript: './gif.worker.js' // **重要：Web Worker脚本的正确路径**
+      });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 500;
+      canvas.height = 400;
+      const ctx = canvas.getContext('2d');
+      document.body.appendChild(canvas);
+
+      const animate = () => {
+        const len = Math.round(Math.random() * 10);
+        for (let i = 0; i < len; i++) {
+          ctx.beginPath();
+          ctx.arc(
+            Math.round(Math.random() * canvas.width),
+            Math.round(Math.random() * canvas.height),
+            Math.round(Math.random() * 100),
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = `rgb(${Math.round(Math.random() * 255)},${Math.round(
+            Math.random() * 255
+          )},${Math.round(Math.random() * 255)})`;
+          ctx.fill();
+        }
+      };
+
+      const onAdd = () => {
+        animate();
+        gif.addFrame(canvas, {delay: 1000, copy: true});
+      };
+
+      const onRender = () => {
+        gif.on('finished', function (blob) {
+          // `blob` 是包含生成的GIF数据的Blob对象
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.style = 'display: none';
+          a.download = new Date().getTime() + '.gif';
+          a.href = url;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+
+        gif.render();
+      };
+    </script>
+  </body>
+</html>
