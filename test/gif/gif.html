@@ -15,7 +15,7 @@
         quality: 10, // GIF质量，数字越小图像质量越高，文件越大
         width: 500, // 输出GIF的宽度
         height: 400, // 输出GIF的高度
-        background: 'rgba(0,0,0,0)',
+        transparent: 'rgba(0,0,0,0)',
         workerScript: './gif.worker.js' // **重要：Web Worker脚本的正确路径**
       });
 
@@ -23,6 +23,8 @@
       canvas.width = 500;
       canvas.height = 400;
       const ctx = canvas.getContext('2d');
+      // ctx.fillStyle = 'white';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       document.body.appendChild(canvas);
 
       const animate = () => {
@@ -49,6 +51,9 @@
       };
 
       const onRender = () => {
+        gif.on('progress', (ev) => {
+          console.log('🚀 ~ gif.html ~ onRender ~ ev:', ev);
+        });
         gif.on('finished', function (blob) {
           // `blob` 是包含生成的GIF数据的Blob对象
           const url = URL.createObjectURL(blob);
