@@ -111,7 +111,7 @@ git merge origin/branch-name
 # 保存到暂存区
 git  stash
 # 从暂存区恢复
-git  git stash pop
+git stash pop
 # 暂存区列表
 git  stash list
 # 恢复第二次暂存
