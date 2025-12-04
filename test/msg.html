@@ -14,15 +14,15 @@
   <body>
     <iframe
       id="receiver"
-      sandbox="allow-same-origin allow-scripts"
       style="position: absolute; height: 100%; width: 100%; border: none"
       src="http://localhost:9988/publish?id=20251202092626"
     ></iframe>
     <script>
+      //  sandbox="allow-same-origin allow-scripts"
       window.onload = () => {
-        window._postMessage = (data) => {
+        window.addEventListener('message', (data) => {
           console.log('🚀 ~ msg.html ~ data:', data);
-        };
+        });
       };
     </script>
   </body>
