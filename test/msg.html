@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        padding: 0px;
+        margin: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      id="receiver"
+      sandbox="allow-same-origin allow-scripts"
+      style="position: absolute; height: 100%; width: 100%; border: none"
+      src="http://localhost:9988/publish?id=20251202092626"
+    ></iframe>
+    <script>
+      window.onload = () => {
+        window._postMessage = (data) => {
+          console.log('🚀 ~ msg.html ~ data:', data);
+        };
+      };
+    </script>
+  </body>
+</html>
