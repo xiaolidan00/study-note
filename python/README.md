@@ -982,3 +982,237 @@ x = frozenset({"apple", "banana", "cherry"})
 print(x)# frozenset({'apple', 'cherry', 'banana'})
 print(type(x)) # <class 'frozenset'>
 ```
+
+# Dict 字典
+
+```py
+thisdict = {
+  "brand": "Ford",
+  "model": "Mustang",
+  "year": 1964
+}
+print(thisdict["brand"])# Ford
+
+x = thisdict.get("model")
+print(x)# Mustang
+
+x = thisdict.keys()
+
+print(x)# dict_keys(['brand', 'model', 'year'])
+
+thisdict["year"] = 2018
+
+thisdict.update({"year": 2020})
+
+thisdict["color"] = "red"
+
+thisdict.update({"color": "red"})
+```
+
+删除元素
+
+```py
+thisdict = {
+  "brand": "Ford",
+  "model": "Mustang",
+  "year": 1964
+}
+thisdict.pop("model")
+print(thisdict)# {'brand': 'Ford', 'year': 1964}
+
+thisdict = {
+  "brand": "Ford",
+  "model": "Mustang",
+  "year": 1964
+}
+thisdict.popitem()
+print(thisdict)# {'brand': 'Ford', 'model': 'Mustang'}
+
+
+del thisdict["model"]
+# 删除字典
+del thisdict
+# 清空
+thisdict.clear()
+```
+
+遍历
+
+```py
+thisdict = {
+  "brand": "Ford",
+  "model": "Mustang",
+  "year": 1964
+}
+for x in thisdict:
+  print(x,thisdict[x])
+
+# brand Ford
+# model Mustang
+# year 1964
+thisdict.keys()
+thisdict.values()
+
+for x, y in thisdict.items():
+  print(x, y)
+```
+
+复制
+
+```py
+mydict = thisdict.copy()
+
+mydict = dict(thisdict)
+```
+
+```py
+myfamily = {
+  "child1" : {
+    "name" : "Emil",
+    "year" : 2004
+  },
+  "child2" : {
+    "name" : "Tobias",
+    "year" : 2007
+  },
+  "child3" : {
+    "name" : "Linus",
+    "year" : 2011
+  }
+}
+print(myfamily["child2"]["name"])
+
+for x, obj in myfamily.items():
+  print(x)
+
+  for y in obj:
+    print(y + ':', obj[y])
+```
+
+字典方法
+https://www.w3schools.com/python/python_dictionaries_methods.asp
+
+# if else
+
+```py
+age = 20
+if age >= 18:
+  print("You are an adult")
+  print("You can vote")
+  print("You have full legal rights")
+
+
+score = 75
+
+if score >= 90:
+  print("Grade: A")
+elif score >= 80:
+  print("Grade: B")
+elif score >= 70:
+  print("Grade: C")
+elif score >= 60:
+  print("Grade: D")
+else:
+  print("Grade: E")
+```
+
+条件赋值
+
+```py
+a = 10
+b = 20
+bigger = a if a > b else b
+print("Bigger is", bigger)# 20
+```
+
+条件打印
+
+```py
+a = 330
+b = 330
+print("A") if a > b else print("=") if a == b else print("B")# =
+```
+
+且条件
+
+```py
+a = 200
+b = 33
+c = 500
+if a > b and c > a:
+  print("Both conditions are True")
+```
+
+或条件
+
+```py
+a = 200
+b = 33
+c = 500
+if a > b or a > c:
+  print("At least one of the conditions is True")
+```
+
+非条件
+
+```py
+a = 33
+b = 200
+if not a > b:
+  print("a is NOT greater than b")
+```
+
+多级条件
+
+```py
+score = 85
+attendance = 90
+submitted = True
+
+if score >= 60:
+  if attendance >= 80:
+    if submitted:
+      print("Pass with good standing")# Pass with good standing
+    else:
+      print("Pass but missing assignment")
+  else:
+    print("Pass but low attendance")
+else:
+  print("Fail")
+```
+
+## switch
+
+```py
+day = 4
+match day:
+  case 1:
+    print("Monday")
+  case 2:
+    print("Tuesday")
+  case 3:
+    print("Wednesday")
+  case 4:
+    print("Thursday")
+  case 5:
+    print("Friday")
+  case 6:
+    print("Saturday")
+  case 7:
+    print("Sunday")
+```
+
+## while
+
+```py
+i = 1
+while i < 6:
+  print(i)
+  if i == 3:
+    break
+  i += 1
+
+# 1
+# 2
+# 3
+```
