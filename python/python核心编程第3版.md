@@ -1,6 +1,6 @@
 # 正则表达式
 
-```py
+```python
 aaa|bbb
 .
 ```

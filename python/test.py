@@ -1,10 +1,11 @@
-i = 1
-while i < 6:
-  print(i)
-  if i == 3:
-    break
-  i += 1
+print("Enter your name:")
+name = input()
+print(f"Hello {name}")
 
-# 1
-# 2
-# 3
+name = input("Enter your name:")
+print(f"Hello {name}")
+# Enter your name:
+# aaaa
+# Hello aaaa
+# Enter your name:bbb
+# Hello bbb

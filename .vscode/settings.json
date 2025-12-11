@@ -1,5 +1,7 @@
 {
   "liveServer.settings.port": 5501,
   "liveServer.settings.file": "test/**/*.html",
-  "liveServer.settings.ignoreFiles": [".vscode/**", "**/*.scss", "**/*.sass", "**/*.ts", "**/*.md"]
+  "liveServer.settings.ignoreFiles": [".vscode/**", "**/*.scss", "**/*.sass", "**/*.ts", "**/*.md"],
+  "python-envs.defaultEnvManager": "ms-python.python:system",
+  "python-envs.pythonProjects": []
 }
