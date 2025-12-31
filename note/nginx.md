@@ -1,6 +1,23 @@
+# nginx 下载
+
+https://nginx.org/en/download.html
+
+# nginx 注册到 window 服务
+
+```sh
+# 创建服务
+sc create nginx binpath=D:\\softwares\\nginx-1.28.1\\nginx.exe type=own start=auto displayname=nginx
+# 开启服务
+net start nginx
+# 关闭服务
+net stop nginx
+# 卸载服务
+sc delete "nginx"
+```
+
 # nginx 命令
 
-```
+```sh
 # 启动
 start nginx
 # 关闭
@@ -27,17 +44,16 @@ taskkill /f /t /pid 17444
         location /api/ {
             proxy_pass http://10.1.136.124:8888/;
             proxy_connect_timeout 60s;
-        proxy_read_timeout 120s;
-        proxy_send_timeout 120s;
-        proxy_set_header from "";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto http;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $http_host;
-        proxy_set_header from "";
+            proxy_read_timeout 120s;
+            proxy_send_timeout 120s;
+            proxy_set_header from "";
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto http;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $http_host;
         }
 
     }
