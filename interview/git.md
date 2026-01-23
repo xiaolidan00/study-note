@@ -21,6 +21,12 @@ git remote set-url origin https://github.com/user/new-repo.git
 git remote show origin
 ```
 
+# revert
+
+```sh
+git revert commitId
+```
+
 ## config
 
 ```bash
