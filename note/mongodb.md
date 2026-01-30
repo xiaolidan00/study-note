@@ -32,8 +32,86 @@ mongosh --version
 # 连接到数据库
 
 ```sh
-mongosh "mongodb+srv://127.0.0.1/testdb" --apiVersion 1 --username root
+mongosh "mongodb+srv://127.0.0.1/testdb" --apiVersion 1 --username root --password 123456
 
+```
+
+# 添加用户和密码
+
+```sh
+# 链接到数据库
+mongosh
+# 添加密码
+use admin
+db.createUser({
+  user: "root",
+  pwd: "123456",
+  roles: [
+    { role: "userAdminAnyDatabase", db: "admin" },
+    { role: "readWriteAnyDatabase", db: "admin" }
+  ]
+})
+
+
+db.createUser({
+  user: "root",
+  pwd: "123456",
+  roles: [
+    { role: "userAdminAnyDatabase", db: "test" },
+    { role: "readWriteAnyDatabase", db: "test" }
+  ]
+})
+```
+
+`mongod.conf`修改配置文件，开启验证
+
+```ini
+security:
+  authorization: "enabled"
+
+```
+
+重新启动mongodb
+
+用用户连接到mongodb
+
+```sh
+mongosh -u root -p '123456' --authenticationDatabase admin
+```
+
+## 给指定数据库添加用户
+
+```sh
+use test
+db.createUser({
+  user: "test01",
+  pwd: "test@123456",
+  roles: [{ role: "readWrite", db: "test" }]
+})
+```
+
+获取用户
+
+```sh
+db.getUsers()
+```
+
+连接到用户
+
+```sh
+mongosh -u test01 -p 'test_123456' --authenticationDatabase test
+```
+
+修改重置密码
+
+```sh
+db.changeUserPassword("test01", "test_123456")
+```
+
+修改角色和属性
+
+```sh
+db.updateUser("appUser", { roles: [{ role: "read", db: "test" }] })
 ```
 
 # 无认证启动，忘记密码的情况
@@ -346,6 +424,143 @@ db.comments.aggregate([
 ])
 ```
 
+# 多表查询
+
+在 MongoDB（NoSQL）里没有传统关系型数据库的“表”，而是“集合（collections）”。要做“多表查询”（等价于 SQL 的 join），常用方法是使用聚合管道里的 $lookup（以及其它聚合算子）。下面总结常用方式、示例和注意事项，帮助你根据场景选择实现方式。
+
+一、常用方法概览
+
+- $lookup（Aggregation Framework）：在聚合管道里做左外连接（支持两种形式：简单字段匹配和基于 pipeline 的复杂匹配）。
+- $graphLookup：用于递归/层级关系查询（例如树形/分类的上下级关系）。
+- $unionWith：把多个集合的结果合并（类似 SQL 的 UNION）。
+- 客户端关联（Application-side join）：先分别查询集合，在应用里合并（适用于小数据量或复杂逻辑）。
+- 反规范化（denormalization）：把常用关联数据嵌入到文档中以避免频繁 join（常见于高读场景）。
+- map-reduce（已较少使用，通常用聚合替代）。
+
+二、$lookup 基本用法（mongosh）
+假设有两个集合：orders（含 customerId 字段），customers（以 \_id 标识）：
+
+```js
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: 'customers', // 要连接的集合
+      localField: 'customerId', // orders 中的字段
+      foreignField: '_id', // customers 中的字段
+      as: 'customer' // 输出数组字段名
+    }
+  },
+  // 如果想把 customer 数组展开为单个对象（且保留没有关联的 orders）
+  {$unwind: {path: '$customer', preserveNullAndEmptyArrays: true}}
+  // 可继续 $match / $project / $sort 等
+]);
+```
+
+三、$lookup 的 pipeline 形式（更灵活，可用 $expr）
+当关联条件更复杂或需要在 from 集合上做更多筛选/投影时，使用 pipeline 形式：
+
+```js
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: 'items',
+      let: {orderId: '$_id', status: '$status'},
+      pipeline: [
+        {
+          $match: {
+            $expr: {$and: [{$eq: ['$orderId', '$$orderId']}, {$eq: ['$status', '$$status']}]}
+          }
+        },
+        {$project: {name: 1, price: 1, _id: 0}}
+      ],
+      as: 'items'
+    }
+  }
+]);
+```
+
+四、多个 $lookup（多个关联）
+可以在同一聚合管道中连续使用多个 $lookup：
+
+```js
+db.orders.aggregate([
+  {$lookup: {from: 'customers', localField: 'customerId', foreignField: '_id', as: 'customer'}},
+  {$unwind: {path: '$customer', preserveNullAndEmptyArrays: true}},
+  {$lookup: {from: 'shipments', localField: '_id', foreignField: 'orderId', as: 'shipments'}}
+]);
+```
+
+五、$graphLookup（递归查询）
+用于查找树形或图结构的所有子/父节点：
+
+```js
+db.categories.aggregate([
+  {$match: {_id: ObjectId('...')}},
+  {
+    $graphLookup: {
+      from: 'categories',
+      startWith: '$_id',
+      connectFromField: '_id',
+      connectToField: 'parentId',
+      as: 'descendants',
+      maxDepth: 5, // 可选
+      depthField: 'level' // 可选
+    }
+  }
+]);
+```
+
+六、$unionWith（合并多个集合结果）
+将多个集合的查询结果拼接起来：
+
+```js
+db.collectionA.aggregate([
+  {$match: {active: true}},
+  {$unionWith: {coll: 'collectionB', pipeline: [{$match: {active: true}}]}},
+  {$sort: {createdAt: -1}}
+]);
+```
+
+七：在驱动里的用法示例（Node.js / Python）
+Node.js (mongodb 官方驱动)：
+
+```js
+const result = await db
+  .collection('orders')
+  .aggregate([
+    {$match: {status: 'paid'}},
+    {$lookup: {from: 'customers', localField: 'customerId', foreignField: '_id', as: 'customer'}},
+    {$unwind: {path: '$customer', preserveNullAndEmptyArrays: true}}
+  ])
+  .toArray();
+```
+
+Python (pymongo):
+
+```py
+pipeline = [
+    {"$match": {"status": "paid"}},
+    {"$lookup": {
+        "from": "customers",
+        "localField": "customerId",
+        "foreignField": "_id",
+        "as": "customer"
+    }},
+    {"$unwind": {"path": "$customer", "preserveNullAndEmptyArrays": True}}
+]
+results = list(db.orders.aggregate(pipeline))
+```
+
+八、性能与注意事项
+
+- $lookup 在 from 集合很大且没有合适索引时可能很慢。确保在 foreignField 上有索引（尤其是在大量数据关联时）。
+- 尽量在管道前端用 $match / $project 削减文档数量与大小（提前过滤和只保留必要字段）。
+- $lookup 本质上是左外连接（未匹配的仍保留，字段为空数组），可以用 $unwind preserveNullAndEmptyArrays 控制行为。
+- $graphLookup 有递归开销，注意 depth 与集合大小。
+- 对于高并发/大数据量场景，考虑反规范化以减少实时 join。
+- $lookup 仅在同一 database 的集合之间；跨数据库需要特别处理（某些版本/部署可能受限）。
+- 使用 explain() 检查聚合性能瓶颈。
+
 # 聚合写入集合
 
 第一个阶段将按 property_type 对房产进行分组，并为每个房产包含 name、accommodates 和 price 字段。
@@ -435,3 +650,15 @@ db.createCollection("posts", {
   }
 })
 ```
+
+# node.js 连接MongoDB
+
+https://www.runoob.com/nodejs/nodejs-mongodb.html
+
+https://www.npmjs.com/package/mongodb
+
+https://www.mongodb.com/zh-cn/docs/drivers/node/current/databases-collections/
+
+# Group
+
+https://www.mongodb.com/zh-cn/docs/manual/reference/operator/aggregation/group/#std-label-group-pipeline-optimization
