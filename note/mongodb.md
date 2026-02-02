@@ -1,15 +1,15 @@
 # MongoDB
 
-https://w3schools.org.cn/mongodb/mongodb_mongosh_create_collection.php
+<https://w3schools.org.cn/mongodb/mongodb_mongosh_create_collection.php>
 
 # 下载
 
 直接下msi
 
-https://www.mongodb.com/try/download/community
+<https://www.mongodb.com/try/download/community>
 
 命令行
-https://www.mongodb.com/try/download/shell
+<https://www.mongodb.com/try/download/shell>
 
 # 安装选择用户
 
@@ -43,24 +43,26 @@ mongosh "mongodb+srv://127.0.0.1/testdb" --apiVersion 1 --username root --passwo
 mongosh
 # 添加密码
 use admin
-db.createUser({
-  user: "root",
-  pwd: "123456",
-  roles: [
-    { role: "userAdminAnyDatabase", db: "admin" },
-    { role: "readWriteAnyDatabase", db: "admin" }
-  ]
-})
+```
 
+```js
+db.createUser({
+  user: 'root',
+  pwd: '123456',
+  roles: [
+    {role: 'userAdminAnyDatabase', db: 'admin'},
+    {role: 'readWriteAnyDatabase', db: 'admin'}
+  ]
+});
 
 db.createUser({
-  user: "root",
-  pwd: "123456",
+  user: 'root',
+  pwd: '123456',
   roles: [
-    { role: "userAdminAnyDatabase", db: "test" },
-    { role: "readWriteAnyDatabase", db: "test" }
+    {role: 'userAdminAnyDatabase', db: 'test'},
+    {role: 'readWriteAnyDatabase', db: 'test'}
   ]
-})
+});
 ```
 
 `mongod.conf`修改配置文件，开启验证
@@ -83,17 +85,20 @@ mongosh -u root -p '123456' --authenticationDatabase admin
 
 ```sh
 use test
+```
+
+```js
 db.createUser({
-  user: "test01",
-  pwd: "test@123456",
-  roles: [{ role: "readWrite", db: "test" }]
-})
+  user: 'test01',
+  pwd: 'test@123456',
+  roles: [{role: 'readWrite', db: 'test'}]
+});
 ```
 
 获取用户
 
-```sh
-db.getUsers()
+```js
+db.getUsers();
 ```
 
 连接到用户
@@ -104,19 +109,19 @@ mongosh -u test01 -p 'test_123456' --authenticationDatabase test
 
 修改重置密码
 
-```sh
-db.changeUserPassword("test01", "test_123456")
+```js
+db.changeUserPassword('test01', 'test_123456');
 ```
 
 修改角色和属性
 
-```sh
-db.updateUser("appUser", { roles: [{ role: "read", db: "test" }] })
+```js
+db.updateUser('appUser', {roles: [{role: 'read', db: 'test'}]});
 ```
 
 # 无认证启动，忘记密码的情况
 
-```sh
+```js
 mongod --dbpath D:\softwares\MongoDB\data --bind_ip 127.0.0.1 --port 27017 --noauth
 ```
 
@@ -134,7 +139,7 @@ show dbs
 
 # 合集
 
-```sh
+```js
 # 创建合集
 db.createCollection("posts")
 
@@ -144,7 +149,7 @@ db.posts.insertOne({name:"hello",value:1})
 
 # 插入数据
 
-```sh
+```js
 # 插入一条
 db.posts.insertOne({
   title: "Post Title 1",
@@ -185,7 +190,7 @@ db.posts.insertMany([
 
 # 查找
 
-```sh
+```js
 db.posts.find( {category: "News"} )
 # 查询一条，没有返回空
 db.posts.findOne( {category: "News"} )
@@ -198,7 +203,7 @@ db.posts.find({}, {_id: 0, title: 1, date: 1})
 
 # 更新
 
-```sh
+```js
 # 将这篇帖子的“likes”更新为 2
 db.posts.updateOne( { title: "Post Title 1" }, { $set: { likes: 2 } } )
 # 更新文档，但如果未找到则插入
@@ -223,8 +228,8 @@ db.posts.updateMany({}, { $inc: { likes: 1 } })
 
 # 删除
 
-```sh
-db.posts.deleteOne({ title: "Post Title 5" })
+```js
+db.posts.deleteOne({title: 'Post Title 5'});
 ```
 
 # 创建操作符
@@ -281,7 +286,7 @@ db.posts.deleteOne({ title: "Post Title 5" })
 
 # 聚合
 
-```sh
+```js
 db.posts.aggregate([
   // Stage 1: Only find documents that have more than 1 like
   {
@@ -302,8 +307,8 @@ db.listingsAndReviews.aggregate(
 
 # 分页
 
-```sh
-db.movies.aggregate([ { $limit: 1 } ])
+```js
+db.movies.aggregate([{$limit: 1}]);
 ```
 
 # $project包含某字段
@@ -311,92 +316,94 @@ db.movies.aggregate([ { $limit: 1 } ])
 使用 1 来包含一个字段，使用 0 来排除一个字段
 \_id 字段也包含在内。除非明确排除，否则此字段总是被包含
 
-```sh
+```js
 db.restaurants.aggregate([
   {
     $project: {
-      "name": 1,
-      "cuisine": 1,
-      "address": 1
+      name: 1,
+      cuisine: 1,
+      address: 1
     }
   },
   {
     $limit: 5
   }
-])
+]);
 ```
 
 # 排序
 
 1 表示升序，-1 表示降序
 
-```sh
+```js
 db.listingsAndReviews.aggregate([
   {
-    $sort: { "accommodates": -1 }
+    $sort: {accommodates: -1}
   },
   {
     $project: {
-      "name": 1,
-      "accommodates": 1
+      name: 1,
+      accommodates: 1
     }
   },
   {
     $limit: 5
   }
-])
+]);
 ```
 
 # $match过滤条件
 
 仅返回 property_type 为“House”
 
-```sh
+```js
 db.listingsAndReviews.aggregate([
-  { $match : { property_type : "House" } },
-  { $limit: 2 },
-  { $project: {
-    "name": 1,
-    "bedrooms": 1,
-    "price": 1
-  }}
-])
+  {$match: {property_type: 'House'}},
+  {$limit: 2},
+  {
+    $project: {
+      name: 1,
+      bedrooms: 1,
+      price: 1
+    }
+  }
+]);
 ```
 
 # $addFields 给聚合添加字段
 
 将返回包含新字段 avgGrade 的文档，该字段将包含每个餐厅 grades.score 的平均值
 
-```sh
+```js
 db.restaurants.aggregate([
   {
     $addFields: {
-      avgGrade: { $avg: "$grades.score" }
+      avgGrade: {$avg: '$grades.score'}
     }
   },
   {
     $project: {
-      "name": 1,
-      "avgGrade": 1
+      name: 1,
+      avgGrade: 1
     }
   },
   {
     $limit: 5
   }
-])
+]);
 ```
 
 # $count计算总数
 
-```sh
+```js
 db.restaurants.aggregate([
   {
-    $match: { "cuisine": "Chinese" }
+    $match: {cuisine: 'Chinese'}
   },
   {
-    $count: "totalChinese"
+    $count: 'totalChinese'
   }
-])
+]);
 ```
 
 # 外键连接
@@ -408,20 +415,20 @@ as：将包含来自 from 集合的匹配文档的新字段的名称。
 
 这将返回电影数据以及每条评论。
 
-```sh
+```js
 db.comments.aggregate([
   {
     $lookup: {
-      from: "movies",
-      localField: "movie_id",
-      foreignField: "_id",
-      as: "movie_details",
-    },
+      from: 'movies',
+      localField: 'movie_id',
+      foreignField: '_id',
+      as: 'movie_details'
+    }
   },
   {
     $limit: 1
   }
-])
+]);
 ```
 
 # 多表查询
@@ -566,22 +573,22 @@ results = list(db.orders.aggregate(pipeline))
 第一个阶段将按 property_type 对房产进行分组，并为每个房产包含 name、accommodates 和 price 字段。
 $out 阶段将在当前数据库中创建一个名为 properties_by_type 的新集合，并将结果文档写入该集合。
 
-```sh
+```js
 db.listingsAndReviews.aggregate([
   {
     $group: {
-      _id: "$property_type",
+      _id: '$property_type',
       properties: {
         $push: {
-          name: "$name",
-          accommodates: "$accommodates",
-          price: "$price",
-        },
-      },
-    },
+          name: '$name',
+          accommodates: '$accommodates',
+          price: '$price'
+        }
+      }
+    }
   },
-  { $out: "properties_by_type" },
-])
+  {$out: 'properties_by_type'}
+]);
 ```
 
 # 索引和搜索
@@ -590,75 +597,499 @@ db.listingsAndReviews.aggregate([
 
 第二阶段将从每个文档中提取 title 和 year 字段。
 
-```sh
+```js
 db.movies.aggregate([
   {
     $search: {
-      index: "default", // optional unless you named your index something other than "default"
+      index: 'default', // optional unless you named your index something other than "default"
       text: {
-        query: "star wars",
-        path: "title"
-      },
-    },
+        query: 'star wars',
+        path: 'title'
+      }
+    }
   },
   {
     $project: {
       title: 1,
-      year: 1,
+      year: 1
     }
   }
-])
+]);
 ```
 
 # 模式验证
 
 创建当前数据库中的 posts 集合，并为该集合指定 JSON Schema 验证要求。
 
-```sh
-db.createCollection("posts", {
+```js
+db.createCollection('posts', {
   validator: {
     $jsonSchema: {
-      bsonType: "object",
-      required: [ "title", "body" ],
+      bsonType: 'object',
+      required: ['title', 'body'],
       properties: {
         title: {
-          bsonType: "string",
-          description: "Title of post - Required."
+          bsonType: 'string',
+          description: 'Title of post - Required.'
         },
         body: {
-          bsonType: "string",
-          description: "Body of post - Required."
+          bsonType: 'string',
+          description: 'Body of post - Required.'
         },
         category: {
-          bsonType: "string",
-          description: "Category of post - Optional."
+          bsonType: 'string',
+          description: 'Category of post - Optional.'
         },
         likes: {
-          bsonType: "int",
-          description: "Post like count. Must be an integer - Optional."
+          bsonType: 'int',
+          description: 'Post like count. Must be an integer - Optional.'
         },
         tags: {
-          bsonType: ["string"],
-          description: "Must be an array of strings - Optional."
+          bsonType: ['string'],
+          description: 'Must be an array of strings - Optional.'
         },
         date: {
-          bsonType: "date",
-          description: "Must be a date - Optional."
+          bsonType: 'date',
+          description: 'Must be a date - Optional.'
         }
       }
     }
   }
-})
+});
 ```
 
 # node.js 连接MongoDB
 
-https://www.runoob.com/nodejs/nodejs-mongodb.html
+<https://www.runoob.com/nodejs/nodejs-mongodb.html>
 
-https://www.npmjs.com/package/mongodb
+<https://www.npmjs.com/package/mongodb>
 
-https://www.mongodb.com/zh-cn/docs/drivers/node/current/databases-collections/
+<https://www.mongodb.com/zh-cn/docs/drivers/node/current/databases-collections/>
 
 # Group
 
-https://www.mongodb.com/zh-cn/docs/manual/reference/operator/aggregation/group/#std-label-group-pipeline-optimization
+<https://www.mongodb.com/zh-cn/docs/manual/reference/operator/aggregation/group/#std-label-group-pipeline-optimization>
+
+# SQL 到mongodb
+
+<https://www.mongodb.com/zh-cn/docs/manual/reference/sql-aggregation-comparison/>
+
+```sql
+SELECT COUNT(*) AS count
+FROM orders
+```
+
+```js
+db.orders.aggregate([
+  {
+    $group: {
+      _id: null,
+      count: {$sum: 1}
+    }
+  }
+]);
+```
+
+| SQL 示例                                                                                                                                         | MongoDB 示例                                                                                                                                                                                                                                                                                               | 说明                                                                                                                        |
+| :----------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| `SELECT COUNT(*) AS countFROM orders`                                                                                                            | `db.orders.aggregate( [   {     $group: {        _id: null,        count: { $sum: 1 }     }   }] )`                                                                                                                                                                                                        | 计算 `orders` 中的所有记录                                                                                                  |
+| `SELECT SUM(price) AS totalFROM orders`                                                                                                          | `db.orders.aggregate( [   {     $group: {        _id: null,        total: { $sum: "$price" }     }   }] )`                                                                                                                                                                                                 | 对 `orders` 中的 `price` 字段求和                                                                                           |
+| `SELECT cust_id,       SUM(price) AS totalFROM ordersGROUP BY cust_id`                                                                           | `db.orders.aggregate( [   {     $group: {        _id: "$cust_id",        total: { $sum: "$price" }     }   }] )`                                                                                                                                                                                           | 对于每个唯一的 `cust_id`，对 `price` 字段求和。                                                                             |
+| `SELECT cust_id,       SUM(price) AS totalFROM ordersGROUP BY cust_idORDER BY total`                                                             | `db.orders.aggregate( [   {     $group: {        _id: "$cust_id",        total: { $sum: "$price" }     }   },   { $sort: { total: 1 } }] )`                                                                                                                                                                | 对于每个唯一 `cust_id`，对 `price` 字段求和，且结果按总和排序。                                                             |
+| `SELECT cust_id,       ord_date,       SUM(price) AS totalFROM ordersGROUP BY cust_id,         ord_date`                                         | `db.orders.aggregate( [   {     $group: {        _id: {           cust_id: "$cust_id",           ord_date: { $dateToString: {              format: "%Y-%m-%d",              date: "$ord_date"           }}        },        total: { $sum: "$price" }     }   }] )`                                        | 对于每个唯一的 `cust_id` 和 `ord_date` 分组，对 `price` 字段求和。不包括日期的时间部分。                                    |
+| `SELECT cust_id,       count(*)FROM ordersGROUP BY cust_idHAVING count(*) > 1`                                                                   | `db.orders.aggregate( [   {     $group: {        _id: "$cust_id",        count: { $sum: 1 }     }   },   { $match: { count: { $gt: 1 } } }] )`                                                                                                                                                             | 对于具有多条记录的 `cust_id`，返回 `cust_id` 和相应的记录数。                                                               |
+| `SELECT cust_id,       ord_date,       SUM(price) AS totalFROM ordersGROUP BY cust_id,         ord_dateHAVING total > 250`                       | `db.orders.aggregate( [   {     $group: {        _id: {           cust_id: "$cust_id",           ord_date: { $dateToString: {              format: "%Y-%m-%d",              date: "$ord_date"           }}        },        total: { $sum: "$price" }     }   },   { $match: { total: { $gt: 250 } } }] )` | 对于每个唯一的 `cust_id` 和 `ord_date` 分组，对 `price` 字段求和并仅在总和大于 250 的情况下返回结果。不包括日期的时间部分。 |
+| `SELECT cust_id,       SUM(price) as totalFROM ordersWHERE status = 'A'GROUP BY cust_id`                                                         | `db.orders.aggregate( [   { $match: { status: 'A' } },   {     $group: {        _id: "$cust_id",        total: { $sum: "$price" }     }   }] )`                                                                                                                                                            | 对于状态为 `A` 的每个唯一的 `cust_id`，对 `price` 字段求和。                                                                |
+| `SELECT cust_id,       SUM(price) as totalFROM ordersWHERE status = 'A'GROUP BY cust_idHAVING total > 250`                                       | `db.orders.aggregate( [   { $match: { status: 'A' } },   {     $group: {        _id: "$cust_id",        total: { $sum: "$price" }     }   },   { $match: { total: { $gt: 250 } } }] )`                                                                                                                     | 对状态为 `A` 的每个唯一 `cust_id`，求 `price` 字段的总和，仅当总和大于 250 时才会返回。                                     |
+| `SELECT cust_id,       SUM(li.qty) as qtyFROM orders o,     order_lineitem liWHERE li.order_id = o.idGROUP BY cust_id`                           | `db.orders.aggregate( [   { $unwind: "$items" },   {     $group: {        _id: "$cust_id",        qty: { $sum: "$items.qty" }     }   }] )`                                                                                                                                                                | 对于每个唯一的 `cust_id`，将与订单关联的相应订单项 `qty` 字段相加求和。                                                     |
+| `SELECT COUNT(*)FROM (SELECT cust_id,             ord_date      FROM orders      GROUP BY cust_id,               ord_date)      as DerivedTable` | `db.orders.aggregate( [   {     $group: {        _id: {           cust_id: "$cust_id",           ord_date: { $dateToString: {              format: "%Y-%m-%d",              date: "$ord_date"           }}        }     }   },   {     $group: {        _id: null,        count: { $sum: 1 }     }   }] )` | 计算不同 `cust_id`、`ord_date` 分组的数量。不包括日期的时间部分。                                                           |
+
+<https://www.mongodb.com/zh-cn/docs/manual/reference/sql-comparison/>
+
+| SQL SELECT 语句                                              | MongoDB find () 语句                                                                                                                                                                                                                      |
+| :----------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SELECT *FROM people`                                        | `db.people.find()`                                                                                                                                                                                                                        |
+| `SELECT id,       user_id,       statusFROM people`          | `db.people.find(    { },    { user_id: 1, status: 1 })`                                                                                                                                                                                   |
+| `SELECT user_id, statusFROM people`                          | `db.people.find(    { },    { user_id: 1, status: 1, _id: 0 })`                                                                                                                                                                           |
+| `SELECT *FROM peopleWHERE status = "A"`                      | `db.people.find(    { status: "A" })`                                                                                                                                                                                                     |
+| `SELECT user_id, statusFROM peopleWHERE status = "A"`        | `db.people.find(    { status: "A" },    { user_id: 1, status: 1, _id: 0 })`                                                                                                                                                               |
+| `SELECT *FROM peopleWHERE status != "A"`                     | `db.people.find(    { status: { $ne: "A" } })`                                                                                                                                                                                            |
+| `SELECT *FROM peopleWHERE status = "A"AND age = 50`          | `db.people.find(    { status: "A",      age: 50 })`                                                                                                                                                                                       |
+| `SELECT *FROM peopleWHERE status = "A"OR age = 50`           | `db.people.find(    { $or: [ { status: "A" } , { age: 50 } ] })`                                                                                                                                                                          |
+| `SELECT *FROM peopleWHERE age > 25`                          | `db.people.find(    { age: { $gt: 25 } })`                                                                                                                                                                                                |
+| `SELECT *FROM peopleWHERE age < 25`                          | `db.people.find(   { age: { $lt: 25 } })`                                                                                                                                                                                                 |
+| `SELECT *FROM peopleWHERE age > 25AND   age <= 50`           | `db.people.find(   { age: { $gt: 25, $lte: 50 } })`                                                                                                                                                                                       |
+| `SELECT *FROM peopleWHERE user_id like "%bc%"`               | `db.people.find( { user_id: /bc/ } )`-或-`db.people.find( { user_id: { $regex: /bc/ } } )`                                                                                                                                                |
+| `SELECT *FROM peopleWHERE user_id like "bc%"`                | `db.people.find( { user_id: /^bc/ } )`-或-`db.people.find( { user_id: { $regex: /^bc/ } } )`                                                                                                                                              |
+| `SELECT *FROM peopleWHERE status = "A"ORDER BY user_id ASC`  | `db.people.find( { status: "A" } ).sort( { user_id: 1 } )`                                                                                                                                                                                |
+| `SELECT *FROM peopleWHERE status = "A"ORDER BY user_id DESC` | `db.people.find( { status: "A" } ).sort( { user_id: -1 } )`                                                                                                                                                                               |
+| `SELECT COUNT(*)FROM people`                                 | `db.people.count()`_or_`db.people.find().count()`                                                                                                                                                                                         |
+| `SELECT COUNT(user_id)FROM people`                           | `db.people.count( { user_id: { $exists: true } } )`_or_`db.people.find( { user_id: { $exists: true } } ).count()`                                                                                                                         |
+| `SELECT COUNT(*)FROM peopleWHERE age > 30`                   | `db.people.count( { age: { $gt: 30 } } )`_or_`db.people.find( { age: { $gt: 30 } } ).count()`                                                                                                                                             |
+| `SELECT DISTINCT(status)FROM people`                         | `db.people.aggregate( [ { $group : { _id : "$status" } } ] )`或者，对于不超过 [BSON 大小限制](https://www.mongodb.com/zh-cn/docs/manual/reference/limits/#std-label-limit-bson-document-size)的非重复值集`db.people.distinct( "status" )` |
+| `SELECT *FROM peopleLIMIT 1`                                 | `db.people.findOne()`_or_`db.people.find().limit(1)`                                                                                                                                                                                      |
+| `SELECT *FROM peopleLIMIT 5SKIP 10`                          | `db.people.find().limit(5).skip(10)`                                                                                                                                                                                                      |
+| `EXPLAIN SELECT *FROM peopleWHERE status = "A"`              | `db.people.find( { status: "A" } ).explain()`                                                                                                                                                                                             |
+
+# Mongodb电子书
+
+<https://www.practical-mongodb-aggregations.com/>
+
+# SQL 与mongodb
+
+count
+
+```js
+db.sales.aggregate([{$group: {_id: '$item', count: {$sum: 1}}}]);
+```
+
+```sql
+SELECT
+  item AS _id,
+   COUNT(*) AS count
+FROM
+  sales
+GROUP BY
+  item;
+```
+
+ifelse
+
+```js
+db.sales.aggregate([
+  {
+    $group: {
+      _id: {
+        $cond: {
+          if: {$gte: ['$price', Decimal128('10')]},
+          then: 'Price >= 10',
+          else: 'Price < 10'
+        }
+      },
+      count: {$sum: 1}
+    }
+  }
+]);
+```
+
+```sql
+SELECT
+   CASE
+      WHEN price >= 10 THEN 'Price >= 10'
+      ELSE 'Price < 10'
+   END AS price_group,
+   COUNT(*) AS count
+FROM
+  sales
+GROUP BY
+  price_group;
+```
+
+count
+
+```js
+db.sales.aggregate([{$group: {_id: '$item'}}]);
+```
+
+match group
+
+```js
+db.sales.aggregate([
+  // First Stage
+  {
+    $group: {
+      _id: '$item',
+      totalSaleAmount: {$sum: {$multiply: ['$price', '$quantity']}}
+    }
+  },
+  // Second Stage
+  {
+    $match: {totalSaleAmount: {$gte: 100}}
+  }
+]);
+```
+
+```sql
+ SELECT item,
+   Sum(( price * quantity )) AS totalSaleAmount
+FROM   sales
+GROUP  BY item
+HAVING totalSaleAmount >= 100
+```
+
+计算 2014 年每一天的总销售额、平均销售数量和销售数量
+
+```js
+db.sales.aggregate([
+  // First Stage
+  {
+    $match: {date: {$gte: new ISODate('2014-01-01'), $lt: new ISODate('2015-01-01')}}
+  },
+  // Second Stage
+  {
+    $group: {
+      _id: {$dateToString: {format: '%Y-%m-%d', date: '$date'}},
+      totalSaleAmount: {$sum: {$multiply: ['$price', '$quantity']}},
+      averageQuantity: {$avg: '$quantity'},
+      count: {$sum: 1}
+    }
+  },
+  // Third Stage
+  {
+    $sort: {totalSaleAmount: -1}
+  }
+]);
+```
+
+```sql
+ SELECT date,
+       Sum(( price * quantity )) AS totalSaleAmount,
+       Avg(quantity)             AS averageQuantity,
+       Count(*)                  AS Count
+FROM   sales
+WHERE  date >= '01/01/2014' AND date < '01/01/2015'
+GROUP  BY date
+ORDER  BY totalSaleAmount DESC
+```
+
+指定了 null 的 \_id 组，计算集合中所有文档的总销售额、平均数量和计数
+
+```js
+db.sales.aggregate([
+  {
+    $group: {
+      _id: null,
+      totalSaleAmount: {$sum: {$multiply: ['$price', '$quantity']}},
+      averageQuantity: {$avg: '$quantity'},
+      count: {$sum: 1}
+    }
+  }
+]);
+```
+
+```sql
+ SELECT Sum(price * quantity) AS totalSaleAmount,
+       Avg(quantity)         AS averageQuantity,
+       Count(*)              AS Count
+FROM   sales
+```
+
+将books集合中的数据转换为按作者分组的标题
+
+```js
+db.books.aggregate([{$group: {_id: '$author', books: {$push: '$title'}}}]);
+```
+
+$group 使用 $ROOT 系统变量将整个文档按作者分组,`$addFields` 向输出添加一个字段，其中包含每位作者的图书总份数。
+
+```js
+db.books.aggregate([
+  // First Stage
+  {
+    $group: {_id: '$author', books: {$push: '$$ROOT'}}
+  },
+  // Second Stage
+  {
+    $addFields: {
+      totalCopies: {$sum: '$books.copies'}
+    }
+  }
+]);
+```
+
+# 去重获取值
+
+```js
+db.sales.distinct('item');
+
+db.sensor.distinct('temperatures.1.value');
+```
+
+# 总计
+
+2020 年以来客户订单
+
+```js
+db.orders.aggregate([
+  {
+    $match: {
+      orderdate: {
+        $gte: new Date('2020-01-01T00:00:00Z'),
+        $lt: new Date('2021-01-01T00:00:00Z')
+      }
+    }
+  },
+  {
+    $sort: {
+      orderdate: 1
+    }
+  },
+  {
+    $group: {
+      _id: '$customer_id',
+      first_purchase_date: {$first: '$orderdate'},
+      total_value: {$sum: '$value'},
+      total_orders: {$sum: 1},
+      orders: {
+        $push: {
+          orderdate: '$orderdate',
+          value: '$value'
+        }
+      }
+    }
+  },
+  {
+    $sort: {
+      first_purchase_date: 1
+    }
+  },
+  {
+    $set: {
+      customer_id: '$_id'
+    }
+  },
+  //删除不需要的字段
+  {$unset: ['_id']}
+]);
+```
+
+# 过滤器和子集
+
+职业为"ENGINEER"的三个最年轻的人，按从幼到长的顺序排列,前三名
+
+```js
+db.persons.aggregate([
+  {
+    $match: {
+      vocation: 'ENGINEER'
+    }
+  },
+  {
+    $sort: {
+      dateofbirth: -1
+    }
+  },
+  {
+    $limit: 3
+  },
+  {
+    $unset: ['_id', 'address']
+  }
+]);
+```
+
+# 展开数组
+
+```js
+db.orders1.aggregate([
+  {
+    $unwind: {
+      path: '$products'
+    }
+  },
+  {
+    $match: {
+      'products.price': {
+        $gt: 15
+      }
+    }
+  },
+  {
+    $group: {
+      _id: '$products.prod_id',
+      product: {$first: '$products.name'},
+      total_value: {$sum: '$products.price'},
+      quantity: {$sum: 1}
+    }
+  },
+  {
+    $set: {
+      product_id: '$_id'
+    }
+  },
+  {$unset: ['_id']}
+]);
+```
+
+# 一对一连接
+
+```js
+db.orders.aggregate([
+  {
+    $match: {
+      orderdate: {
+        $gte: new Date('2020-01-01T00:00:00Z'),
+        $lt: new Date('2021-01-01T00:00:00Z')
+      }
+    }
+  },
+  {
+    $lookup: {
+      from: 'products',
+      localField: 'product_id',
+      foreignField: 'id',
+      as: 'product_mapping'
+    }
+  },
+  {
+    $set: {
+      product_mapping: {$first: '$product_mapping'}
+    }
+  },
+  {
+    $set: {
+      product_name: '$product_mapping.name',
+      product_category: '$product_mapping.category'
+    }
+  },
+  {$unset: ['_id', 'product_id', 'product_mapping']}
+]);
+```
+
+# 多字段连接
+
+```js
+db.products.aggregate([
+  {
+    $lookup: {
+      from: 'orders2',
+      let: {
+        prdname: '$name',
+        prdvartn: '$variation'
+      },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $and: [
+                {$eq: ['$product_name', '$$prdname']},
+                {$eq: ['$product_variation', '$$prdvartn']}
+              ]
+            }
+          }
+        },
+        {
+          $match: {
+            orderdate: {
+              $gte: new Date('2020-01-01T00:00:00Z'),
+              $lt: new Date('2021-01-01T00:00:00Z')
+            }
+          }
+        },
+        {
+          $unset: ['_id', 'product_name', 'product_variation']
+        }
+      ],
+      as: 'orders'
+    }
+  },
+  {
+    $match: {
+      orders: {$ne: []}
+    }
+  },
+  {
+    $unset: ['_id', 'description']
+  }
+]);
+```
