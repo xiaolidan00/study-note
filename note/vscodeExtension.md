@@ -18,6 +18,7 @@ yo code
 ```
 
 1. 点开 debug，调试，ctrl+shift+I 打开开发者中心
+2. 调试时在DEBUG CONSOLE可以看查看打印变量
 
 注意，要用 npm 安装才能打包成功，不能用 pnpm 否则会识别路径失败
 
