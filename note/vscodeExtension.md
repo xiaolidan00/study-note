@@ -34,7 +34,7 @@ vsce login <publisher>
 vsce publish
 ```
 
-- publisher 要注册，因为使用谷歌的验证码，要科学上网才能成功
+- publisher注册时，因为使用谷歌的验证码，可能要科学上网才能成功
 - access token 在 Azure DevOps 注册用户和创建组织，然后再用户设置的 Personal Access Tokens.里面创建该组织下的 token
 - 发布插件的时候不要开启 fastGithub，否则会验证失败
-- 另外，一些临时文件不需要打包的文件请在.vscodeignore 里面标识忽略
+- 另外，一些临时文件不需要打包的文件请在`.vscodeignore` 里面标识忽略
