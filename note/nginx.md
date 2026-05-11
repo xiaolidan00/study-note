@@ -34,6 +34,21 @@ taskkill /f /t /pid 17444
 
 # 常用配置
 
+代理转发到具体路径直接修改80端口下路径
+
+```yml
+ server {
+        listen       80;
+        server_name  localhost;
+#....
+        location /api/ {
+            proxy_pass http://10.1.111.111:11111/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+}
+```
+
 ```yml
 
 	server{

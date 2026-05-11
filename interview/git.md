@@ -214,7 +214,14 @@ git rebase -i <commit>
 git rebase -i HEAD~3
 # 选择提交
 git cherry-pick <commit>
+# 转移多个提交
+git cherry-pick <HashA> <HashB>
+# 如果想要转移一系列的连续提交
+git cherry-pick A..B
 
+# 使用上面的命令，提交 A 将不会包含在 Cherry pick 中。如果要包含提交 A，可以使用下面的语法
+
+git cherry-pick A^..B
 ```
 
 ```bash
