@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btn-open">打开文件</button>
+    <button id="btn-save">保存到原路径</button>
+    <script>
+
+        class FileHandler {
+            constructor() {
+                this.fileHandle = null; // 用于存储文件句柄
+                this.fileName = '';
+            }
+
+            /**
+             * 1. 打开文件（获取句柄）
+             */
+            async openFile() {
+                try {
+                    // 弹出系统选择框，用户选择文件
+                    [this.fileHandle] = await window.showOpenFilePicker({
+                        types: [
+                            {
+                                description: 'Text Files',
+                                accept: { 'text/plain': ['.txt'] }
+                            }
+                        ],
+                        excludeAcceptAllOption: true,
+                        multiple: false
+                    });
+
+                    this.fileName = this.fileHandle.name;
+
+                    // 请求读写权限（浏览器可能会提示用户授权）
+                    if ((await this.fileHandle.queryPermission({ mode: 'readwrite' })) !== 'granted') {
+                        await this.fileHandle.requestPermission({ mode: 'readwrite' });
+                    }
+
+                    console.log(`✅ 已打开文件: ${this.fileName}`);
+                    // 这里可以读取文件内容用于编辑
+                    const file = await this.fileHandle.getFile();
+                    const contents = await file.arrayBuffer();
+                    return contents;
+                } catch (err) {
+                    if (err.name === 'AbortError') {
+                        console.log('用户取消了选择');
+                    } else {
+                        console.error('打开文件失败:', err);
+                    }
+                    return null;
+                }
+            }
+
+            /**
+             * 2. 保存到原路径（覆盖原文件）
+             * @param {Blob|Uint8Array} content - 修改后的文件二进制数据
+             */
+            async saveToOriginalPath(content) {
+                if (!this.fileHandle) {
+                    alert('请先打开一个文件！');
+                    return;
+                }
+
+                try {
+                    // 创建可写流
+                    const writable = await this.fileHandle.createWritable();
+
+                    // 写入内容
+                    await writable.write(content);
+
+                    // 关闭流（这一步执行后，磁盘上的原文件就被更新了）
+                    await writable.close();
+
+                    console.log('✅ 文件已成功覆盖保存！');
+                } catch (err) {
+                    console.error('❌ 保存失败:', err);
+                    // 如果权限丢失，可能需要重新请求
+                    if (err.name === 'NotAllowedError') {
+                        await this.fileHandle.requestPermission({ mode: 'readwrite' });
+                    }
+                }
+            }
+        }
+
+        // --- 使用示例 ---
+        const handler = new FileHandler();
+
+        // 1. 用户点击“打开”按钮
+        document.getElementById('btn-open').onclick = async () => {
+            await handler.openFile();
+        };
+
+        // 2. 用户点击“保存”按钮（假设你已经用 pdf-lib 修改完了数据）
+        document.getElementById('btn-save').onclick = async () => {
+            // 假设这是修改后的文本数据
+            const modifiedTextBlob = new Blob(['模拟的文本数据'], { type: 'text/plain' });
+            await handler.saveToOriginalPath(modifiedTextBlob);
+        };
+    </script>
+</body>
+
+</html>

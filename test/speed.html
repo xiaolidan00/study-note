@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>浏览器TTS语音合成</title>
+    <style>
+      :root {
+        --el-color-primary: #1a67ff;
+      }
+
+      body {
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+      }
+      * {
+        box-sizing: border-box !important;
+      }
+      ::-webkit-scrollbar {
+        background: transparent;
+        height: 8px;
+        width: 8px;
+        border: none;
+        cursor: pointer;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-corner {
+        background-color: transparent;
+      }
+
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+      }
+
+      textarea {
+        font-size: 20px;
+        line-height: 2;
+      }
+
+      .el-button {
+        margin: 10px;
+        display: block;
+        color: white;
+        background-color: blueviolet;
+        border: none;
+        outline: none;
+        padding: 0 16px;
+        border-radius: 4px;
+        line-height: 32px;
+        height: 32px;
+      }
+
+      .el-button:active {
+        background-color: cornflowerblue;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style="display: flex; height: 100%; width: 100%; justify-content: center">
+      <textarea id="text" style="width: 600px; height: 100%"></textarea>
+      <div style="height: 100%; width: 20%">
+        <button class="el-button" onclick="speak()">播放</button>
+        <button class="el-button" onclick="pause()">暂停</button>
+        <button class="el-button" onclick="restart()">继续</button>
+        <button class="el-button" onclick="stop()">停止</button>
+        <button class="el-button" onclick="readCursor()">从光标处开始</button>
+        <button class="el-button" onclick="readSelect()">读选中的部分</button>
+      </div>
+    </div>
+    <script>
+      // navigator.mediaDevices
+      //   .getUserMedia({
+      //     video: false,
+      //     audio: true
+      //   })
+      //   .then((stream) => {
+      //     console.log('获取语音成功');
+      //   });
+      var startX = 0;
+
+      function getTextPos() {
+        let el = document.getElementById('text'),
+          x = 0,
+          y = 0,
+          val = '';
+        //IE
+        if (document.selection) {
+          //创建范围对象
+          let range = document.selection.createRange();
+          //克隆对象
+          let drange = range.duplicate();
+          //复制范围
+          drange.moveToElementText(el);
+          drange.setEndPoint('EndToEnd', range);
+          x = drange.text.length - range.text.length;
+          y = x + range.text.length;
+          val = el.value.substring(x, y);
+        }
+        //Firefox,Chrome,Safari,opera etc
+        else if (window.getSelection) {
+          x = el.selectionStart;
+          y = el.selectionEnd;
+          val = el.value.substring(x, y);
+        }
+        return {
+          val: val,
+          x: x,
+          y: y
+        };
+      }
+
+      function setCursorPosition(rangeData) {
+        let textarea = document.getElementById('text');
+
+        if (textarea.setSelectionRange) {
+          // W3C
+          textarea.focus();
+          textarea.setSelectionRange(rangeData.x, rangeData.y);
+        }
+      }
+      function speakText(text) {
+        var speechInstance = new window.SpeechSynthesisUtterance(text);
+        speechInstance.lang = 'zh';
+        speechInstance.volume = 100; //声音的音量
+        speechInstance.rate = 1; //语速，数值，默认值是1，范围是0.1到10
+        speechInstance.pitch = 1.5; // 表示说话的音高，数值，范围从0（最小）到2（最大）。默认值为1
+        window.speechSynthesis.speak(speechInstance);
+        speechInstance.onboundary = (e) => {
+          setCursorPosition({ x: startX + e.charIndex, y: startX + e.charIndex + e.charLength });
+        };
+        speechInstance.onend = (e) => {
+          alert('内容播放完毕！');
+        };
+      }
+      function speak() {
+        let text = document.getElementById('text').value;
+        startX = 0;
+        speakText(text);
+      }
+
+      function stop() {
+        window.speechSynthesis.cancel();
+      }
+      window.onbeforeunload = () => {
+        stop();
+      };
+      function pause() {
+        window.speechSynthesis.pause();
+      }
+      function restart() {
+        window.speechSynthesis.resume();
+      }
+      function readCursor() {
+        stop();
+        let res = getTextPos();
+        let text = document.getElementById('text').value;
+        let val = text.substring(res.x);
+        startX = res.x;
+        if (val) {
+          speakText(val);
+        }
+      }
+      function readSelect() {
+        stop();
+        let res = getTextPos();
+        startX = res.x;
+        if (res.val) {
+          speakText(res.val);
+        } else {
+          alert('未选中内容');
+        }
+      }
+    </script>
+  </body>
+</html>

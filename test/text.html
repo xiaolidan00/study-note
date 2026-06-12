@@ -1,18 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      h1 {
-        color: white;
 
-        text-shadow: -1px -1px 0 #009ea1, 1px -1px 0 #009ea1, -1px 1px 0 #009ea1, 1px 1px 0 #009ea1;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>机智如我</h1>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    .text1 {
+      color: white;
+
+      text-shadow:
+        -1px -1px 0 #009ea1,
+        1px -1px 0 #009ea1,
+        -1px 1px 0 #009ea1,
+        1px 1px 0 #009ea1;
+    }
+
+    .text2 {
+      color: transparent;
+      background-image: linear-gradient(45deg, blue, red);
+      -webkit-background-clip: text;
+      background-clip: text;
+      display: inline-block;
+    }
+
+    .text3 {
+
+      color: white;
+      -webkit-text-stroke: 5px rgba(0, 0, 0, 0);
+
+      background: -webkit-linear-gradient(-90deg, red 9%, blue 88%);
+
+      -webkit-background-clip: text;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="text1">机智如我</h1>
+  <h1 class="text2">机智如我</h1>
+
+  <h1 class="text3">机智如我</h1>
+</body>
+
 </html>
