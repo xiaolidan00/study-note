@@ -160,6 +160,19 @@ git reset --hard origin/master
 # HEAD^^^ 上上上一个版本
 ```
 
+# `.gitignore`配置失效
+
+```ini
+node_modules/
+dist/
+```
+
+```sh
+git rm -r --cached node_modules/
+
+git rm -r --cached
+```
+
 ## tag
 
 ```bash

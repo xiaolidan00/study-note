@@ -296,3 +296,79 @@ server {
     }
 }
 ```
+
+# history模式
+
+在使用 Vue Router、React Router 等前端路由库开启 HTML5 History 模式时，URL 不再依赖哈希（`#`），而是使用真实的 URL 路径（如 `/user/123`）。但在刷新或直接访问这些路径时，Nginx 默认会尝试在服务器上查找对应的物理文件，由于这些路径实际上是由前端 JavaScript 控制的，服务器上并不存在，因此会导致 404 错误。
+
+解决这个问题的核心思路是：配置 Nginx，让它在找不到对应文件时，回退（fallback）到 `index.html`，交由前端路由接管处理。
+
+### 核心配置方案
+
+在 Nginx 的 `server` 块中，通过 `location /` 匹配 + `try_files` 指令来实现前端路由兜底：
+
+```nginx
+server {
+    listen 80;
+    server_name your_domain.com;
+    root /path/to/your/dist;  # 指向你的前端打包文件夹（如 dist）
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+**配置说明：**
+
+- `$uri`：首先检查请求的路径是否对应一个真实存在的静态文件（如 `/css/app.css`）。
+- `$uri/`：其次检查请求路径是否为一个目录。
+- `/index.html`：如果以上都不匹配，则统一返回根目录下的 `index.html`，由前端 JS 解析当前 URL 并渲染对应视图。
+
+### 避免干扰 API 和静态资源
+
+如果你的项目同时包含后端 API 代理或需要单独配置静态资源缓存，**务必将它们的 `location` 规则写在 `location /` 之前**。否则，`try_files` 会提前兜底，导致 API 请求也被重定向到 `index.html`。
+
+```nginx
+server {
+    listen 80;
+    server_name your_domain.com;
+    root /path/to/your/dist;
+
+    # 1. 优先处理 API 请求（假设以 /api/ 开头）
+    location ^~ /api/ {
+        proxy_pass http://your_backend_server;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # 2. 优先处理静态资源并设置缓存
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # 3. 最后处理前端路由兜底
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+### 子路径部署情况
+
+如果你的前端应用部署在子路径下（例如 `http://your_domain.com/admin/`），需要调整 `location` 和 `try_files` 的回退路径，并确保前端路由的 `base` 配置与 Nginx 保持一致：
+
+```nginx
+location /admin/ {
+    alias /usr/share/nginx/html/admin/;  # 注意 alias 路径末尾需加 /
+    try_files $uri $uri/ /admin/index.html;
+}
+```
+
+### 验证与生效步骤
+
+1. **检查语法**：修改配置后，务必执行 `sudo nginx -t` 检查配置文件是否有语法错误。
+2. **重载配置**：执行 `sudo systemctl reload nginx` 或 `nginx -s reload` 平滑重载配置，使更改生效且不中断服务。
+3. **验证效果**：在浏览器中直接访问一个前端路由路径（如 `/dashboard`）并刷新页面，确认能正常显示页面而不是 404 错误。
