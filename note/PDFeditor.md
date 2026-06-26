@@ -509,3 +509,34 @@ function getLineWidth(prevPoint, currPoint, pressure) {
 | **图像平滑** | `imageSmoothingEnabled = true` | 确保图片缩放时不锯齿       |
 
 通过以上组合拳，你可以实现专业级的平滑绘图体验，效果接近原生应用。
+
+# 给pdf引入其他字体的代码
+
+```js
+import {PDFDocument, rgb} from 'pdf-lib';
+import fontkit from 'fontkit';
+import fs from 'fs';
+
+// 1. 关键步骤：注册 fontkit
+PDFDocument.registerFontkit(fontkit);
+
+const pdfDoc = await PDFDocument.create();
+const page = pdfDoc.addPage();
+
+// 2. 读取并嵌入字体文件
+const fontBytes = fs.readFileSync('./assets/fonts/SourceHanSerifJP-Regular.otf');
+const customFont = await pdfDoc.embedFont(fontBytes);
+
+// 3. 绘制文本
+page.drawText('Hello World - 你好世界', {
+  x: 50,
+  y: 500,
+  font: customFont,
+  size: 20
+});
+```
+
+# pdf.js
+
+`src/display/api.js getDocument`
+`src/core/prser.js findDefaultInlineStreamEnd`
