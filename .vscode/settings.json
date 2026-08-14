@@ -3,5 +3,16 @@
   "liveServer.settings.file": "test/**/*.html",
   "liveServer.settings.ignoreFiles": [".vscode/**", "**/*.scss", "**/*.sass", "**/*.ts", "**/*.md"],
   "python-envs.defaultEnvManager": "ms-python.python:system",
-  "python-envs.pythonProjects": []
+  "python-envs.pythonProjects": [],
+
+  "search.exclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/vendor/**": true,
+    "**/package-lock.json": true,
+    "**/.git": true,
+    "**/.gitignore": true,
+    "**/.prettierrc": true
+  }
 }

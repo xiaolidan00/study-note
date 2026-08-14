@@ -1,97 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="data:image/png;base64," />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
 
-    <title>Video</title>
-    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
-    <style>
-      button {
-        background-color: dodgerblue;
-        border: none;
-        color: white;
-        font-size: 18px;
-        padding: 10px 20px;
-        border-radius: 4px;
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="data:image/png;base64," />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+
+  <title>Video</title>
+  <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+  <style>
+    button {
+      background-color: dodgerblue;
+      border: none;
+      color: white;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 4px;
+    }
+
+    body {
+      position: absolute;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow: auto;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin: 20px 0px;
+      padding: 0px;
+      height: 10px;
+      --range-value: 0%;
+      appearance: none;
+      background: transparent;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      background-color: #ccc;
+      background: linear-gradient(to right,
+          white 0%,
+          white var(--range-value, 0%),
+          rgba(255, 255, 255, 0.5) var(--range-value, 0%));
+      border-radius: 3px;
+      height: 6px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      border-radius: 50%;
+      height: 20px;
+      width: 20px;
+      position: relative;
+      background-color: white;
+      color: white;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+
+      top: -7px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="padding: 20px">
+    <input id="file" type="file" accept=".mp4" />
+    <button id="capture">截图</button>
+
+  </div>
+  <video id="video" style="width: 100%; height:70%"></video>
+  <div style="padding: 20px;">
+
+
+    <button id="play">播放</button>
+    <input type="range" id="range" min="0" step="0.1">
+  </div>
+  <script>
+
+    const state = {
+      width: 0,
+      height: 0
+    };
+    function convertBase64UrlToFile(base64, fileName) {
+      let parts = base64.split(';base64,');
+      let contentType = parts[0].split(':')[1];
+      let raw = window.atob(parts[1]);
+      let rawLength = raw.length;
+      let uInt8Array = new Uint8Array(rawLength);
+      for (let i = 0; i < rawLength; i++) {
+        uInt8Array[i] = raw.charCodeAt(i);
       }
-      body {
-        position: absolute;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        overflow: auto;
+      return new File([uInt8Array], fileName, { type: contentType });
+    }
+    const downloadFile = (buffer, filename) => {
+      const url = URL.createObjectURL(buffer);
+      const a = document.createElement('a');
+      a.style = 'display: none';
+      a.download = filename;
+      a.href = url;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+    const theButton = document.getElementById('capture');
+
+    const theFile = document.getElementById('file');
+    const theRange = document.getElementById('range') //as HTMLInputElement;
+    const theVideo = document.getElementById('video') //as HTMLVideoElement;
+    const thePlay = document.getElementById('play');
+
+    theFile.onchange = () => {
+      if (theFile.files.length) {
+        const f = theFile.files[0];
+        console.log(f);
+        theVideo.pause();
+        const url = URL.createObjectURL(f);
+        theVideo.src = url;
+        //   theVideo.play();
+        theVideo.onloadeddata = () => {
+          theRange.value = 0
+          state.width = theVideo.videoWidth;
+          state.height = theVideo.videoHeight;
+          theRange.max = theVideo.duration;
+        };
       }
-    </style>
-  </head>
-  <body>
-    <div style="margin-bottom: 20px">
-      <input type="file" accept=".mp4" />
-      <button>截图</button>
-    </div>
-    <video controls style="width: 100%; height: 300px"></video>
-    <script>
-      const vConsole = new VConsole();
-      const state = {
-        width: 0,
-        height: 0
-      };
-      function convertBase64UrlToFile(base64, fileName) {
-        let parts = base64.split(';base64,');
-        let contentType = parts[0].split(':')[1];
-        let raw = window.atob(parts[1]);
-        let rawLength = raw.length;
-        let uInt8Array = new Uint8Array(rawLength);
-        for (let i = 0; i < rawLength; i++) {
-          uInt8Array[i] = raw.charCodeAt(i);
-        }
-        return new File([uInt8Array], fileName, {type: contentType});
+    };
+    theButton.onclick = () => {
+      const canvas = document.createElement('canvas');
+      canvas.height = state.height;
+      canvas.width = state.width;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(theVideo, 0, 0, canvas.width, canvas.height);
+
+      const image = canvas.toDataURL('image/png');
+      const fileName = new Date().getTime() + '.png';
+      const file = convertBase64UrlToFile(image, fileName);
+      downloadFile(file, file.name);
+    };
+    theRange.onchange = () => {
+      theVideo.currentTime = theRange.value
+      theRange.style['--range-value'] = (100 * theRange.value / theRange.max).toFixed(2) + '%'
+    }
+    theVideo.ontimeupdate = () => {
+      theRange.value = theVideo.currentTime;
+      theRange.style['--range-value'] = (100 * theRange.value / theRange.max).toFixed(2) + '%'
+    }
+    theVideo.onended = () => {
+      thePlay.innerHTML = '播放'
+      theVideo.pause();
+    }
+    const togglePlay = () => {
+      if (thePlay.innerHTML === '播放') {
+        thePlay.innerHTML = '暂停'
+        theVideo.play();
+      } else {
+        thePlay.innerHTML = '播放'
+        theVideo.pause();
       }
-      const downloadFile = (buffer, filename) => {
-        const url = URL.createObjectURL(buffer);
-        const a = document.createElement('a');
-        a.style = 'display: none';
-        a.download = filename;
-        a.href = url;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      };
-      const theButton = document.querySelector('button');
+    }
+    theVideo.onclick = togglePlay
+    thePlay.onclick = togglePlay
+  </script>
+</body>
 
-      const theFile = document.querySelector('input');
-
-      const theVideo = document.querySelector('video');
-
-      theFile.onchange = () => {
-        if (theFile.files.length) {
-          const f = theFile.files[0];
-          console.log(f);
-          theVideo.pause();
-          const url = URL.createObjectURL(f);
-          theVideo.src = url;
-          //   theVideo.play();
-          theVideo.onloadeddata = () => {
-            state.width = theVideo.videoWidth;
-            state.height = theVideo.videoHeight;
-          };
-        }
-      };
-      theButton.onclick = () => {
-        const canvas = document.createElement('canvas');
-        canvas.height = state.height;
-        canvas.width = state.width;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(theVideo, 0, 0, canvas.width, canvas.height);
-
-        const image = canvas.toDataURL('image/png');
-        const fileName = new Date().getTime() + '.png';
-        const file = convertBase64UrlToFile(image, fileName);
-        downloadFile(file, file.name);
-      };
-    </script>
-  </body>
 </html>

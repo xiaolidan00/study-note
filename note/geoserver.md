@@ -29,7 +29,7 @@ https://www.jsdelivr.com/package/npm/esri-leaflet
 import * as esri from 'esri-leaflet';
 this.pipeLineLayer = esri
   .tiledMapLayer({
-    url: 'http://x.x.x.x:x/NewMapServer/arcgis/rest/services/XXXX/XXXX/MapServer/{z}/{y}/{x}',
+    url: 'http://x.x.x.x:x/NewMapServer/arcgis/rest/services/XXXX/XXXX/MapServer/tile/{z}/{y}/{x}',
     token,
     pane: 'overlayPane'
   })
